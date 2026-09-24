@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editar factura | Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'navbar.html' %}
+<main class="container py-5 mt-5 text-light">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div><span class="text-success fw-bold">FACTURA {{ factura.id_formateado }}</span><h1 class="mb-1">Editar factura</h1><p class="text-secondary mb-0">Actualiza el cliente, el estado, el método de pago y sus productos.</p></div>
+        <a class="btn btn-outline-light" href="{{ url_for('facturas') }}">Volver a facturas</a>
+    </div>
+    {% if factura %}
+    <form method="post" class="card bg-dark border-secondary text-light p-4">
+        <div class="row g-3 mb-4">
+            <div class="col-md-4"><label class="form-label">Cliente<select name="usuario_id" class="form-select" required>{% for usuario in usuarios %}<option value="{{ usuario.id }}" {% if usuario.id == factura.usuario_id %}selected{% endif %}>{{ usuario.username }} · {{ usuario.email }}</option>{% endfor %}</select></label></div>
+            <div class="col-md-4"><label class="form-label">Estado<select name="estado" class="form-select" required>{% for estado in ['pendiente','pagado','enviado','entregado','cancelado'] %}<option value="{{ estado }}" {% if factura.estado == estado %}selected{% endif %}>{{ estado|title }}</option>{% endfor %}</select></label></div>
+            <div class="col-md-4"><label class="form-label">Método de pago<input name="metodo_pago" class="form-control" value="{{ factura.metodo_pago or '' }}"></label></div>
+            <div class="col-md-4"><label class="form-label">Dirección de entrega<input name="direccion_entrega" class="form-control" value="{{ factura.direccion_entrega or '' }}"></label></div>
+            <div class="col-md-4"><label class="form-label">Ciudad<input name="ciudad_entrega" class="form-control" value="{{ factura.ciudad_entrega or '' }}"></label></div>
+            <div class="col-md-4"><label class="form-label">Teléfono<input name="telefono_contacto" class="form-control" value="{{ factura.telefono_contacto or '' }}"></label></div>
+            <div class="col-12"><label class="form-label">Notas<textarea name="notas_entrega" class="form-control" rows="2">{{ factura.notas_entrega or '' }}</textarea></label></div>
+        </div>
+        <h2 class="h5">Productos facturados</h2>
+        <div class="table-responsive"><table class="table table-dark align-middle"><thead><tr><th>Producto</th><th style="width:140px">Cantidad</th><th style="width:180px">Precio unitario</th></tr></thead><tbody>{% for detalle in detalles %}<tr><td>{{ detalle.producto_nombre }}<input type="hidden" name="producto_id[]" value="{{ detalle.producto_id }}"></td><td><input type="number" min="1" name="cantidad[]" class="form-control" value="{{ detalle.cantidad }}" required></td><td><input type="number" min="0" step="0.01" name="precio[]" class="form-control" value="{{ detalle.precio_unitario }}" required></td></tr>{% else %}<tr><td colspan="3" class="text-secondary">Esta factura no tiene detalles de productos.</td></tr>{% endfor %}</tbody></table></div>
+        <div class="d-flex flex-wrap gap-2 mt-3"><button class="btn btn-success" type="submit">Guardar cambios</button><button class="btn btn-outline-danger" type="submit" name="accion" value="eliminar" onclick="return confirm('¿Eliminar esta factura?');">Eliminar factura</button></div>
+    </form>
+    {% else %}<div class="alert alert-warning">La factura no existe.</div>{% endif %}
+</main>
+{% include 'footer.html' %}
+</body>
+</html>

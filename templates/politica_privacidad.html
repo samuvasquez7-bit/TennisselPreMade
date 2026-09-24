@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad y Tratamiento de Datos | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        body {
+            background-color: #05070a !important;
+            color: #e2e8f0 !important;
+            font-family: 'Montserrat', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .tx-legal-wrapper {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        .tx-legal-hero {
+            background: rgba(10, 12, 16, 0.88);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #1a1f2c;
+            padding: 2rem 1rem 1.75rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .tx-legal-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+        }
+
+        .tx-legal-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 5rem 1.25rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .tx-legal-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* SIDEBAR BAJADO CON POSICIÓN 130PX */
+        .tx-legal-sidebar {
+            position: sticky;
+            top: 130px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+
+        .tx-legal-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb {
+            background: #1a1f2c;
+            border-radius: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        .tx-sidebar-title {
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .tx-sidebar-link {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tx-sidebar-link:hover,
+        .tx-sidebar-link.active {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateX(3px);
+        }
+
+        .tx-legal-content {
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        @media (max-width: 576px) {
+            .tx-legal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        .tx-section-block {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 130px;
+        }
+
+        .tx-section-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .tx-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .tx-section-title {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: #cbd5e1;
+            font-size: 0.93rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+
+        li strong, p strong {
+            color: #ffffff;
+        }
+
+        .tx-highlight-box {
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-left: 4px solid #fbbf24;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .tx-grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin: 1.25rem 0;
+        }
+
+        .tx-privacy-card {
+            background: #141822;
+            border: 1px solid #1a1f2c;
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+
+        .tx-privacy-card-title {
+            color: #fbbf24;
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' ignore missing %}
+
+<div class="tx-legal-wrapper">
+
+    <header class="tx-legal-hero">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <span class="badge rounded-pill px-3 py-1 mb-2" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px;">
+                <i class="fa-solid fa-user-shield me-1"></i> PRIVACIDAD Y SEGURIDAD
+            </span>
+            <h1 class="h2 text-uppercase fw-black text-white mb-1" style="font-size: 2rem; letter-spacing: 1px;">Política de Privacidad</h1>
+            <p class="small text-secondary mb-0">Normativa de recolección, uso, cifrado y protección de datos personales dentro de TENNISSEL.</p>
+        </div>
+    </header>
+
+    <main class="tx-legal-layout">
+
+        <aside class="tx-legal-sidebar d-none d-lg-block">
+            <div class="tx-sidebar-title"><i class="fa-solid fa-shield-cat me-2"></i>Secciones</div>
+            <nav class="tx-sidebar-nav">
+                <a href="#p-sec-1" class="tx-sidebar-link active"><i class="fa-solid fa-chevron-right text-warning small"></i>1. Recopilación de Datos</a>
+                <a href="#p-sec-2" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>2. Finalidad del Tratamiento</a>
+                <a href="#p-sec-3" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>3. Geolocalización (Mapa)</a>
+                <a href="#p-sec-4" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>4. Seguridad Técnica</a>
+                <a href="#p-sec-5" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>5. Proveedores Externos</a>
+                <a href="#p-sec-6" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>6. Derechos ARCO</a>
+            </nav>
+        </aside>
+
+        <div class="tx-legal-content">
+
+            <section id="p-sec-1" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-database"></i></div>
+                    <h2 class="tx-section-title">1. Información y Datos Personales Recopilados</h2>
+                </div>
+                <p>Para habilitar los servicios del ecosistema TENNISSEL, nuestro sistema recopila categorías específicas de datos según el tipo de interacción[cite: 1]:</p>
+                
+                <div class="tx-grid-cards">
+                    <div class="tx-privacy-card">
+                        <div class="tx-privacy-card-title"><i class="fa-solid fa-user me-1"></i> Datos de Identificación</div>
+                        <p class="small mb-0">Nombre completo, correo electrónico, credenciales encriptadas y rol (Jugador, Profesor, Comercio)[cite: 1].</p>
+                    </div>
+                    <div class="tx-privacy-card">
+                        <div class="tx-privacy-card-title"><i class="fa-solid fa-location-crosshairs me-1"></i> Geolocalización</div>
+                        <p class="small mb-0">Coordenadas GPS y radio geográfico de búsqueda para el mapa en tiempo real[cite: 1].</p>
+                    </div>
+                    <div class="tx-privacy-card">
+                        <div class="tx-privacy-card-title"><i class="fa-solid fa-trophy me-1"></i> Datos Deportivos</div>
+                        <p class="small mb-0">Nivel de juego, historial de reservas y parámetros del motor de emparejamiento (Matchmaking)[cite: 1].</p>
+                    </div>
+                    <div class="tx-privacy-card">
+                        <div class="tx-privacy-card-title"><i class="fa-solid fa-credit-card me-1"></i> Datos Transaccionales</div>
+                        <p class="small mb-0">Logs de reservas, cálculo de comisiones y token de pasarela de pago[cite: 1].</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="p-sec-2" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-gears"></i></div>
+                    <h2 class="tx-section-title">2. Finalidad del Tratamiento de los Datos</h2>
+                </div>
+                <p>La información recolectada es procesada por nuestra arquitectura Backend en Python (Flask / Django)[cite: 1] con las siguientes finalidades operativas exentas de venta a terceros:</p>
+                <ul>
+                    <li><strong>Conexión Estratégica:</strong> Facilitar el agendamiento y reserva inmediata entre deportistas, profesores independientes y locaciones[cite: 1].</li>
+                    <li><strong>Gestión Financiera:</strong> Cálculo y retención automatizada de la tasa de comisión administrativa (10%-15%)[cite: 1] y facturación de suscripciones B2C / B2B[cite: 1].</li>
+                    <li><strong>Notificaciones Segmentadas:</strong> Envío de alertas de noticias de última hora, cancelaciones repentinas y ofertas del Club de Descuentos para usuarios Premium[cite: 1].</li>
+                    <li><strong>Mejora Algorítmica:</strong> Evaluación de recomendaciones y eficiencia del Mapa Interactivo y del Módulo de Entrenamiento[cite: 1].</li>
+                </ul>
+            </section>
+
+            <section id="p-sec-3" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h2 class="tx-section-title">3. Tratamiento de Datos de Geolocalización (Mapa Interactivo)</h2>
+                </div>
+                <p>El mapa dinámico utiliza tecnologías como Google Maps API o Mapbox para posicionar canchas, tiendas y bares deportivos[cite: 1].</p>
+                <div class="tx-highlight-box">
+                    <p class="mb-0"><strong>Consentimiento Expreso:</strong> El acceso a las coordenadas en tiempo real del usuario únicamente se activa previa autorización del navegador o dispositivo móvil. Esta información se procesa en memoria volátil para renderizar los nodos cercanos y no se utiliza para seguimiento persistente fuera de la aplicación.</p>
+                </div>
+            </section>
+
+            <section id="p-sec-4" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h2 class="tx-section-title">4. Protocolos de Seguridad Técnica y Almacenamiento</h2>
+                </div>
+                <p>Conforme a los Requisitos No Funcionales del Sistema (RNF 3)[cite: 1], TENNISSEL implementa barreras de seguridad de nivel bancario:</p>
+                <ul>
+                    <li><strong>Encriptación Transaccional:</strong> Transmisión de datos protegida mediante certificados HTTPS y cifrado TLS 1.3 activo.</li>
+                    <li><strong>Almacenamiento Seguro:</strong> Bases de datos relacionales normalizadas (PostgreSQL / MySQL)[cite: 1] con contraseñas encriptadas mediante algoritmos Hash Bcrypt.</li>
+                    <li><strong>Pasarelas Tokenizadas:</strong> Ningún dato completo de tarjetas de crédito o débito se almacena en nuestros servidores; los cobros son procesados mediante tokens seguros por proveedores certificados PCI-DSS[cite: 1].</li>
+                </ul>
+            </section>
+
+            <section id="p-sec-5" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <h2 class="tx-section-title">5. Integraciones y Transferencia a Terceros</h2>
+                </div>
+                <p>TENNISSEL interactúa con servicios externos autorizados mediante llamadas a APIs strictly configuradas[cite: 1]:</p>
+                <ul>
+                    <li><strong>Proveedores de Analítica Deportiva (ej. Sportradar):</strong> Para la sincronización continua de marcadores, rankings ATP/WTA y noticias del circuito profesional[cite: 1].</li>
+                    <li><strong>Motores de Mapas Geográficos:</strong> Para la representación visual de coordenadas de locales e instructores[cite: 1].</li>
+                </ul>
+                <p>En ningún caso comercializamos ni cedemos bases de datos personales a agencias publicitarias de terceros.</p>
+            </section>
+
+            <section id="p-sec-6" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-user-check"></i></div>
+                    <h2 class="tx-section-title">6. Derechos del Titular de Datos (Derechos ARCO)</h2>
+                </div>
+                <p>Los usuarios de la plataforma conservan el derecho irrestricto a:</p>
+                <ol>
+                    <li><strong>Acceso y Rectificación:</strong> Consultar y modificar sus datos personales en cualquier momento desde el panel de perfil.</li>
+                    <li><strong>Cancelación y Supresión:</strong> Solicitar la eliminación total y definitiva de su cuenta de usuario y registros asociados de nuestras bases de datos relacionales[cite: 1].</li>
+                    <li><strong>Oposición al Envío de Alertas:</strong> Desactivar las notificaciones push o boletines informativos manteniendo activa su cuenta funcional.</li>
+                </ol>
+                <p class="small text-secondary mt-4">Para ejercer sus derechos ARCO o hacer consultas sobre nuestra política de protección de datos, escríbanos a <strong>tennisselnuestrosaber@gmail.com</strong>.</p>
+            </section>
+
+        </div>
+    </main>
+
+</div>
+
+{% include 'footer.html' ignore missing %}
+{% include 'javascript.html' ignore missing %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".tx-section-block");
+    const navLinks = document.querySelectorAll(".tx-sidebar-link");
+
+    function changeActiveLink() {
+        let index = sections.length;
+
+        while(--index && window.scrollY + 160 < sections[index].offsetTop) {}
+
+        navLinks.forEach((link) => link.classList.remove("active"));
+        if(navLinks[index]) {
+            navLinks[index].classList.add("active");
+        }
+    }
+
+    changeActiveLink();
+    window.addEventListener("scroll", changeActiveLink);
+});
+</script>
+</body>
+</html>

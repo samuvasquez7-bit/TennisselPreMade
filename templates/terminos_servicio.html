@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos y Condiciones de Servicio | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        body {
+            background-color: #05070a !important;
+            color: #e2e8f0 !important;
+            font-family: 'Montserrat', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .tx-legal-wrapper {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        .tx-legal-hero {
+            background: rgba(10, 12, 16, 0.88);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #1a1f2c;
+            padding: 2rem 1rem 1.75rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .tx-legal-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+        }
+
+        .tx-legal-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 5rem 1.25rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .tx-legal-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* SIDEBAR BAJADO CON POSICIÓN 130PX */
+        .tx-legal-sidebar {
+            position: sticky;
+            top: 130px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+
+        .tx-legal-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb {
+            background: #1a1f2c;
+            border-radius: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        .tx-sidebar-title {
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .tx-sidebar-link {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tx-sidebar-link:hover,
+        .tx-sidebar-link.active {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateX(3px);
+        }
+
+        .tx-legal-content {
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        @media (max-width: 576px) {
+            .tx-legal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        .tx-section-block {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 130px;
+        }
+
+        .tx-section-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .tx-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .tx-section-title {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: #cbd5e1;
+            font-size: 0.93rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+
+        li strong, p strong {
+            color: #ffffff;
+        }
+
+        .tx-highlight-box {
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-left: 4px solid #fbbf24;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .tx-warning-box {
+            background: rgba(239, 68, 68, 0.04);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-left: 4px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .tx-table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1.25rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1a1f2c;
+        }
+
+        .tx-table-custom th {
+            background: #141822;
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 12px 14px;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-table-custom td {
+            background: #0d1017;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            padding: 12px 14px;
+            border-bottom: 1px solid #141822;
+        }
+
+        .tx-table-custom tr:last-child td {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' ignore missing %}
+
+<div class="tx-legal-wrapper">
+
+    <header class="tx-legal-hero">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <span class="badge rounded-pill px-3 py-1 mb-2" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px;">
+                <i class="fa-solid fa-gavel me-1"></i> MARCO LEGAL Y REGULATORIO
+            </span>
+            <h1 class="h2 text-uppercase fw-black text-white mb-1" style="font-size: 2rem; letter-spacing: 1px;">Términos de Servicio</h1>
+            <p class="small text-secondary mb-0">Contrato marco de uso para la plataforma digital, HUB conector y ecosistema transaccional TENNISSEL.</p>
+        </div>
+    </header>
+
+    <main class="tx-legal-layout">
+
+        <aside class="tx-legal-sidebar d-none d-lg-block">
+            <div class="tx-sidebar-title"><i class="fa-solid fa-list-ul me-2"></i>Contenido</div>
+            <nav class="tx-sidebar-nav">
+                <a href="#sec-1" class="tx-sidebar-link active"><i class="fa-solid fa-chevron-right text-warning small"></i>1. Definición del HUB</a>
+                <a href="#sec-2" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>2. Roles de Usuario</a>
+                <a href="#sec-3" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>3. Reservas y Clases</a>
+                <a href="#sec-4" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>4. Modelo Financiero</a>
+                <a href="#sec-5" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>5. Cancelaciones</a>
+                <a href="#sec-6" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>6. Módulo Entreno</a>
+                <a href="#sec-7" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>7. Datos de APIs</a>
+                <a href="#sec-8" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>8. Responsabilidad</a>
+            </nav>
+        </aside>
+
+        <div class="tx-legal-content">
+
+            <section id="sec-1" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-sitemap"></i></div>
+                    <h2 class="tx-section-title">1. Naturaleza Jurídica y Definición del HUB Conector</h2>
+                </div>
+                <p>El presente contrato regula los términos y condiciones bajo los cuales los usuarios acceden y hacen uso de la plataforma web y servicios digitales de <strong>TENNISSEL</strong>.</p>
+                <div class="tx-highlight-box">
+                    <p class="mb-0"><strong>Principio de Intermediación Estratégica:</strong> Tennissel opera exclusivamente como un HUB tecnológico y conector[cite: 1]. Tennissel <strong>no es propietario, no administra directamente, ni gestiona infraestructura física</strong> de canchas de tenis, comercios minoristas, ni talleres de encordado[cite: 1]. Nuestra plataforma actúa únicamente como el puente digital que facilita la vinculación[cite: 1].</p>
+                </div>
+                <p>Al acceder, registrarse o utilizar cualquier componente del ecosistema (Mapa en tiempo real, Directorio de Profesores, Portal Informativo, Módulo de Entrenamiento Asistido o Chatbot)[cite: 1], el usuario acepta quedar jurídicamente vinculado por las disposiciones estipuladas en este documento.</p>
+            </section>
+
+            <section id="sec-2" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-id-card"></i></div>
+                    <h2 class="tx-section-title">2. Estructura de Cuentas y Gestión de Roles (RBAC)</h2>
+                </div>
+                <p>El sistema implementa un esquema de Control de Acceso Basado en Roles (RBAC)[cite: 1] para salvaguardar la operativa según la naturaleza del usuario:</p>
+                
+                <table class="tx-table-custom">
+                    <thead>
+                        <tr>
+                            <th>Rol de Usuario</th>
+                            <th>Alcance y Capacidades del Sistema</th>
+                            <th>Responsabilidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Deportista / Jugador (B2C)</strong></td>
+                            <td>Consulta del mapa geolocalizado[cite: 1], reserva de clases[cite: 1], consumo de noticias[cite: 1], módulo de entreno biomecánico[cite: 1] y herramientas de Matchmaking[cite: 1].</td>
+                            <td>Veracidad de sus datos de contacto y conducta en instalaciones de terceros.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Profesor Independiente (B2B)</strong></td>
+                            <td>Creación de ficha profesional[cite: 1], publicación de tarifas por hora[cite: 1], gestión de agenda y recepción de cobros[cite: 1].</td>
+                            <td>Certificación técnica, cumplimiento de horarios y calidad de instrucción.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Comercio / Locación (B2B)</strong></td>
+                            <td>Publicación de turnos de canchas[cite: 1], venta de insumos, publicidad de transmisiones de torneos[cite: 1] y promociones[cite: 1].</td>
+                            <td>Veracidad de precios, disponibilidad de turnos e idoneidad del equipamiento.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Está estrictamente prohibido utilizar cuentas falsas o suplantar la identidad de profesionales e instituciones del ámbito deportivo.</p>
+            </section>
+
+            <section id="sec-3" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <h2 class="tx-section-title">3. Directorio de Profesores, Mapa y Reservas</h2>
+                </div>
+                <p>Las reservas de clases de tenis, turnos en canchas o contrataciones de talleres de encordado se rigen bajo los siguientes preceptos[cite: 1]:</p>
+                <ul>
+                    <li><strong>Relación Contractual Directa:</strong> La reserva efectuada formaliza un acuerdo de prestación de servicios directamente entre el deportista y el profesor o la locación deportiva correspondiente[cite: 1].</li>
+                    <li><strong>Validación de Disponibilidad:</strong> Los horarios expuestos en el mapa interactivo y en las fichas de los profesores se actualizan mediante la información suministrada por los mismos[cite: 1]. Tennissel realiza esfuerzos técnicos para garantizar la sincronía en tiempo real sin asumir responsabilidad por duplicidad de reservas imprevistas ocasionadas por terceros.</li>
+                    <li><strong>Calificaciones y Reseñas:</strong> Los usuarios podrán publicar calificaciones[cite: 1]. Nos reservamos el derecho de remover comentarios injuriosos, difamatorios o que atenten contra el honor de los profesionales.</li>
+                </ul>
+            </section>
+
+            <section id="sec-4" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-receipt"></i></div>
+                    <h2 class="tx-section-title">4. Modelo Financiero, Suscripciones y Comisiones</h2>
+                </div>
+                <p>Para la sostenibilidad del HUB[cite: 1], Tennissel opera bajo tres canales de monetización autorizados[cite: 1]:</p>
+                <ol>
+                    <li><strong>Comisión Transaccional por Clase (B2B2C):</strong> Tennissel retiene automáticamente una tasa administrativa de entre el <strong>10% y el 15%</strong> sobre el valor total de cada clase agendada y abonada mediante la pasarela de pagos integrada[cite: 1].</li>
+                    <li><strong>Membresía Suscripción Premium (Jugadores / B2C):</strong> Pago recurrente mensual que otorga beneficios exclusivos[cite: 1]:
+                        <ul>
+                            <li>Motor de emparejamiento inteligente por nivel de juego y geolocalización (Matchmaking)[cite: 1].</li>
+                            <li>Notificaciones y Alertas Last-Minute de cancelaciones o noticias críticas[cite: 1].</li>
+                            <li>Club de Descuentos en comercios y talleres de encordado aliados[cite: 1].</li>
+                            <li>Desbloqueo de bloques de entrenamiento biomecánico Élite.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Suscripción de Visibilidad Comercial (B2B):</strong> Cargo fijo mensual para profesores y comercios que mejora el posicionamiento en los resultados de búsqueda del mapa geográfico y reduce las tasas de comisión[cite: 1].</li>
+                </ol>
+            </section>
+
+            <section id="sec-5" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-circle-xmark"></i></div>
+                    <h2 class="tx-section-title">5. Políticas de Cancelación y Reembolsos</h2>
+                </div>
+                <div class="tx-warning-box">
+                    <p class="mb-0"><strong>Atención:</strong> Cada profesor o locación puede establecer políticas particulares de cancelación dentro de su perfil[cite: 1]. A falta de especificación, regirá la política estándar de Tennissel.</p>
+                </div>
+                <ul>
+                    <li><strong>Cancelación con más de 24 horas de antelación:</strong> El usuario recibirá el reembolso del 100% del valor pagado en su billetera digital o medio de pago origen, descontando únicamente los costes operativos de la pasarela de pagos.</li>
+                    <li><strong>Cancelación con menos de 24 horas o Inasistencia (No-Show):</strong> El importe total de la clase será transferido al profesor o locación para resarcir la reserva de agenda, perdiendo el usuario el derecho a devolución.</li>
+                    <li><strong>Fuerza Mayor u Origen Meteorológico:</strong> Si una clase en pista descubierta se suspende por lluvia previa o durante los primeros 20 minutos, el profesor/locación reprogramará la sesión sin penalidad.</li>
+                </ul>
+            </section>
+
+            <section id="sec-6" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                    <h2 class="tx-section-title">6. Módulo de Entrenamiento Asistido y Descargos de Salud</h2>
+                </div>
+                <p>Las rutinas de ejercicio, programas de optimización biomecánica y el Asistente/Chatbot de la plataforma tienen carácter informativo y de preparación física general[cite: 1].</p>
+                <p><strong>Descargo Médico:</strong> El deportista asume plenamente los riesgos derivados del entrenamiento. Se recomienda encarecidamente contar con la valoración de un profesional médico antes de ejecutar programas deportivos de alta exigencia cardiovascular o miofascial[cite: 1]. Tennissel no se responsabiliza por lesiones resultantes de ejecuciones técnicas defectuosas.</p>
+            </section>
+
+            <section id="sec-7" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-square-rss"></i></div>
+                    <h2 class="tx-section-title">7. Portal Informativo e Integraciones con APIs Externas</h2>
+                </div>
+                <p>La sección informativa del circuito mundial (rankings ATP/WTA, resultados en directo, cuadros de torneos) se nutre mediante la integración automatizada con APIs y proveedores de analítica deportiva (ej. Sportradar)[cite: 1].</p>
+                <p>Tennissel no garantiza la infalibilidad o inmediatez milimétrica de marcadores en tiempo real frente a eventuales fallos de conectividad de los proveedores primarios de datos[cite: 1]. La retransmisión visual se enfoca en la divulgación de opciones de emisión legal para los aficionados[cite: 1].</p>
+            </section>
+
+            <section id="sec-8" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h2 class="tx-section-title">8. Limitación de Responsabilidad y Jurisdicción</h2>
+                </div>
+                <p>Hasta el máximo permitido por la legislación vigente, Tennissel se exime de responsabilidad por daños indirectos, pérdidas de ganancias, indisponibilidad técnica del sistema por causas ajenas (SLA objetivo del 99.9%)[cite: 1] o disputas de índole civil o comercial que surjan directamente entre deportistas, profesores independientes y comercios afiliados[cite: 1].</p>
+                <p class="small text-secondary mt-4">Para resolver cualquier consulta legal o requerimiento judicial, puede ponerse en contacto con nuestra área jurídica a través de <strong>tennisselnuestrosaber@gmail.com</strong>.</p>
+            </section>
+
+        </div>
+    </main>
+
+</div>
+
+{% include 'footer.html' ignore missing %}
+{% include 'javascript.html' ignore missing %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".tx-section-block");
+    const navLinks = document.querySelectorAll(".tx-sidebar-link");
+
+    function changeActiveLink() {
+        let index = sections.length;
+
+        while(--index && window.scrollY + 160 < sections[index].offsetTop) {}
+
+        navLinks.forEach((link) => link.classList.remove("active"));
+        if(navLinks[index]) {
+            navLinks[index].classList.add("active");
+        }
+    }
+
+    changeActiveLink();
+    window.addEventListener("scroll", changeActiveLink);
+});
+</script>
+</body>
+</html>

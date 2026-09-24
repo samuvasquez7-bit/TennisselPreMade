@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información ATP y WTA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.3">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<main class="informative-page informative-page--wide">
+    <header class="informative-hero informative-hero--centered">
+        <div class="informative-hero__copy">
+            <span class="informative-kicker">Circuito profesional</span>
+            <h1>ATP y WTA</h1>
+            <p>Conoce cómo funcionan los circuitos profesionales masculino y femenino, cómo se construye un ranking y qué torneos marcan cada temporada.</p>
+        </div>
+    </header>
+
+    <section class="informative-section">
+        <div class="informative-section__heading">
+            <span class="informative-kicker">Dos circuitos profesionales</span>
+            <h2>ATP y WTA: qué significa cada uno</h2>
+            <p>Ambas organizaciones coordinan la competición profesional, el ranking y buena parte del calendario internacional. Sus torneos comparten las grandes reglas del tenis, aunque cada circuito tiene sus propios eventos y clasificación.</p>
+        </div>
+        <div class="informative-grid informative-grid--content">
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">ATP</span>
+                    <h3>Asociación de Tenistas Profesionales</h3>
+                    <p>Organiza el circuito masculino, gestiona el ranking ATP y reúne torneos como los ATP 250, ATP 500, Masters 1000 y las ATP Finals. El rendimiento semanal determina la entrada a los cuadros y la clasificación.</p>
+                </div>
+            </article>
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">WTA</span>
+                    <h3>Asociación de Tenis Femenino</h3>
+                    <p>Coordina el circuito femenino, el ranking WTA y torneos de distintas categorías, incluidos los WTA 1000 y las WTA Finals. Sus resultados permiten seguir la evolución de las jugadoras y la lucha por los grandes títulos.</p>
+                </div>
+            </article>
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">Grand Slams</span>
+                    <h3>El punto de encuentro</h3>
+                    <p>Australian Open, Roland Garros, Wimbledon y US Open son los cuatro grandes torneos del año. Reúnen a los mejores jugadores y ofrecen una referencia común para comparar épocas, superficies y carreras.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="informative-section">
+        <div class="informative-section__heading">
+            <span class="informative-kicker">Guía para usuarios</span>
+            <h2>Cómo interpretar una temporada</h2>
+        </div>
+        <div class="informative-grid informative-grid--content">
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">01 · Ranking</span>
+                    <h3>Los puntos se defienden</h3>
+                    <p>La posición no depende solo del último torneo. Los jugadores suman puntos durante el calendario y deben defender resultados equivalentes de la temporada anterior, por eso un buen resultado puede cambiar de valor con el paso de las semanas.</p>
+                </div>
+            </article>
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">02 · Superficie</span>
+                    <h3>La pista cambia el partido</h3>
+                    <p>La tierra batida favorece la construcción y los intercambios largos; la pista dura equilibra potencia y defensa; el césped reduce el tiempo de reacción y premia el saque, la devolución y la iniciativa.</p>
+                </div>
+            </article>
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">03 · Estadísticas</span>
+                    <h3>Mira más allá del marcador</h3>
+                    <p>Para entender un encuentro, observa primeros servicios, puntos de quiebre, devolución y errores no forzados. Estas cifras explican si el resultado llegó por dominio sostenido, remontada o pequeños momentos de presión.</p>
+                </div>
+            </article>
+            <article class="informative-card">
+                <div class="informative-card__body">
+                    <span class="informative-label">04 · Calendario</span>
+                    <h3>El contexto también compite</h3>
+                    <p>La carga de partidos, los viajes, la recuperación y el cambio de superficie influyen en el rendimiento. Comparar resultados teniendo en cuenta el calendario ofrece una lectura más justa de cada jugador.</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    {% if secciones %}
+        <div class="informative-grid informative-grid--featured">
+            {% for seccion in secciones %}
+                <article class="informative-card informative-card--feature">
+                    <div class="informative-card__body">
+                            <span class="informative-label">{{ seccion.seccion }}</span>
+                            <h2>{{ seccion.titulo }}</h2>
+                            {% if seccion.subtitulo %}
+                                <p class="informative-card__subtitle">{{ seccion.subtitulo }}</p>
+                            {% endif %}
+                            <p>{{ seccion.texto }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if tabla_rankings %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Historia y referentes</span>
+                <h2>Referentes históricos de la WTA</h2>
+                <p>Una selección de campeonas que transformaron el tenis con títulos, personalidad y estilos de juego memorables. La tabla puede editarse desde el panel de administración.</p>
+            </div>
+            <div class="informative-table-wrap">
+                <table class="informative-table">
+                    <thead>
+                        <tr style="font-size: 0.8rem;">
+                            <th style="width: 5%;">Pos.</th>
+                            <th style="width: 25%;">Jugadora</th>
+                            <th style="width: 20%;">País</th>
+                            <th style="width: 10%;">GS</th>
+                            <th style="width: 40%;">Destacado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for fila in tabla_rankings %}
+                            <tr>
+                                <td class="fw-bold text-primary">{{ fila.posicion }}</td>
+                                <td>{{ fila.jugadora }}</td>
+                                <td>{{ fila.pais }}</td>
+                                <td class="text-warning">{{ fila.grand_slam }}</td>
+                                <td>{{ fila.destacado }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    {% endif %}
+
+    {% if contenidos %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Guía rápida</span>
+                <h2>Claves para seguir la temporada</h2>
+            </div>
+        <div class="informative-grid informative-grid--content">
+            {% for contenido in contenidos %}
+                <article class="informative-card">
+                    <div class="informative-card__body">
+                        <span class="informative-label">{{ contenido.tipo }}</span>
+                        <h3>{{ contenido.titulo }}</h3>
+                        <p>{{ contenido.texto }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        </section>
+    {% endif %}
+
+    {% if api_data %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Actualización en vivo</span>
+                <h2>Datos Sportradar</h2>
+            </div>
+            <div class="informative-grid informative-grid--data">
+                {% for key, payload in api_data.items() %}
+                    <article class="informative-card informative-card--data">
+                        <div class="informative-card__body">
+                                <h3>{{ key.replace('_', ' ') | title }}</h3>
+                                {% if payload.rankings is defined %}
+                                    <ul class="informative-list">
+                                        {% for item in payload.rankings[:5] %}
+                                            <li class="text-light">{{ item.rank }}. {% if item.player and item.player.name %}{{ item.player.name }}{% elif item.name %}{{ item.name }}{% endif %}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% elif payload.tournaments is defined %}
+                                    <ul class="informative-list">
+                                        {% for tournament in payload.tournaments[:5] %}
+                                            <li class="text-light">{{ tournament.name if tournament.name else tournament }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    <p class="informative-card__muted">Datos disponibles</p>
+                                {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+</main>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

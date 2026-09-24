@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Facturas | Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+{% include 'navbar.html' %}
+<main class="container py-5 mt-5 text-light">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+        <div><span class="text-success fw-bold">TIENDA Y PEDIDOS</span><h1 class="mb-1">Facturas</h1><p class="text-secondary mb-0">Consulta y administra las facturas de todos los clientes.</p></div>
+        <a class="btn btn-outline-light" href="{{ url_for('admin_crud', resource='ordenes') }}">Ver pedidos</a>
+    </div>
+    <form method="get" class="input-group mb-4">
+        <input class="form-control" name="busqueda" value="{{ busqueda }}" placeholder="Buscar por factura, cliente, correo o estado">
+        <button class="btn btn-success" type="submit"><i class="fa-solid fa-search"></i> Buscar</button>
+    </form>
+    <div class="table-responsive bg-dark border border-secondary rounded p-2">
+        <table class="table table-dark table-striped align-middle mb-0">
+            <thead><tr><th>Factura</th><th>Fecha</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Estado</th><th>Método</th><th>Acciones</th></tr></thead>
+            <tbody>
+            {% for factura in facturas %}
+                <tr>
+                    <td class="fw-bold">{{ factura.id_formateado }}</td>
+                    <td>{{ factura.fecha }}</td>
+                    <td>{{ factura.cliente }}<small class="d-block text-secondary">{{ factura.cliente_email }}</small></td>
+                    <td>{% for producto in factura.productos %}<span class="d-block">{{ producto.producto_nombre }} x{{ producto.cantidad }}</span>{% else %}<span class="text-secondary">Sin productos</span>{% endfor %}</td>
+                    <td class="text-success fw-bold">${{ factura.total }}</td>
+                    <td><span class="badge text-bg-{{ 'success' if factura.estado == 'pagado' else 'warning' }}">{{ factura.estado }}</span></td>
+                    <td>{{ factura.metodo_pago or '-' }}</td>
+                    <td><a class="btn btn-sm btn-outline-light" href="{{ url_for('editar_factura', id=factura.id) }}">Editar</a></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="8" class="text-center text-secondary py-5">No hay facturas que mostrar.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+{% include 'footer.html' %}
+</body>
+</html>

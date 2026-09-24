@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.3">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+{% set video_pages = ['Jugadores', 'Datos y tips', 'Noticias de último momento', 'Sitios para ver tenis'] %}
+{% set has_video = titulo in video_pages %}
+{% set video_src = 'IMG/TENISSALUDABLE.mp4' if titulo == 'Datos y tips' else 'IMG/TENNISSELNOSOTROS.mp4' %}
+
+<main class="informative-page{% if titulo == 'Jugadores' %} informative-page--players{% elif titulo == 'Partidos recientes' %} informative-page--matches{% elif titulo == 'Datos y tips' %} informative-page--training{% elif titulo == 'Noticias semanales' %} informative-page--weekly{% elif titulo == 'Noticias de último momento' %} informative-page--breaking{% elif titulo == 'Marcas y útiles' %} informative-page--gear{% elif titulo == 'Sitios para ver tenis' %} informative-page--watch{% endif %}">
+    <header class="informative-hero informative-hero--centered">
+        <div class="informative-hero__copy">
+            <span class="informative-kicker">Tennissel informa</span>
+            <h1>{{ titulo }}</h1>
+            <p>{{ descripcion }}</p>
+        </div>
+    </header>
+
+    <section class="informative-quickfacts" aria-label="Datos clave de la sección">
+        {% if titulo == 'Jugadores' %}
+            <div><strong>4</strong><span>pilares para analizar</span></div><div><strong>3</strong><span>superficies principales</span></div><div><strong>1</strong><span>carrera en evolución</span></div>
+        {% elif titulo == 'Partidos recientes' %}
+            <div><strong>01</strong><span>resultado y contexto</span></div><div><strong>02</strong><span>táctica y ajustes</span></div><div><strong>03</strong><span>puntos de presión</span></div>
+        {% elif titulo == 'Datos y tips' %}
+            <div><strong>4</strong><span>métricas útiles</span></div><div><strong>30</strong><span>puntos para simular</span></div><div><strong>1</strong><span>plan de mejora</span></div>
+        {% elif titulo == 'Marcas y útiles' %}
+            <div><strong>4</strong><span>familias de producto</span></div><div><strong>3</strong><span>pistas a considerar</span></div><div><strong>0</strong><span>compras por impulso</span></div>
+        {% elif titulo == 'Sitios para ver tenis' %}
+            <div><strong>4</strong><span>fuentes complementarias</span></div><div><strong>24/7</strong><span>seguimiento global</span></div><div><strong>1</strong><span>agenda personal</span></div>
+        {% else %}
+            <div><strong>3</strong><span>claves de lectura</span></div><div><strong>1</strong><span>fuente verificada</span></div><div><strong>100%</strong><span>contexto útil</span></div>
+        {% endif %}
+    </section>
+
+    {% if has_video %}
+        <section class="informative-media-callout">
+            <div class="informative-media-callout__video">
+                <video controls preload="metadata">
+                    <source src="{{ url_for('static', filename=video_src) }}" type="video/mp4">
+                    Tu navegador no soporta la reproducción de vídeos.
+                </video>
+            </div>
+            <div class="informative-media-callout__copy">
+                {% if titulo == 'Datos y tips' %}
+                    <span class="informative-kicker">Entrenamiento y bienestar</span>
+                    <h2>Entrena mejor, recupérate mejor</h2>
+                    <p>Usa este contenido como complemento de los tips: alterna técnica, movilidad, hidratación y descanso para que la mejora sea sostenible.</p>
+                    <ul class="informative-list">
+                        <li><strong>Antes:</strong> activa articulaciones y prepara el movimiento.</li>
+                        <li><strong>Durante:</strong> controla la intensidad y la calidad de cada repetición.</li>
+                        <li><strong>Después:</strong> recupera, registra sensaciones y ajusta la próxima sesión.</li>
+                    </ul>
+                {% elif titulo == 'Jugadores' %}
+                    <span class="informative-kicker">Perfil del tenista</span>
+                    <h2>Analiza el estilo antes del ranking</h2>
+                    <p>La forma de jugar define la historia del jugador: servicio, equilibrio, salida de bolas y fijación del punto.</p>
+                    <ul class="informative-list">
+                        <li><strong>Técnica:</strong> observa la conexión entre golpe y posición.</li>
+                        <li><strong>Ritmo:</strong> detecta cómo cambian las decisiones bajo presión.</li>
+                        <li><strong>Impacto:</strong> revisa cómo cada jugador modifica una superficie.</li>
+                    </ul>
+                {% elif titulo == 'Partidos recientes' %}
+                    <span class="informative-kicker">Resumen del encuentro</span>
+                    <h2>Entiende qué cambió en el punto decisivo</h2>
+                    <p>Un marcador no cuenta toda la historia: la tensión, la dirección y la resistencia marcan la diferencia.</p>
+                    <ul class="informative-list">
+                        <li><strong>Servicio:</strong> revisa la primera pelota y la presión sobre el resto.</li>
+                        <li><strong>Rondas:</strong> identifica cada quiebre y cada cambio de atmósfera.</li>
+                        <li><strong>Contexto:</strong> toma decisiones con más criterio tras el partido.</li>
+                    </ul>
+                {% elif titulo == 'Noticias semanales' %}
+                    <span class="informative-kicker">Resumen semanal</span>
+                    <h2>Lee lo importante sin perder el contexto</h2>
+                    <p>La semana del tenis se entiende mejor cuando se conecta calendario, ranking y resultados con su impacto real.</p>
+                    <ul class="informative-list">
+                        <li><strong>Resultados:</strong> revisa quién sube, quién baja y por qué.</li>
+                        <li><strong>Agenda:</strong> prepara los partidos que vienen.</li>
+                        <li><strong>Crítica:</strong> analiza qué cambia dentro del circuito.</li>
+                    </ul>
+                {% elif titulo == 'Noticias de último momento' %}
+                    <span class="informative-kicker">Actualización inmediata</span>
+                    <h2>Verifica antes de compartir la noticia</h2>
+                    <p>El dato más reciente debe ser comparado con la fuente, la fecha y el contexto real del torneo.</p>
+                    <ul class="informative-list">
+                        <li><strong>Fuente:</strong> confirma quién comunica la información.</li>
+                        <li><strong>Origen:</strong> comprueba torneo, ronda y situación.</li>
+                        <li><strong>Actualización:</strong> observa si la novedad fue confirmada.</li>
+                    </ul>
+                {% else %}
+                    <span class="informative-kicker">Recursos recomendados</span>
+                    <h2>Busca el mejor sitio para seguir el tenis</h2>
+                    <p>Empareja resultados en directo con análisis, estadísticas y contexto para seguir cada torneo con criterio.</p>
+                    <ul class="informative-list">
+                        <li><strong>Directo:</strong> revisa horarios y cuadros actualizados.</li>
+                        <li><strong>Estadísticas:</strong> compara rendimiento por superficie.</li>
+                        <li><strong>Contexto:</strong> entiende mejor lo que realmente importa.</li>
+                    </ul>
+                {% endif %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if bloques %}
+        <div class="informative-grid informative-grid--content informative-blocks-grid">
+            {% for bloque in bloques %}
+                <article class="informative-card">
+                    <div class="informative-card__body">
+                        <span class="informative-label">{{ bloque.tipo|upper }}</span>
+                        <h2>{{ bloque.titulo }}</h2>
+                        <p>{{ bloque.texto }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if titulo == 'Jugadores' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Lectura del jugador</span>
+                <h2>Cómo analizar una carrera</h2>
+                <p>El ranking es una referencia, pero el nivel de un tenista se entiende mejor al combinar resultados, estilo, superficie y evolución.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Estilo</span><h3>Identifica su patrón de juego</h3><p>Observa si busca dominar con el saque, atacar desde la devolución, abrir la pista con la derecha o desgastar al rival con intercambios largos. El patrón explica qué decisiones repite bajo presión.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Técnica</span><h3>Más que un golpe ganador</h3><p>Servicio, resto, desplazamiento, transición a la red y defensa forman un conjunto. Un jugador completo puede cambiar la altura, la velocidad y la dirección para encontrar soluciones durante el partido.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Evolución</span><h3>La temporada cuenta una historia</h3><p>Compara sus resultados por superficie, la calidad de sus rivales, las lesiones y la carga de partidos. Una mejora en la devolución o en los puntos de quiebre puede anticipar un salto en el ranking.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Legado</span><h3>Impacto dentro y fuera de pista</h3><p>Los títulos son parte del legado, junto con la regularidad, las rivalidades, la influencia en nuevas generaciones y la capacidad de representar valores positivos para el deporte.</p></div></article>
+            </div>
+        </section>
+    {% elif titulo == 'Partidos recientes' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Análisis del encuentro</span>
+                <h2>Qué revisar después de un partido</h2>
+                <p>Un marcador resume el resultado, pero los siguientes datos ayudan a entender cómo se construyó la victoria.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Resultado</span><h3>Lee cada set con contexto</h3><p>Un 6-2 puede esconder varios juegos largos y un 7-6 puede resolverse por pocos puntos. Revisa quiebres, tie-breaks y oportunidades salvadas antes de sacar conclusiones.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Servicio</span><h3>El primer golpe marca el ritmo</h3><p>Compara primeros servicios, puntos ganados con el segundo saque y dobles faltas. La eficacia no depende solo de la velocidad, sino de colocar el saque lejos de la zona cómoda del restador.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Táctica</span><h3>Busca el cambio decisivo</h3><p>Fíjate en cuándo un jugador cambia la dirección del saque, ataca el revés, sube a la red o se coloca más atrás. Los ajustes entre sets suelen explicar las remontadas.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Presión</span><h3>Los puntos importantes pesan</h3><p>Break points, juegos de cierre y puntos de set muestran la respuesta mental. También conviene observar el lenguaje corporal y la capacidad de mantener el plan tras un error.</p></div></article>
+            </div>
+        </section>
+    {% elif titulo == 'Datos y tips' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Entrenamiento inteligente</span>
+                <h2>Convierte los datos en ejercicios</h2>
+                <p>Registra pocas métricas, pero úsalas para tomar decisiones concretas en la siguiente sesión.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Servicio</span><h3>Mejora la primera bola</h3><p>Anota porcentaje de primeros servicios y puntos ganados con el segundo. Practica objetivos por zonas y termina cada serie con una rutina completa, igual que en un partido.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Resto</span><h3>Devuelve con intención</h3><p>Cuenta cuántas devoluciones entran y dónde botan. Alterna bloques de devolución profunda con otros de ataque para aprender cuándo neutralizar y cuándo tomar la iniciativa.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Decisión</span><h3>Entrena los puntos de presión</h3><p>Simula 30-30, break point y tie-breaks con un objetivo claro. La presión debe formar parte de la práctica para que la rutina técnica aparezca cuando el marcador aprieta.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Recuperación</span><h3>Planifica la carga</h3><p>Combina intensidad, movilidad, hidratación y descanso. Si el rendimiento cae durante varias sesiones, reduce volumen y revisa la recuperación antes de añadir más ejercicios.</p></div></article>
+            </div>
+        </section>
+    {% elif titulo == 'Noticias semanales' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Resumen con contexto</span>
+                <h2>Cómo seguir la semana del tenis</h2>
+                <p>Una buena noticia conecta resultados, calendario y consecuencias para que el usuario entienda qué puede pasar después.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Resultados</span><h3>Lo que cambió en la pista</h3><p>Revisa campeones, finalistas, sorpresas y eliminaciones tempranas. El resultado importa, pero también la ronda alcanzada y la calidad de los rivales.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Ranking</span><h3>Quién sube y quién defiende</h3><p>Relaciona cada resultado con los puntos que se ganan o se pierden. Así es más fácil explicar por qué un jugador avanza aunque no haya ganado el torneo.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Agenda</span><h3>Qué viene ahora</h3><p>Consulta la siguiente superficie, los cuadros, los horarios y los posibles cruces. Una agenda ordenada ayuda a no perder los partidos más relevantes.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Club</span><h3>Conecta el circuito con tu juego</h3><p>Usa la noticia como inspiración: analiza una táctica, prueba un ejercicio o comenta con la comunidad qué decisión del partido te pareció más importante.</p></div></article>
+            </div>
+        </section>
+    {% elif titulo == 'Noticias de último momento' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Información reciente</span>
+                <h2>Lee una noticia antes de compartirla</h2>
+                <p>Las actualizaciones rápidas necesitan fecha, fuente y contexto para no confundir un rumor con un hecho confirmado.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Fuente</span><h3>Comprueba quién lo comunica</h3><p>Prioriza al torneo, la organización oficial, el equipo del jugador o una fuente periodística reconocida. Una captura sin origen no basta para confirmar una noticia.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Estado</span><h3>Distingue confirmado y pendiente</h3><p>Una retirada, lesión o cambio de rival puede actualizarse varias veces. Indica si la información está confirmada, en revisión o procede de una declaración inicial.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Contexto</span><h3>Explica qué cambia</h3><p>Cuenta la ronda, el torneo, la superficie y el efecto en el cuadro o el ranking. El contexto convierte un titular breve en una información realmente útil.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Actualización</span><h3>Revisa la hora y la fecha</h3><p>En días de competición una noticia puede quedar desactualizada en minutos. Mostrar cuándo se publicó y cuándo se verificó evita malentendidos.</p></div></article>
+            </div>
+        </section>
+    {% elif titulo == 'Marcas y útiles' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Equipamiento y lanzamientos</span>
+                <h2>Elige material que acompañe tu juego</h2>
+                <p>Las marcas ofrecen perfiles distintos. La mejor compra depende de tu nivel, frecuencia, presupuesto y sensaciones en la pista.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Raqueta</span><h3>Peso, balance y control</h3><p>Un marco ligero facilita la maniobra; uno más pesado aporta estabilidad. Revisa tamaño de cabeza, patrón de encordado y balance antes de fijarte solo en la marca.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Calzado</span><h3>Compra según la superficie</h3><p>Las suelas para tierra, pista dura y césped responden a necesidades diferentes. Prioriza ajuste, estabilidad lateral, amortiguación y durabilidad para reducir molestias.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Útiles</span><h3>Pequeños accesorios, gran diferencia</h3><p>Overgrips, protectores, pelotas, muñequeras y bolsas mejoran la comodidad y el cuidado del equipo. Lleva repuestos para que una sesión no termine por un detalle.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Lanzamientos</span><h3>Compara antes de estrenar</h3><p>Un modelo nuevo no siempre cambia tu rendimiento. Busca pruebas independientes, garantía, disponibilidad de repuestos y diferencias reales frente a la generación anterior.</p></div></article>
+            </div>
+        </section>
+    {% elif titulo == 'Sitios para ver tenis' %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Recursos para aficionados</span>
+                <h2>Organiza tu forma de seguir el tenis</h2>
+                <p>Combina resultados en directo, fuentes oficiales, estadísticas y vídeo para tener una visión completa sin perderte entre demasiadas pestañas.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Directo</span><h3>Resultados y cuadros</h3><p>Utiliza una plataforma de marcadores para consultar horarios, resultados, orden de juego y cuadros. Comprueba siempre tu zona horaria antes de planificar un partido.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Oficial</span><h3>Calendario y noticias</h3><p>Las páginas oficiales de ATP, WTA, Grand Slams y torneos son la mejor referencia para comunicados, cuadros definitivos, reglas, cambios de horario y declaraciones.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Estadísticas</span><h3>Compara con preguntas concretas</h3><p>Busca datos de saque, devolución, puntos de quiebre, duración y enfrentamientos directos. Una cifra aislada no explica un partido: compárala con superficie y rival.</p></div></article>
+                <article class="informative-card"><div class="informative-card__body"><span class="informative-label">Vídeo</span><h3>Aprende viendo el punto</h3><p>Cuando una retransmisión o resumen esté disponible legalmente, observa la posición de los jugadores, la construcción del punto y la toma de decisiones, no solo los golpes ganadores.</p></div></article>
+            </div>
+        </section>
+    {% endif %}
+</main>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

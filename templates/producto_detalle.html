@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ producto.get('nombre', 'Producto') }} | TENNISSEL</title>
+    <meta name="description" content="{{ (producto.get('descripcion_corta') or producto.get('descripcion_larga') or 'Compra productos para tenis en TENNISSEL.')|striptags|truncate(155, True, '') }}">
+    <link rel="canonical" href="{{ request.url }}">
+    <meta property="og:title" content="{{ producto.get('nombre', 'Producto') }} | TENNISSEL">
+    <meta property="og:description" content="{{ (producto.get('descripcion_corta') or 'Producto para jugadores de tenis.')|striptags|truncate(155, True, '') }}">
+    <meta property="og:type" content="product">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #121212; color: #fff; }
+        header { background: #181818; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
+        .logo { font-size: 24px; font-weight: bold; color: #fff; letter-spacing: 1px; }
+        .logo span { color: #00ff66; }
+        .container { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
+
+        /* --- ZOOM PROFESIONAL CON LUPA --- */
+        .img-zoom-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #222;
+            cursor: crosshair;
+        }
+        .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .img-lens {
+            position: absolute;
+            border: 2px solid #00ff66;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            display: none;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
+        }
+
+        /* --- ESTILOS DE PRODUCTO --- */
+        .product-detail { display: flex; gap: 40px; flex-wrap: wrap; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #2a2a2a; }
+        .product-media { flex: 1; min-width: 300px; }
+        .product-info { flex: 1; min-width: 300px; }
+        .badge { background: #00ff66; color: #000; padding: 5px 10px; font-weight: bold; border-radius: 4px; font-size: 12px; display: inline-block; margin-bottom: 10px; }
+        .title { font-size: 28px; margin-bottom: 10px; }
+        .price-detail { font-size: 32px; color: #00ff66; font-weight: bold; margin: 15px 0; }
+        .description { color: #ccc; line-height: 1.6; margin: 20px 0; font-size: 15px; }
+        .specs-list { list-style: none; margin: 15px 0; background: #222; padding: 15px; border-radius: 8px; }
+        .specs-list li { padding: 5px 0; color: #aaa; font-size: 14px; }
+        .specs-list li strong { color: #fff; }
+        
+        .btn-cart { 
+            background: #00ff66; 
+            color: #000; 
+            border: none; 
+            padding: 14px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            width: 100%; 
+            margin-top: 20px; 
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn-cart:hover { background: #00cc52; }
+        .btn-cart:active { transform: scale(0.98); }
+
+        /* Toast / Notificación de confirmación */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #00ff66;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .section-title { margin-top: 50px; font-size: 22px; border-bottom: 2px solid #2a2a2a; padding-bottom: 10px; margin-bottom: 20px; }
+        .grid-similares { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .card-similar { background: #1a1a1a; padding: 15px; border-radius: 8px; text-align: center; border: 1px solid #2a2a2a; }
+        .card-similar img { width: 100%; height: 160px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; }
+        .card-similar a { display: inline-block; margin-top: 10px; background: #2a2a2a; color: #fff; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px; }
+        
+        .faq-box { background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #2a2a2a; }
+        .faq-box strong { color: #00ff66; }
+        .faq-box p { color: #bbb; margin-top: 5px; font-size: 14px; }
+        .product-rating { display: flex; align-items: center; gap: 8px; color: #ffd34e; margin: 10px 0; }
+        .product-rating strong { color: #fff; }
+        .rating-stars { letter-spacing: 2px; font-size: 20px; }
+        .product-rating small { color: #888; }
+        .product-rating-form, .product-question-form { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 14px 0 20px; padding: 14px; border: 1px solid #2a2a2a; border-radius: 8px; background: #151515; }
+        .product-rating-form label, .product-question-form label { color: #aaa; font-size: 13px; }
+        .product-rating-form select, .product-question-form textarea { border: 1px solid #3a3a3a; border-radius: 6px; padding: 9px; background: #0d0d0d; color: #fff; }
+        .product-rating-form button, .product-question-form button { border: 0; border-radius: 6px; padding: 9px 14px; background: #00ff66; color: #000; font-weight: 700; cursor: pointer; }
+        .product-question-form { display: grid; align-items: stretch; }
+        .product-question-form textarea { width: 100%; resize: vertical; }
+        .faq-rating-form { display: inline-flex; gap: 5px; align-items: center; }
+        .faq-rating-form select { border: 1px solid #444; border-radius: 5px; padding: 5px; background: #0d0d0d; color: #ffd34e; }
+        .faq-rating-form button { border: 0; border-radius: 5px; padding: 5px 8px; background: #00ff66; color: #000; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .faq-login-link, .faq-login-prompt a { color: #00ff66; }
+        .faq-login-prompt { color: #999; }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<header>
+    <div class="logo">TENNIS<span>SEL.</span></div>
+    <a href="/catalogo" style="color: #aaa; text-decoration: none;">Catálogo</a>
+</header>
+
+<div class="container">
+    {% if producto %}
+        <div class="product-detail">
+            <div class="product-media">
+                <span class="badge">NUEVO</span>
+                
+                <div class="img-zoom-container" id="zoomContainer">
+                    <img src="{{ url_for('static', filename=(producto.get('imagen_principal') if producto.get('imagen_principal', '').startswith('uploads/') else 'img/' ~ producto.get('imagen_principal', 'default-product.jpg'))) }}" 
+                         alt="{{ producto.get('nombre', 'Producto') }}" 
+                        width="800" height="600" loading="eager" decoding="async"
+                         class="main-image" 
+                         id="mainImage">
+                    <div class="img-lens" id="imgLens"></div>
+                </div>
+                
+                {% if producto.get('video') %}
+                <div style="margin-top: 20px;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">Video Demostrativo</h3>
+                    <video width="100%" controls style="border-radius: 8px; background: #000;">
+                        <source src="{{ url_for('static', filename='videos/' ~ producto.get('video')) }}" type="video/mp4">
+                    </video>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="product-info">
+                <p style="color: #888; text-transform: uppercase; font-size: 13px; letter-spacing: 1px;">{{ producto.get('marca', 'TENNISSEL') }}</p>
+                <h1 class="title">{{ producto.get('nombre', 'Sin nombre') }}</h1>
+                <div class="product-rating" aria-label="{{ '%.1f'|format(valoracion.promedio|float) }} de 5 estrellas">
+                    <strong>{{ '%.1f'|format(valoracion.promedio|float) }}/5</strong>
+                    <span class="rating-stars">{% for estrella in range(1, 6) %}{{ '★' if estrella <= valoracion.promedio|float|round(0, 'common') else '☆' }}{% endfor %}</span>
+                    <small>({{ valoracion.total }} calificaciones)</small>
+                </div>
+                {% if session.get('user_id') and not is_banned %}
+                <form action="{{ url_for('calificar_producto', slug=producto.get('slug')) }}" method="POST" class="product-rating-form">
+                    <label for="product-rating">Tu calificación</label>
+                    <select id="product-rating" name="calificacion" required><option value="">Elige estrellas</option><option value="5">★★★★★ Excelente</option><option value="4">★★★★ Muy bueno</option><option value="3">★★★ Bueno</option><option value="2">★★ Regular</option><option value="1">★ Malo</option></select>
+                    <button type="submit">Calificar</button>
+                </form>
+                {% endif %}
+                <div class="price-detail">${{ producto.get('precio', 0) }}</div>
+                
+                <p style="color: #00ff66; font-weight: bold; font-size: 14px;">
+                    {% if producto.get('stock', 1) > 0 %} ✔ En stock {% else %} ❌ Agotado {% endif %}
+                </p>
+
+                <div class="description">
+                    {{ producto.get('descripcion_larga') or producto.get('descripcion_corta') or 'Sin descripción disponible.' }}
+                </div>
+
+                <ul class="specs-list">
+                    <li><strong>Categoría:</strong> {{ producto.get('subcategoria') or 'General' }}</li>
+                    <li><strong>Color:</strong> {{ producto.get('color', 'N/A') }}</li>
+                    <li><strong>Talla:</strong> {{ producto.get('talla', 'N/A') }}</li>
+                </ul>
+
+                <!-- BOTÓN INTEGRADO CON ATRIBUTOS DATA PARA JAVASCRIPT -->
+                <button class="btn-cart" 
+                        onclick="agregarAlCarrito(this)"
+                        data-id="{{ producto.get('id', 1) }}"
+                        data-nombre="{{ producto.get('nombre', 'Producto') }}"
+                        data-precio="{{ producto.get('precio', 0) }}"
+                        data-imagen="{{ url_for('static', filename='IMG/' ~ (producto.get('imagen') or producto.get('foto') or producto.get('url') or 'produ' ~ producto.get('id', 1) ~ '.jfif')) }}">
+                    <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                </button>
+            </div>
+        </div>
+
+        <h3 class="section-title">Productos Similares</h3>
+        <div class="grid-similares">
+            {% for sim in similares %}
+            <div class="card-similar">
+                <img src="{{ url_for('static', filename=(sim.get('imagen_principal') if sim.get('imagen_principal', '').startswith('uploads/') else 'img/' ~ sim.get('imagen_principal', 'default-product.jpg'))) }}" alt="{{ sim.get('nombre', 'Producto similar') }}" width="640" height="480" loading="lazy" decoding="async">
+                <h4>{{ sim.get('nombre') }}</h4>
+                <p style="color: #00ff66; font-weight: bold;">${{ sim.get('precio') }}</p>
+                <a href="{{ url_for('producto_detalle', slug=sim.get('slug')) }}">Ver Producto</a>
+            </div>
+            {% else %}
+            <p style="color: #777; font-size: 14px;">No hay productos similares.</p>
+            {% endfor %}
+        </div>
+
+        <h3 class="section-title">Preguntas Frecuentes</h3>
+            <p style="color:#888;">Consulta respuestas de la tienda o envía tu propia pregunta sobre este artículo.</p>
+        {% for preg in preguntas %}
+        <div class="faq-box">
+            <strong>P: {{ preg.get('pregunta') }}</strong>
+            <p>R: {{ preg.get('respuesta') or 'La respuesta está pendiente de revisión.' }}</p>
+            {% if preg.get('usuario_nombre') %}<small style="color:#888;">Preguntó {{ preg.get('usuario_nombre') }}</small>{% endif %}
+            <div style="margin-top:12px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;">
+                <span style="color:#ffd700;">★ {{ '%.1f'|format(preg.get('valoracion_promedio', 0)|float) }}/5 ({{ preg.get('total_valoraciones', 0) }})</span>
+                {% if session.get('user_id') and not is_banned %}
+                <form action="{{ url_for('calificar_pregunta_producto', pregunta_id=preg.get('id')) }}" method="POST" class="faq-rating-form">
+                    <select name="calificacion" aria-label="Calificar respuesta" required><option value="">Valorar</option><option value="5">★★★★★</option><option value="4">★★★★</option><option value="3">★★★</option><option value="2">★★</option><option value="1">★</option></select>
+                    <button type="submit">Guardar</button>
+                </form>
+                {% else %}<a href="{{ url_for('login') }}" class="faq-login-link">Inicia sesión para calificar</a>{% endif %}
+            </div>
+        </div>
+        {% else %}
+        <p style="color: #777; font-size: 14px; margin-bottom: 40px;">No hay preguntas frecuentes registradas.</p>
+        {% endfor %}
+        {% if session.get('user_id') and not is_banned %}
+        <form action="{{ url_for('preguntar_producto', slug=producto.get('slug')) }}" method="POST" class="product-question-form">
+            <label for="product-question">¿Qué quieres saber sobre este producto?</label>
+            <textarea id="product-question" name="pregunta" maxlength="1000" rows="3" required placeholder="Escribe una pregunta..."></textarea>
+            <button type="submit">Enviar pregunta</button>
+        </form>
+        {% else %}<p class="faq-login-prompt"><a href="{{ url_for('login') }}">Inicia sesión</a> para enviar una pregunta y calificar respuestas.</p>{% endif %}
+    {% endif %}
+</div>
+
+<!-- Elemento emergente para la notificación -->
+<!-- Elemento emergente con botón al carrito -->
+<div id="toast" class="toast-notification">
+    <i class="fas fa-check-circle" style="font-size: 20px; color: #00ff66;"></i>
+    <span id="toast-message">Producto agregado</span>
+    <button type="button" class="btn-toast-carrito" onclick="location.href='/carrito'">
+        Ir al Carrito
+    </button>
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+
+<script>
+    // --- LÓGICA DE AGREGAR AL CARRITO (LOCALSTORAGE) ---
+function agregarAlCarrito(btn) {
+    const id = btn.getAttribute('data-id');
+    const nombre = btn.getAttribute('data-nombre');
+    const precio = parseFloat(btn.getAttribute('data-precio'));
+    const imagen = btn.getAttribute('data-imagen');
+
+    let carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+    const existeIndex = carrito.findIndex(item => item.id === id);
+
+    if (existeIndex !== -1) {
+        carrito[existeIndex].cantidad += 1;
+    } else {
+        carrito.push({
+            id: id,
+            nombre: nombre,
+            precio: precio,
+            imagen: imagen,
+            cantidad: 1
+        });
+    }
+
+    localStorage.setItem('carritoTennissel', JSON.stringify(carrito));
+
+    mostrarNotificacion(`"${nombre}" se agregó al carrito`);
+}
+
+let toastTimer; // Variable global para controlar el tiempo del aviso
+
+function mostrarNotificacion(mensaje) {
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toast-message');
+    
+    toastMsg.innerText = mensaje;
+    toast.classList.add('show');
+
+    // Reinicia el temporizador si se agregan varios productos seguidos
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 5000); // Mantiene visible el Toast durante 5 segundos para dar tiempo de hacer clic
+}
+
+    // --- LÓGICA DE LA LUPA DE ZOOM ---
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById("zoomContainer");
+        const img = document.getElementById("mainImage");
+        const lens = document.getElementById("imgLens");
+
+        if (container && img && lens) {
+            let zoomFactor = 2.5;
+
+            lens.style.backgroundImage = `url('${img.src}')`;
+
+            container.addEventListener("mouseenter", function() {
+                lens.style.display = "block";
+                lens.style.backgroundSize = `${img.width * zoomFactor}px ${img.height * zoomFactor}px`;
+            });
+
+            container.addEventListener("mouseleave", function() {
+                lens.style.display = "none";
+            });
+
+            container.addEventListener("mousemove", function(e) {
+                let rect = container.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                let y = e.clientY - rect.top;
+
+                let lensWidth = lens.offsetWidth;
+                let lensHeight = lens.offsetHeight;
+
+                let posX = x - lensWidth / 2;
+                let posY = y - lensHeight / 2;
+
+                if (posX > container.clientWidth - lensWidth) posX = container.clientWidth - lensWidth;
+                if (posX < 0) posX = 0;
+                if (posY > container.clientHeight - lensHeight) posY = container.clientHeight - lensHeight;
+                if (posY < 0) posY = 0;
+
+                lens.style.left = posX + "px";
+                lens.style.top = posY + "px";
+
+                let bgX = (x * zoomFactor) - (lensWidth / 2);
+                let bgY = (y * zoomFactor) - (lensHeight / 2);
+
+                lens.style.backgroundPosition = `-${bgX}px -${bgY}px`;
+            });
+        }
+    });
+</script>
+</body>
+</html>

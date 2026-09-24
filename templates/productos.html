@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos de tenis | Raquetas, accesorios y ropa | TENNISSEL</title>
+    <meta name="description" content="Compra raquetas, pelotas, ropa, accesorios y tecnología para tenis en el catálogo de TENNISSEL.">
+    <link rel="canonical" href="{{ request.url_root.rstrip('/') }}{{ url_for('productos') }}">
+    <meta property="og:title" content="Productos de tenis | TENNISSEL">
+    <meta property="og:description" content="Encuentra equipamiento y accesorios para disfrutar más del tenis.">
+    <meta property="og:type" content="website">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0b0b0b; color: #fff; }
+
+        .catalog-container { 
+            max-width: 1450px; 
+            margin: 40px auto; 
+            padding: 0 30px; 
+        }
+
+        .filter-navbar {
+            background: #141414;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 24px 30px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-row span {
+            font-size: 12px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            min-width: 115px;
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chip {
+            background: #1c1c1c;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #282828;
+            transition: all 0.25s ease;
+        }
+
+        .chip:hover {
+            border-color: #00ff66;
+            color: #fff;
+        }
+
+        .chip.active {
+            background: #00ff66;
+            color: #000;
+            border-color: #00ff66;
+            font-weight: 700;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+        }
+
+        .filter-input, .filter-select {
+            background: #1c1c1c;
+            color: #fff;
+            border: 1px solid #282828;
+            padding: 9px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .filter-input:focus, .filter-select:focus {
+            border-color: #00ff66;
+        }
+        
+        .btn-filter-apply {
+            background: #00ff66;
+            color: #000;
+            border: none;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-filter-apply:hover {
+            background: #00cc52;
+            transform: translateY(-1px);
+        }
+
+        .grid-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            background: #141414;
+            padding: 18px 25px;
+            border-radius: 12px;
+            border: 1px solid #222;
+        }
+        .grid-header h2 { font-size: 20px; color: #fff; font-weight: 600; letter-spacing: 0.5px; }
+        .grid-header span { color: #666; font-size: 13px; }
+
+        .products-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 25px; 
+        }
+
+        @media (max-width: 1200px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 700px) {
+            .products-grid { grid-template-columns: 1fr; }
+        }
+        
+        .product-card { 
+            background: #141414; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid #222; 
+            display: flex; 
+            flex-direction: column; 
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; 
+        }
+        .product-card:hover { 
+            transform: translateY(-6px); 
+            border-color: #00ff66; 
+            box-shadow: 0 12px 30px rgba(0, 255, 102, 0.12);
+        }
+        .product-img-wrapper {
+            position: relative;
+            width: 100%;
+            height: 230px;
+            background: #0e0e0e;
+            overflow: hidden;
+        }
+        .product-card img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.4s ease;
+        }
+        .product-card:hover img {
+            transform: scale(1.05);
+        }
+        
+        .product-card-body { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        
+        .product-category-tag { 
+            font-size: 11px; 
+            color: #00ff66; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            font-weight: 700;
+            margin-bottom: 6px; 
+        }
+        
+        .product-meta-info { 
+            font-size: 12px; 
+            color: #666; 
+            margin-bottom: 10px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+
+        .product-card-body h3 { 
+            font-size: 16px; 
+            margin-bottom: 12px; 
+            color: #fff; 
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .price-section {
+            margin-top: auto;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+        .price-symbol { font-size: 14px; color: #00ff66; font-weight: bold; }
+        .price-value { font-size: 20px; color: #fff; font-weight: bold; }
+        
+        .btn-detail { 
+            text-align: center; 
+            background: #1c1c1c; 
+            color: #fff; 
+            padding: 11px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 600; 
+            border: 1px solid #282828;
+            transition: all 0.2s ease;
+        }
+        .btn-detail:hover { 
+            background: #00ff66; 
+            color: #000; 
+            border-color: #00ff66;
+        }
+        
+        .no-products { 
+            text-align: center; 
+            padding: 70px 20px; 
+            color: #666; 
+            grid-column: 1 / -1; 
+            background: #141414;
+            border-radius: 12px;
+            border: 1px solid #222;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="catalog-container">
+    
+    <form method="GET" action="/productos" class="filter-navbar">
+    
+        <div class="filter-row" style="border-top: 1px solid #1f1f1f; padding-top: 14px;">
+            <span>CATEGORIA:</span>
+            <div class="filter-chips">
+<div class="filtros-container">
+    <a href="/productos" class="chip {% if not request.args.get('categoria') %}active{% endif %}">Todas</a>
+    <a href="/productos?subcategoria=Raquetas" class="chip {% if request.args.get('subcategoria') == 'Raquetas' %}active{% endif %}">Raquetas</a>
+    <a href="/productos?subcategoria=Pelotas" class="chip {% if request.args.get('subcategoria') == 'Pelotas' %}active{% endif %}">Pelotas</a>
+    <a href="/productos?subcategoria=Accesorios" class="chip {% if request.args.get('subcategoria') == 'Accesorios' %}active{% endif %}">Accesorios</a>
+    <a href="/productos?subcategoria=Ropa" class="chip {% if request.args.get('subcategoria') == 'Ropa' %}active{% endif %}">Ropa</a>
+    <a href="/productos?subcategoria=Tecnología" class="chip {% if request.args.get('subcategoria') == 'Tecnología' %}active{% endif %}">Tecnología</a>
+</div>
+            </div>
+        </div>
+
+        <div class="filter-row" style="border-top: 1px solid #1f1f1f; padding-top: 14px;">
+            <span>Filtros & Orden:</span>
+            
+            <div class="filter-chips" style="gap: 12px; width: 100%; display: flex; flex-wrap: wrap; align-items: center;">
+                
+                {% if request.args.get('categoria') %}
+                <input type="hidden" name="categoria" value="{{ request.args.get('categoria') }}">
+                {% endif %}
+                {% if request.args.get('subcategoria') %}
+                <input type="hidden" name="subcategoria" value="{{ request.args.get('subcategoria') }}">
+                {% endif %}
+
+                <input type="text" name="marca" placeholder="Marca..." value="{{ request.args.get('marca', '') }}" class="filter-input" style="width: 120px;">
+                <input type="text" name="color" placeholder="Color..." value="{{ request.args.get('color', '') }}" class="filter-input" style="width: 110px;">
+                <input type="text" name="talla" placeholder="Talla..." value="{{ request.args.get('talla', '') }}" class="filter-input" style="width: 85px;">
+                
+                <input type="number" name="precio_min" placeholder="Mín $" value="{{ request.args.get('precio_min', '') }}" class="filter-input" style="width: 95px;">
+                <input type="number" name="precio_max" placeholder="Máx $" value="{{ request.args.get('precio_max', '') }}" class="filter-input" style="width: 95px;">
+
+                <select name="orden" class="filter-select">
+                    <option value="">Ordenar por...</option>
+                    <option value="precio_asc" {% if request.args.get('orden') == 'precio_asc' %}selected{% endif %}>Precio: Menor a Mayor</option>
+                    <option value="precio_desc" {% if request.args.get('orden') == 'precio_desc' %}selected{% endif %}>Precio: Mayor a Menor</option>
+                    <option value="nombre_asc" {% if request.args.get('orden') == 'nombre_asc' %}selected{% endif %}>Alfabético: A - Z</option>
+                    <option value="nombre_desc" {% if request.args.get('orden') == 'nombre_desc' %}selected{% endif %}>Alfabético: Z - A</option>
+                </select>
+
+                <button type="submit" class="btn-filter-apply">Aplicar Filtros</button>
+                <a href="/productos" style="color: #666; font-size: 13px; text-decoration: none; padding: 5px 0;">Limpiar filtros</a>
+            </div>
+        </div>
+
+    </form>
+
+    <div class="grid-header">
+        <h2>Catálogo de Artículos</h2>
+        <span>Mostrando resultados en cuadrícula de 4</span>
+    </div>
+
+    <div class="products-grid">
+        {% for prod in productos %}
+        <div class="product-card">
+            <div class="product-img-wrapper">
+                <img src="{{ url_for('static', filename=prod['imagen_principal'] if prod['imagen_principal'].startswith('uploads/') else 'img/' + prod['imagen_principal']) }}" alt="{{ prod['nombre'] }}" width="640" height="480" loading="lazy" decoding="async">
+            </div>
+            <div class="product-card-body">
+                <span class="product-category-tag">{{ prod['categoria'] or 'TENNISSEL' }}</span>
+                <div class="product-meta-info">Sub: {{ prod['subcategoria'] or 'General' }} | {{ prod['color'] or 'N/A' }} | Talla: {{ prod['talla'] or 'N/A' }}</div>
+                <h3>{{ prod['nombre'] }}</h3>
+                
+                <div class="price-section">
+                    <span class="price-symbol">$</span>
+                    <span class="price-value">{{ prod['precio'] }}</span>
+                </div>
+
+                <a href="{{ url_for('producto_detalle', slug=prod['slug']) }}" class="btn-detail">Ver Detalle</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-products">
+            <h3 style="color: #fff; margin-bottom: 8px; font-size: 18px;">No se encontraron productos</h3>
+            <p style="font-size: 13px; color: #666;">Intenta cambiar los filtros o restablecer la búsqueda.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Cookies y Rastreo | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        body {
+            background-color: #05070a !important;
+            color: #e2e8f0 !important;
+            font-family: 'Montserrat', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .tx-legal-wrapper {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        .tx-legal-hero {
+            background: rgba(10, 12, 16, 0.88);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #1a1f2c;
+            padding: 2rem 1rem 1.75rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .tx-legal-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+        }
+
+        .tx-legal-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 5rem 1.25rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .tx-legal-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tx-legal-sidebar {
+            position: sticky;
+            top: 130px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+
+        .tx-legal-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb {
+            background: #1a1f2c;
+            border-radius: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        .tx-sidebar-title {
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .tx-sidebar-link {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tx-sidebar-link:hover,
+        .tx-sidebar-link.active {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateX(3px);
+        }
+
+        .tx-legal-content {
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        @media (max-width: 576px) {
+            .tx-legal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        .tx-section-block {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 130px;
+        }
+
+        .tx-section-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .tx-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .tx-section-title {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: #cbd5e1;
+            font-size: 0.93rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+
+        li strong, p strong {
+            color: #ffffff;
+        }
+
+        .tx-table-custom {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1.25rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1a1f2c;
+        }
+
+        .tx-table-custom th {
+            background: #141822;
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 12px 14px;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-table-custom td {
+            background: #0d1017;
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            padding: 12px 14px;
+            border-bottom: 1px solid #141822;
+        }
+
+        .tx-highlight-box {
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-left: 4px solid #fbbf24;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' ignore missing %}
+
+<div class="tx-legal-wrapper">
+
+    <header class="tx-legal-hero">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <span class="badge rounded-pill px-3 py-1 mb-2" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px;">
+                <i class="fa-solid fa-cookie-bite me-1"></i> RASTREO Y PREFERENCIAS
+            </span>
+            <h1 class="h2 text-uppercase fw-black text-white mb-1" style="font-size: 2rem; letter-spacing: 1px;">Política de Cookies</h1>
+            <p class="small text-secondary mb-0">Uso de cookies, almacenamiento local y tecnologías de rastreo en TENNISSEL.</p>
+        </div>
+    </header>
+
+    <main class="tx-legal-layout">
+
+        <aside class="tx-legal-sidebar d-none d-lg-block">
+            <div class="tx-sidebar-title"><i class="fa-solid fa-list-ul me-2"></i>Contenido</div>
+            <nav class="tx-sidebar-nav">
+                <a href="#c-sec-1" class="tx-sidebar-link active"><i class="fa-solid fa-chevron-right text-warning small"></i>1. ¿Qué son las Cookies?</a>
+                <a href="#c-sec-2" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>2. Tipos de Cookies</a>
+                <a href="#c-sec-3" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>3. Cookies de Terceros</a>
+                <a href="#c-sec-4" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>4. Desactivación</a>
+            </nav>
+        </aside>
+
+        <div class="tx-legal-content">
+
+            <section id="c-sec-1" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-cookie"></i></div>
+                    <h2 class="tx-section-title">1. ¿Qué son las Cookies y Tecnologías Similares?</h2>
+                </div>
+                <p>Las cookies son pequeños archivos de texto que se almacenan en tu navegador o dispositivo cuando visitas TENNISSEL. Permiten recordar tus preferencias de navegación, mantener activa tu sesión e interactuar de forma fluida con el mapa en tiempo real.</p>
+            </section>
+
+            <section id="c-sec-2" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h2 class="tx-section-title">2. Clasificación de Cookies Utilizadas</h2>
+                </div>
+                
+                <table class="tx-table-custom">
+                    <thead>
+                        <tr>
+                            <th>Categoría</th>
+                            <th>Propósito</th>
+                            <th>Duración</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Técnicas / Esenciales</strong></td>
+                            <td>Permitir la navegación, autenticación de usuario y seguridad en la sesión.</td>
+                            <td>Sesión</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Personalización</strong></td>
+                            <td>Recordar filtros del mapa (ej. radio de búsqueda de canchas o nivel de juego).</td>
+                            <td>Persistente (1 año)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analíticas</strong></td>
+                            <td>Medir el flujo de tráfico y las secciones más visitadas dentro de la app.</td>
+                            <td>Persistente (2 años)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="c-sec-3" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-code-compare"></i></div>
+                    <h2 class="tx-section-title">3. Cookies de Terceros e Integraciones</h2>
+                </div>
+                <p>Nuestra plataforma integra servicios externos que pueden establecer sus propias cookies para funcionar adecuadamente:</p>
+                <ul>
+                    <li><strong>Google Maps / Mapbox:</strong> Para la correcta visualización de canchas y geolocalización de profesores.</li>
+                    <li><strong>Pasarelas de Pago:</strong> Para la prevención de fraudes en transacciones de reserva.</li>
+                    <li><strong>Google Analytics:</strong> Para evaluar de forma anónima el rendimiento de la web.</li>
+                </ul>
+            </section>
+
+            <section id="c-sec-4" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-toggle-off"></i></div>
+                    <h2 class="tx-section-title">4. Gestión y Desactivación de Cookies</h2>
+                </div>
+                <div class="tx-highlight-box">
+                    <p class="mb-0">Puedes cambiar tus preferencias o bloquear el uso de cookies en cualquier momento desde la configuración de tu navegador web (Chrome, Firefox, Safari, Edge).</p>
+                </div>
+                <p>Ten en cuenta que si deshabilitas las cookies esenciales, algunas funciones clave como mantener iniciada tu sesión o la precisión del mapa interactivo podrían verse afectadas.</p>
+                <p class="small text-secondary mt-4">Para más detalles sobre nuestra política de cookies, contáctanos en <strong>tennisselnuestrosaber@gmail.com</strong>.</p>
+            </section>
+
+        </div>
+    </main>
+
+</div>
+
+{% include 'footer.html' ignore missing %}
+{% include 'javascript.html' ignore missing %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".tx-section-block");
+    const navLinks = document.querySelectorAll(".tx-sidebar-link");
+
+    function changeActiveLink() {
+        let index = sections.length;
+
+        while(--index && window.scrollY + 160 < sections[index].offsetTop) {}
+
+        navLinks.forEach((link) => link.classList.remove("active"));
+        if(navLinks[index]) {
+            navLinks[index].classList.add("active");
+        }
+    }
+
+    changeActiveLink();
+    window.addEventListener("scroll", changeActiveLink);
+});
+</script>
+</body>
+</html>

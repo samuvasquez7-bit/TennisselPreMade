@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orden Confirmada | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+    <style>
+        body { background-color: #121212; color: #fff; font-family: 'Montserrat', sans-serif; }
+        .confirmacion-page { padding: 60px 0; }
+        .confirmacion-container { max-width: 600px; margin: 0 auto; padding: 0 20px; }
+        .confirmacion-panel { background: #1a1a1a; border: 1px solid #00ff66; border-radius: 12px; padding: 40px 30px; text-align: center; box-shadow: 0 10px 30px rgba(0, 255, 102, 0.15); }
+        .confirmacion-icono { width: 80px; height: 80px; margin: 0 auto 20px; border-radius: 50%; display: grid; place-items: center; background: rgba(0, 255, 102, 0.15); border: 1px solid #00ff66; color: #00ff66; font-size: 36px; }
+        .confirmacion-panel h2 { font-size: 28px; margin-bottom: 10px; font-weight: 700; }
+        .confirmacion-panel > p { color: #aaa; margin-bottom: 30px; }
+        .detalles-orden { background: #222; border: 1px solid #333; border-radius: 8px; padding: 20px; text-align: left; margin-bottom: 30px; }
+        .detalles-orden div { display: flex; justify-content: space-between; padding: 8px 0; color: #aaa; font-size: 15px; }
+        .detalles-orden div + div { border-top: 1px solid #333; }
+        .detalles-orden strong { color: #fff; }
+        .btn-catalogo { display: inline-block; width: 100%; background: #00ff66; color: #000; font-weight: bold; border: none; padding: 14px; border-radius: 6px; text-decoration: none; font-size: 16px; transition: 0.2s; }
+        .btn-catalogo:hover { background: #00cc52; color: #000; }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<main class="confirmacion-page">
+    <div class="confirmacion-container">
+        <div class="confirmacion-panel">
+            <div class="confirmacion-icono">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2>¡Pago Exitoso!</h2>
+            <p>Tu orden ha sido registrada correctamente en nuestro sistema y ya nos encontramos procesándola.</p>
+
+            <div class="detalles-orden">
+                <div>
+                    <span>Número de Orden:</span>
+                    <strong style="color: #00ff66;">{{ numero_orden }}</strong>
+                </div>
+                <div>
+                    <span>Estado del pago:</span>
+                    <strong>Completado / Pagado</strong>
+                </div>
+                <div>
+                    <span>Método de pago:</span>
+                    <strong>Aprobado con éxito</strong>
+                </div>
+            </div>
+
+            <a href="/" class="btn-catalogo">
+                <i class="fas fa-home me-2"></i> Volver al Inicio
+            </a>
+        </div>
+    </div>
+</main>
+
+{% include 'footer.html' %}
+</body>
+</html>

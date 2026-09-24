@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi tienda | TENNISSEL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="store-page">
+    {% include 'navbar.html' %}
+    <main class="store-shell">
+        <header class="store-heading">
+            <span>CUENTA TIENDA · PREMIUM</span>
+            <h1>Administra tus productos</h1>
+            <p>Publica artículos con una imagen, una descripción y un precio. Solo tú podrás retirarlos.</p>
+        </header>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="store-alert store-alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <div class="store-layout">
+            <section class="store-form-panel">
+                <div class="store-panel-title"><i class="fa-solid fa-plus"></i><div><span>NUEVO ARTÍCULO</span><h2>Publicar producto</h2></div></div>
+                <form method="POST" enctype="multipart/form-data" class="store-form">
+                    <label>Nombre del producto<input type="text" name="nombre" maxlength="150" required placeholder="Ej. Raqueta profesional"></label>
+                    <label>Descripción<textarea name="descripcion" maxlength="2000" rows="5" required placeholder="Describe el estado, características y lo que incluye..."></textarea></label>
+                    <label>Precio<input type="number" name="precio" min="1" step="0.01" required placeholder="0.00"></label>
+                    <label class="store-image-input">Imagen del producto<input type="file" name="imagen" accept="image/png,image/jpeg,image/gif,image/webp" required><small>PNG, JPG, GIF o WEBP</small></label>
+                    <button type="submit" class="store-submit"><i class="fa-solid fa-cloud-arrow-up"></i> Publicar producto</button>
+                </form>
+            </section>
+            <section class="store-products-panel">
+                <div class="store-panel-title"><i class="fa-solid fa-boxes-stacked"></i><div><span>MI CATÁLOGO</span><h2>Mis productos</h2></div></div>
+                <div class="store-products-grid">
+                    {% for producto in productos %}
+                        <article class="store-product-card">
+                            <img src="{{ url_for('static', filename=producto['imagen_principal']) }}" alt="{{ producto['nombre'] }}" width="640" height="480" loading="lazy" decoding="async">
+                            <div><h3>{{ producto['nombre'] }}</h3><p>{{ producto['descripcion_corta'] }}</p><strong>${{ '%.2f'|format(producto['precio']) }}</strong></div>
+                            <form method="POST" action="{{ url_for('eliminar_producto_tienda', id=producto['id']) }}" onsubmit="return confirm('¿Eliminar este producto?');"><button type="submit" class="store-delete"><i class="fa-solid fa-trash"></i> Eliminar</button></form>
+                        </article>
+                    {% else %}
+                        <p class="store-empty">Todavía no has publicado productos.</p>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+    {% include 'footer.html' %}
+</body>
+</html>

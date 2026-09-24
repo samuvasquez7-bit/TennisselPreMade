@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/carrito.css') }}?v=1.1">
+    
+    <style>
+        body { background-color: #121212; color: #fff; font-family: 'Montserrat', sans-serif; }
+        .carrito-page { padding: 40px 0; }
+        .carrito-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .carrito-header { margin-bottom: 30px; }
+        .carrito-header h1 span { color: #00ff66; }
+        .carrito-layout { display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
+        @media (max-width: 992px) { .carrito-layout { grid-template-columns: 1fr; } }
+        .carrito-panel { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 25px; }
+        .carrito-col-resumen .carrito-panel { border-color: #303030; box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35); }
+        .carrito-panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #2a2a2a; padding-bottom: 15px; }
+        .carrito-count { background: #00ff66; color: #000; font-weight: bold; padding: 2px 10px; border-radius: 20px; font-size: 13px; }
+        .table-dark { --bs-table-bg: transparent; }
+        .carrito-item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 6px; }
+        .btn-qty { background: #2a2a2a; color: #fff; border: 1px solid #444; width: 28px; height: 28px; border-radius: 4px; line-height: 1; cursor: pointer; }
+        .btn-qty:hover { background: #00ff66; color: #000; border-color: #00ff66; }
+        .carrito-envio-barra { background: #2a2a2a; height: 8px; border-radius: 4px; overflow: hidden; margin: 15px 0 8px 0; }
+        .carrito-envio-progreso { background: #00ff66; height: 100%; transition: width 0.3s ease; }
+        .carrito-envio-msg { font-size: 13px; color: #aaa; margin: 0; }
+        .carrito-btn-pagar { width: 100%; background: #00ff66; color: #000; font-weight: bold; border: none; padding: 14px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 20px; transition: 0.2s; }
+        .carrito-btn-pagar:hover { background: #00cc52; }
+        .carrito-btn-vaciar { width: 100%; background: transparent; color: #ff4444; border: 1px solid #ff4444; font-weight: 500; padding: 10px; border-radius: 6px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .carrito-btn-vaciar:hover { background: rgba(255, 68, 68, 0.1); }
+        .carrito-actions { width: min(100%, 330px); margin: 24px auto 0; display: grid; gap: 12px; }
+        .carrito-actions .carrito-btn-pagar,
+        .carrito-actions .carrito-btn-vaciar { width: 100%; margin: 0; box-sizing: border-box; }
+        .carrito-actions .carrito-btn-pagar { min-height: 58px; border: 1px solid #00ff66; box-shadow: 0 8px 22px rgba(0, 255, 102, 0.2); letter-spacing: 1.2px; }
+        .carrito-actions .carrito-btn-vaciar { min-height: 52px; border-color: #ff4444; letter-spacing: 1px; }
+        .carrito-metodos-pago { margin-top: 20px; text-align: center; border-top: 1px solid #2a2a2a; padding-top: 15px; font-size: 12px; color: #888; }
+        .carrito-pago-icons { font-size: 24px; display: flex; justify-content: center; gap: 15px; margin-top: 10px; color: #aaa; }
+        .modal-pago-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
+        .modal-pago-content { background: #1a1a1a; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%; border: 1px solid #00ff66; position: relative; color: #fff; box-shadow: 0 10px 30px rgba(0, 255, 102, 0.2); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #aaa; cursor: pointer; transition: 0.2s; }
+        .close-modal:hover { color: #00ff66; }
+        .opciones-pago { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .opcion-card { display: flex; align-items: center; background: #222; padding: 15px; border-radius: 8px; border: 1px solid #333; cursor: pointer; transition: 0.2s; }
+        .opcion-card:hover { border-color: #00ff66; background: #282828; }
+        .opcion-card input { margin-right: 15px; accent-color: #00ff66; transform: scale(1.3); cursor: pointer; }
+        .opcion-detalle { display: flex; align-items: center; gap: 15px; }
+        .opcion-detalle i { font-size: 24px; color: #00ff66; width: 30px; text-align: center; }
+        .opcion-detalle small { display: block; color: #888; font-size: 12px; }
+        .btn-confirmar-pago { width: 100%; padding: 14px; background: #00ff66; color: #000; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        .btn-confirmar-pago:hover { background: #00cc52; }
+        .confirmacion-compra { text-align: center; max-width: 440px; }
+        .confirmacion-icono { width: 76px; height: 76px; margin: 0 auto 18px; border-radius: 50%; display: grid; place-items: center; background: rgba(0, 255, 102, 0.14); border: 1px solid #00ff66; color: #00ff66; font-size: 34px; }
+        .confirmacion-compra h3 { font-size: 25px; margin-bottom: 8px; }
+        .confirmacion-compra > p { color: #aaa; margin-bottom: 20px; }
+        .confirmacion-datos { text-align: left; background: #222; border: 1px solid #333; border-radius: 8px; padding: 14px 16px; margin-bottom: 22px; }
+        .confirmacion-datos div { display: flex; justify-content: space-between; gap: 15px; padding: 7px 0; color: #aaa; font-size: 14px; }
+        .confirmacion-datos div + div { border-top: 1px solid #333; }
+        .confirmacion-datos strong { color: #fff; text-align: right; }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<main class="carrito-page">
+    <div class="carrito-container">
+        <header class="carrito-header">
+            <h1><i class="fas fa-shopping-cart"></i> TU <span>CARRITO</span></h1>
+            <p>Revisa tu equipamiento antes de confirmar la compra.</p>
+        </header>
+
+        <div class="carrito-layout">
+            <div class="carrito-col-productos">
+                <div class="carrito-panel">
+                    <div class="carrito-panel-head">
+                        <h2><i class="fas fa-list"></i> Productos en tu orden</h2>
+                        <span class="carrito-count" id="carritoCount">0 items</span>
+                    </div>
+                    <div id="contenedor-tabla-carrito"></div>
+                </div>
+            </div>
+
+            <div class="carrito-col-resumen">
+                <div class="carrito-panel carrito-sticky">
+                    <div class="carrito-panel-head">
+                        <h2><i class="fas fa-receipt"></i> Resumen</h2>
+                    </div>
+
+                    <div class="carrito-resumen-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span style="color: #aaa;">Subtotal</span>
+                            <span id="resumenSubtotal" class="fw-bold">$0</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span style="color: #aaa;">Envío</span>
+                            <span id="resumenEnvio" class="fw-bold">$0</span>
+                        </div>
+                        <hr style="border-color: #333;">
+                        <div class="d-flex justify-content-between mb-3 align-items-center">
+                            <span class="fs-5">Total</span>
+                            <strong id="gran-total-carrito" style="color: #00ff66; font-size: 24px;">$0</strong>
+                        </div>
+
+                        <div class="carrito-envio-barra">
+                            <div class="carrito-envio-progreso" id="envioProgreso" style="width:0%"></div>
+                        </div>
+                        <p class="carrito-envio-msg" id="envioMsg">
+                            <i class="fas fa-truck"></i> Te faltan <strong>$300.000</strong> para envío gratis
+                        </p>
+                    </div>
+
+                    <div class="carrito-actions">
+                        <button class="carrito-btn-pagar" onclick="procesarPagoFinal()">
+                            <i class="fas fa-lock"></i> Proceder al Pago
+                        </button>
+
+                        <button class="carrito-btn-vaciar" onclick="vaciarCarritoCompleto()">
+                            <i class="fas fa-trash-alt"></i> Vaciar Carrito
+                        </button>
+                    </div>
+
+                    <div class="carrito-metodos-pago">
+                        <span><i class="fas fa-shield-alt"></i> Pago 100% seguro</span>
+                        <div class="carrito-pago-icons">
+                            <i class="fab fa-cc-visa" title="Visa"></i>
+                            <i class="fab fa-cc-mastercard" title="Mastercard"></i>
+                            <i class="fab fa-cc-amex" title="Amex"></i>
+                            <i class="fab fa-cc-paypal" title="PayPal"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- MODAL DE SELECCIÓN DE MÉTODO DE PAGO -->
+<div id="modalPago" class="modal-pago-overlay" style="display: none;">
+    <div class="modal-pago-content">
+        <span class="close-modal" onclick="cerrarModalPago()">&times;</span>
+        <h3 style="margin-bottom: 5px;"><i class="fas fa-credit-card" style="color: #00ff66;"></i> Forma de Pago</h3>
+        <p style="color: #aaa; font-size: 14px;">¿Cómo deseas pagar tus productos?</p>
+        
+        <div class="opciones-pago">
+            <label class="opcion-card">
+                <input type="radio" name="metodo_pago" value="tarjeta" checked>
+                <div class="opcion-detalle">
+                    <i class="far fa-credit-card"></i>
+                    <div>
+                        <strong>Tarjeta de Crédito / Débito</strong>
+                        <small>Visa, Mastercard, American Express</small>
+                    </div>
+                </div>
+            </label>
+
+            <label class="opcion-card">
+                <input type="radio" name="metodo_pago" value="paypal">
+                <div class="opcion-detalle">
+                    <i class="fab fa-paypal"></i>
+                    <div>
+                        <strong>PayPal</strong>
+                        <small>Pago rápido sin ingresar tarjetas</small>
+                    </div>
+                </div>
+            </label>
+
+            <label class="opcion-card">
+                <input type="radio" name="metodo_pago" value="transferencia">
+                <div class="opcion-detalle">
+                    <i class="fas fa-university"></i>
+                    <div>
+                        <strong>PSE / Transferencia</strong>
+                        <small>Débito directo de tu cuenta bancaria</small>
+                    </div>
+                </div>
+            </label>
+        </div>
+
+        <button class="btn-confirmar-pago" onclick="finalizarCompra()">
+            <i class="fas fa-check-circle"></i> Confirmar y Pagar
+        </button>
+    </div>
+</div>
+
+<!-- CONFIRMACIÓN DE COMPRA -->
+<div id="modalConfirmacion" class="modal-pago-overlay" style="display: none;">
+    <div class="modal-pago-content confirmacion-compra">
+        <div class="confirmacion-icono"><i class="fas fa-check"></i></div>
+        <h3>¡Compra confirmada!</h3>
+        <p>Tu pago fue registrado correctamente. Ya puedes consultar el detalle de tu pedido.</p>
+        <div class="confirmacion-datos">
+            <div><span>Factura</span><strong id="confirmacionFactura">FAC-0000</strong></div>
+            <div><span>Entrega estimada</span><strong id="confirmacionEntrega">--</strong></div>
+        </div>
+        <button class="btn-confirmar-pago" onclick="verMisCompras()">
+            <i class="fas fa-receipt"></i> Ver mi factura
+        </button>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+
+<script>
+    function renderizarCarrito() {
+        const contenedor = document.getElementById('contenedor-tabla-carrito');
+        const countEl = document.getElementById('carritoCount');
+        const subtotalEl = document.getElementById('resumenSubtotal');
+        const totalEl = document.getElementById('gran-total-carrito');
+        
+        let carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+        
+        if (carrito.length === 0) {
+            contenedor.innerHTML = `
+                <div style="text-align:center; padding: 50px 20px; color: #888;">
+                    <i class="fas fa-shopping-bag" style="font-size: 48px; color: #333; margin-bottom: 15px;"></i>
+                    <h3>Tu carrito está vacío</h3>
+                    <p style="margin-bottom: 20px;">Aún no has agregado equipamiento.</p>
+                    <a href="/catalogo" class="btn" style="background: #00ff66; color: #000; font-weight: bold;">Explorar productos</a>
+                </div>`;
+            if (countEl) countEl.innerText = "0 items";
+            if (subtotalEl) subtotalEl.innerText = "$0";
+            const envioEl = document.getElementById('resumenEnvio');
+            if (envioEl) {
+                envioEl.innerText = "$0";
+                envioEl.style.color = "#00ff66";
+            }
+            if (totalEl) totalEl.innerText = "$0";
+            actualizarBarraEnvio(0);
+            return;
+        }
+
+        let html = `
+            <table class="table table-dark text-white align-middle">
+                <thead>
+                    <tr style="border-color: #333; color: #aaa;">
+                        <th>Producto</th>
+                        <th>Precio</th>
+                        <th class="text-center">Cant.</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>`;
+        
+        let subtotalGeneral = 0;
+        let totalItems = 0;
+
+        carrito.forEach((item, index) => {
+            let subtotalItem = item.precio * item.cantidad;
+            subtotalGeneral += subtotalItem;
+            totalItems += item.cantidad;
+
+            html += `
+                <tr style="border-color: #2a2a2a;">
+                    <td>
+                        <div class="d-flex align-items-center gap-3">
+                            <img src="${item.imagen}" class="carrito-item-img" alt="${item.nombre}">
+                            <span class="fw-bold">${item.nombre}</span>
+                        </div>
+                    </td>
+                    <td>$${item.precio.toLocaleString()}</td>
+                    <td class="text-center">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <button class="btn-qty" onclick="cambiarCantidad(${index}, -1)">-</button>
+                            <span class="fw-bold">${item.cantidad}</span>
+                            <button class="btn-qty" onclick="cambiarCantidad(${index}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td style="color: #00ff66;" class="fw-bold">$${subtotalItem.toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm text-danger" onclick="eliminarDelCarrito(${index})" title="Eliminar">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        html += `</tbody></table>`;
+        contenedor.innerHTML = html;
+
+        if (countEl) countEl.innerText = `${totalItems} items`;
+        if (subtotalEl) subtotalEl.innerText = `$${subtotalGeneral.toLocaleString()}`;
+        if (totalEl) totalEl.innerText = `$${subtotalGeneral.toLocaleString()}`;
+        
+        actualizarBarraEnvio(subtotalGeneral);
+    }
+
+    function cambiarCantidad(index, delta) {
+        let carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+        if (carrito[index]) {
+            carrito[index].cantidad += delta;
+            if (carrito[index].cantidad <= 0) {
+                carrito.splice(index, 1);
+            }
+            localStorage.setItem('carritoTennissel', JSON.stringify(carrito));
+            renderizarCarrito();
+        }
+    }
+
+    function eliminarDelCarrito(index) {
+        let carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+        carrito.splice(index, 1);
+        localStorage.setItem('carritoTennissel', JSON.stringify(carrito));
+        renderizarCarrito();
+    }
+
+    function vaciarCarritoCompleto() {
+        if (confirm("¿Estás seguro de que deseas vaciar tu carrito?")) {
+            localStorage.removeItem('carritoTennissel');
+            renderizarCarrito();
+        }
+    }
+
+    function actualizarBarraEnvio(subtotal) {
+        const meta = 300000;
+        const costoEnvio = 10000;
+        const barra = document.getElementById('envioProgreso');
+        const msg = document.getElementById('envioMsg');
+        const envioEl = document.getElementById('resumenEnvio');
+        const totalEl = document.getElementById('gran-total-carrito');
+        
+        if (!barra || !msg) return;
+
+        let porcentaje = Math.min((subtotal / meta) * 100, 100);
+        barra.style.width = `${porcentaje}%`;
+
+        if (subtotal <= 0) {
+            if (envioEl) {
+                envioEl.innerText = "$0";
+                envioEl.style.color = "#00ff66";
+            }
+            if (totalEl) totalEl.innerText = "$0";
+            msg.innerHTML = `<i class="fas fa-shopping-bag"></i> Agrega productos para calcular el envío`;
+            return;
+        }
+
+        if (subtotal >= meta) {
+            if (envioEl) {
+                envioEl.innerText = "Gratis";
+                envioEl.style.color = "#00ff66";
+            }
+            if (totalEl) totalEl.innerText = `$${subtotal.toLocaleString()}`;
+            msg.innerHTML = `<i class="fas fa-truck" style="color:#00ff66;"></i> ¡Felicidades! Tienes <strong>Envío Gratis</strong>`;
+        } else {
+            let falta = meta - subtotal;
+            if (envioEl) {
+                envioEl.innerText = `$${costoEnvio.toLocaleString()}`;
+                envioEl.style.color = "#fff";
+            }
+            if (totalEl) totalEl.innerText = `$${(subtotal + costoEnvio).toLocaleString()}`;
+            msg.innerHTML = `<i class="fas fa-truck"></i> Te faltan <strong>$${falta.toLocaleString()}</strong> para envío gratis`;
+        }
+    }
+
+    function procesarPagoFinal() {
+        let carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+        if (carrito.length === 0) {
+            alert("Tu carrito está vacío. Agrega productos antes de realizar el pago.");
+            return;
+        }
+        document.getElementById('modalPago').style.display = 'flex';
+    }
+
+    function cerrarModalPago() {
+        document.getElementById('modalPago').style.display = 'none';
+    }
+
+    async function finalizarCompra() {
+        const opcion = document.querySelector('input[name="metodo_pago"]:checked').value;
+        const carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+        const boton = document.querySelector('.btn-confirmar-pago');
+
+        boton.disabled = true;
+        boton.textContent = 'Procesando compra...';
+        
+        try {
+            // CORREGIDO: Apunta a la ruta real de tu backend /api/compras
+            const respuesta = await fetch('/api/compras', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    metodo_pago: opcion,
+                    productos: carrito.map(item => ({ id: item.id, cantidad: item.cantidad }))
+                })
+            });
+            const resultado = await respuesta.json();
+            if (!respuesta.ok) throw new Error(resultado.error || 'No fue posible procesar la compra.');
+
+            localStorage.removeItem('carritoTennissel');
+            cerrarModalPago();
+            document.getElementById('confirmacionFactura').textContent = `FAC-${String(resultado.factura_id).padStart(4, '0')}`;
+            document.getElementById('confirmacionEntrega').textContent = new Date(`${resultado.fecha_entrega_estimada}T12:00:00`).toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('modalConfirmacion').dataset.redirectUrl = resultado.redirect_url;
+            document.getElementById('modalConfirmacion').style.display = 'flex';
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            boton.disabled = false;
+            boton.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar y Pagar';
+        }
+    }
+
+    function verMisCompras() {
+        window.location.href = document.getElementById('modalConfirmacion').dataset.redirectUrl;
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        renderizarCarrito();
+    });
+</script>
+</body>
+</html>

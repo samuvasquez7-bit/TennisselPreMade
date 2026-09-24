@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="admin-soporte-container">
+    <div class="admin-header">
+        <h1>Bandeja de Soporte Técnico</h1>
+        <p>Gestiona y responde las solicitudes enviadas por los usuarios de TENNISSEL.</p>
+    </div>
+
+    {% if tickets %}
+        <div class="tickets-grid">
+            {% for ticket in tickets %}
+            <div class="admin-ticket-card">
+                <div class="ticket-info-top">
+                    <span class="user-badge">👤 {{ ticket.username }}</span>
+                    <span class="fecha-badge">{{ ticket.fecha_envio.strftime('%d/%m/%Y %H:%M') if ticket.fecha_envio else '' }}</span>
+                </div>
+
+                <h3 class="ticket-motivo">Asunto: {{ ticket.motivo }}</h3>
+                <p class="ticket-user-msg"><strong>Mensaje:</strong> {{ ticket.mensaje }}</p>
+
+                {% if ticket.respuesta %}
+                    <div class="respuesta-enviada">
+                        <strong>Tu respuesta previa:</strong>
+                        <p>{{ ticket.respuesta }}</p>
+                    </div>
+                {% else %}
+                    <form action="{{ url_for('responder_soporte', ticket_id=ticket.id) }}" method="POST" class="form-respuesta">
+                        <textarea name="respuesta" rows="3" placeholder="Escribe una respuesta para el usuario..." required></textarea>
+                        <button type="submit" class="btn-responder">Enviar Respuesta</button>
+                    </form><br><br>
+                <form action="{{ url_for('eliminar_mensaje', origen='soporte', id_msg=ticket.id) }}" method="POST" class="form-respuesta"  onsubmit="return confirm('¿Estás seguro de eliminar este ticket de soporte?');">
+                 <button type="submit" class="btn-ts-delete-aspero">
+                  <i class="fa-solid fa-trash-can"></i> Eliminar
+                 </button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="vacio-box">
+            <p>No hay solicitudes de soporte pendientes.</p>
+        </div>
+    {% endif %}
+</div>
+
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+    /* Estilos aislados EXCLUSIVAMENTE para la tarjeta de perfil */
+    .perfil-seccion {
+        background-color: #0d1117;
+        padding: 40px 15px;
+        min-height: calc(100vh - 180px);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .perfil-card {
+        background: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 12px;
+        padding: 35px 30px;
+        width: 100%;
+        max-width: 580px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .perfil-title {
+        font-weight: 900;
+        font-size: 24px;
+        color: #ffffff;
+        text-align: center;
+        text-transform: uppercase;
+    }
+
+    .perfil-title span { color: #00ff66; }
+
+    .subtitulo {
+        font-size: 13px;
+        color: #8b949e;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       AVATAR AGRANDADO (SIN REPETICIONES)
+    ════════════════════════════════════════════════════════════════ */
+    .avatar-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .avatar-wrapper {
+        position: relative;
+        width: 180px !important;  /* Tamaño grande asegurado */
+        height: 180px !important; /* Tamaño grande asegurado */
+        border-radius: 50%;
+        border: 4px solid #00ff66;
+        overflow: hidden;
+        background: #0d1117;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+        box-shadow: 0 0 20px rgba(0, 255, 102, 0.25);
+    }
+
+    .avatar-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-wrapper i {
+        font-size: 70px;
+        color: #8b949e;
+    }
+
+    .btn-cambiar-foto {
+        font-size: 13px;
+        font-weight: 600;
+        color: #00ff66;
+        border: 1px solid #00ff66;
+        border-radius: 6px;
+        padding: 7px 16px;
+        cursor: pointer;
+        background: transparent;
+        transition: all 0.25s ease;
+    }
+
+    .btn-cambiar-foto:hover {
+        background: #00ff66;
+        color: #000000;
+    }
+
+    /* Campos de formulario */
+    .campo-perfil { margin-bottom: 16px; }
+    .campo-perfil label { display: block; font-weight: 600; font-size: 12px; color: #c9d1d9; margin-bottom: 6px; }
+    .campo-perfil input, .campo-perfil select {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1px solid #21262d;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #ffffff;
+        background: #0d1117;
+    }
+
+    .grupo-password { position: relative; }
+    .grupo-password input { padding-right: 45px; }
+    .toggle-password { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: #8b949e; cursor: pointer; }
+
+    .acciones-perfil { display: flex; gap: 12px; margin-top: 25px; }
+    .btn-guardar { flex: 2; padding: 12px; background: #00ff66; color: #000; border: none; border-radius: 6px; font-weight: 900; text-transform: uppercase; cursor: pointer; }
+    .btn-cancelar { flex: 1; padding: 12px; background: #0d1117; color: #c9d1d9; border: 1px solid #21262d; border-radius: 6px; font-weight: 700; text-align: center; text-decoration: none; }
+</style>
+</head>
+<body>
+
+    <!-- NAVBAR NATIVO IGUAL A LAS DEMÁS PÁGINAS -->
+    {% include 'navbar.html' %}
+
+    <!-- CONTENIDO DEL PERFIL -->
+    <main class="perfil-seccion">
+        <div class="perfil-card">
+            <h1 class="perfil-title">EDITAR <span>PERFIL</span></h1>
+            <div class="subtitulo">Actualiza la información de tu cuenta TENNISSEL</div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category if category != 'error' else 'danger' }} text-center text-sm py-2">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('editarperfil') }}" method="POST" enctype="multipart/form-data">
+                
+                <div class="avatar-section">
+                    <div class="avatar-wrapper">
+                        {% if usuario and usuario.foto %}
+                            <img id="avatarPreviewImg" src="{{ usuario.foto }}" alt="Foto">
+                            <i class="fa-solid fa-user" id="avatarPreviewIcon" style="display: none;"></i>
+                        {% else %}
+                            <i class="fa-solid fa-user" id="avatarPreviewIcon"></i>
+                            <img id="avatarPreviewImg" src="" alt="Foto" style="display: none;">
+                        {% endif %}
+                    </div>
+                    <label for="foto_perfil" class="btn-cambiar-foto"><i class="fa-solid fa-camera mr-1"></i> Cambiar Foto</label>
+                    <input type="file" id="foto_perfil" name="foto_perfil" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="username"><i class="fa-solid fa-at text-success me-1"></i>Nombre de Usuario</label>
+                    <input type="text" id="username" name="username" value="{{ usuario.username if usuario and usuario.username else '' }}" required>
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="nombre_completo"><i class="fa-solid fa-user text-success me-1"></i>Nombre Completo</label>
+                    <input type="text" id="nombre_completo" name="nombre_completo" value="{{ usuario.nombre_completo if usuario and usuario.nombre_completo else '' }}" required>
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="email"><i class="fa-solid fa-envelope text-success me-1"></i>Correo Electrónico</label>
+                    <input type="email" id="email" name="email" value="{{ usuario.email if usuario and usuario.email else '' }}" required>
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="telefono"><i class="fa-solid fa-phone text-success me-1"></i>Teléfono</label>
+                    <input type="tel" id="telefono" name="telefono" value="{{ usuario.telefono if usuario and usuario.telefono else '' }}">
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="ciudad"><i class="fa-solid fa-location-dot text-success me-1"></i>Ciudad</label>
+                    <input type="text" id="ciudad" name="ciudad" value="{{ usuario.ciudad if usuario and usuario.ciudad else '' }}">
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="nivel"><i class="fa-solid fa-trophy text-success me-1"></i>Nivel de Juego</label>
+                    <select id="nivel" name="nivel">
+                        <option value="principiante" {% if usuario and usuario.nivel == 'principiante' %}selected{% endif %}>Principiante (1.0 - 2.5)</option>
+                        <option value="intermedio" {% if usuario and usuario.nivel == 'intermedio' %}selected{% endif %}>Intermedio (3.0 - 4.0)</option>
+                        <option value="avanzado" {% if usuario and usuario.nivel == 'avanzado' %}selected{% endif %}>Avanzado (4.5 - 5.5)</option>
+                        <option value="profesional" {% if usuario and usuario.nivel == 'profesional' %}selected{% endif %}>Profesional (6.0+)</option>
+                    </select>
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="mano_dominante"><i class="fa-solid fa-hand text-success me-1"></i>Mano Dominante</label>
+                    <select id="mano_dominante" name="mano_dominante">
+                        <option value="diestro" {% if usuario and usuario.mano_dominante == 'diestro' %}selected{% endif %}>Diestro</option>
+                        <option value="zurdo" {% if usuario and usuario.mano_dominante == 'zurdo' %}selected{% endif %}>Zurdo</option>
+                        <!-- Cambiar value="ambidextro" por value="ambidiestro" -->
+                        <option value="ambidiestro" {% if usuario and usuario.mano_dominante == 'ambidiestro' %}selected{% endif %}>Ambidiestro</option>
+                    </select>
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="reves"><i class="fa-solid fa-table-tennis-paddle-ball text-success me-1"></i>Tipo de Revés</label>
+                    <select id="reves" name="reves">
+                        <option value="una_mano" {% if usuario and usuario.reves == 'una_mano' %}selected{% endif %}>A una mano</option>
+                        <option value="dos_manos" {% if usuario and usuario.reves == 'dos_manos' %}selected{% endif %}>A dos manos</option>
+                    </select>
+                </div>
+
+                <div class="campo-perfil">
+                    <label for="password"><i class="fa-solid fa-lock text-success me-1"></i>Nueva Contraseña (Opcional)</label>
+                    <div class="grupo-password">
+                        <input type="password" id="password" name="password" placeholder="Déjalo en blanco si no deseas cambiarla">
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="acciones-perfil">
+                    <a href="{{ url_for('index') }}" class="btn-cancelar">Cancelar</a>
+                    <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- FOOTER NATIVO -->
+    {% include 'footer.html' %}
+
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+        if (togglePassword) {
+            togglePassword.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+
+        const inputFoto = document.getElementById('foto_perfil');
+        const previewImg = document.getElementById('avatarPreviewImg');
+        const previewIcon = document.getElementById('avatarPreviewIcon');
+        if (inputFoto) {
+            inputFoto.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        previewImg.src = evt.target.result;
+                        previewImg.style.display = 'block';
+                        if (previewIcon) previewIcon.style.display = 'none';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    </script>
+    {% include 'javascript.html' %}
+</body>
+</html>

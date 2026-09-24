@@ -1,0 +1,379 @@
+<!-- Cargar FontAwesome y tipografía moderna -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<footer class="ts-footer">
+  {% if not is_premium %}
+  <!-- BANNER SUPERIOR DE PROPUESTA DE VALOR / NEWSLETTER & PREMIUM -->
+  <div class="ts-footer-hero">
+    <div class="ts-container">
+      <div class="ts-hero-grid">
+        <div class="ts-hero-text">
+          <span class="ts-tag">EXPERIENCIA EXCLUSIVA</span>
+          <h2>Eleva tu juego al nivel profesional</h2>
+          <p>Accede a análisis avanzados, emparejamiento con matchmaking inteligente y reserva prioritaria de canchas.</p>
+        </div>
+        <div class="ts-hero-action">
+          <a href="{{ url_for('premium') }}" class="ts-btn-gold">
+            <i class="fas fa-crown"></i>
+            <span>Descubrir TENNISSEL Premium</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- NAVEGACIÓN PRINCIPAL DEL FOOTER -->
+  <div class="ts-footer-main">
+    <div class="ts-container">
+      <div class="ts-grid">
+        
+        <!-- COLUMNA 1: BRAND IDENTITY -->
+        <div class="ts-col ts-col-brand">
+          <a href="{{ url_for('index') }}" class="ts-logo">
+            TENNISSEL<span class="ts-dot">.</span>
+          </a>
+          <p class="ts-brand-desc">
+            El ecosistema digital líder para atletas, clubes y aficionados del tenis. Tecnología, comunidad y alto rendimiento en un solo lugar.
+          </p>
+          <div class="ts-status-badge">
+            <span class="ts-status-indicator"></span>
+            <span class="ts-status-text">Red Global Operativa</span>
+          </div>
+        </div>
+
+        <!-- COLUMNA 2: CIRCUITO & COBERTURA -->
+        <div class="ts-col">
+          <h4 class="ts-col-title">Circuito & Noticias</h4>
+          <ul class="ts-links">
+            <li><a href="{{ url_for('informacion_atp_wta') }}">Ranking ATP & WTA</a></li>
+            <li><a href="{{ url_for('informacion_jugadores') }}">Perfiles de Jugadores</a></li>
+            <li><a href="{{ url_for('informacion_torneos') }}">Calendario de Torneos</a></li>
+            <li><a href="{{ url_for('informacion_partidos_recientes') }}">Resultados en Vivo</a></li>
+            <li><a href="{{ url_for('informacion_noticias_new') }}">Noticias de Última Hora</a></li>
+            <li><a href="{{ url_for('informacion_noticias_semanales') }}">Resumen Semanal</a></li>
+            <li><a href="{{ url_for('informacion_sitios_tennis') }}">Directorio de Clubes</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMNA 3: SERVICIOS & PLATAFORMA -->
+        <div class="ts-col">
+          <h4 class="ts-col-title">Servicios & Plataforma</h4>
+          <ul class="ts-links">
+            <li><a href="{{ url_for('matchmaking') }}">Matchmaking de Jugadores</a></li>
+            <li><a href="{{ url_for('reservas') }}">Reserva de Canchas</a></li>
+            <li><a href="{{ url_for('mapas') }}">Mapa Interactivo de Canchas</a></li>
+            <li><a href="{{ url_for('entreno') }}">Planes de Entrenamiento</a></li>
+            <li><a href="{{ url_for('informacion_datos_y_tips') }}">Estrategia & Tips Técnicos</a></li>
+            <li><a href="{{ url_for('informacion_marcas_y_utiles') }}">Guía de Equipamiento</a></li>
+            <li><a href="{{ url_for('productos') }}">Tienda Oficial</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMNA 4: ÁREA DE MIEMBRO -->
+        <div class="ts-col">
+          <h4 class="ts-col-title">Área de Miembro</h4>
+          <ul class="ts-links">
+            <li><a href="{{ url_for('editarperfil') }}">Mi Perfil de Atleta</a></li>
+            <li><a href="{{ url_for('ver_carrito') }}">Mi Carrito de Compras</a></li>
+            <li><a href="{{ url_for('mis_compras') }}">Gestión de Facturas</a></li>
+            <li><a href="{{ url_for('notificaciones') }}">Centro de Notificaciones</a></li>
+            <li><a href="{{ url_for('soporte_tecnico') }}">Centro de Ayuda y Ticket</a></li>
+            <li><a href="{{ url_for('contacto') }}">Contacto Directo</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRAS INFERIOR / COPYRIGHT & LEGAL -->
+  <div class="ts-footer-bottom">
+    <div class="ts-container">
+      <div class="ts-bottom-wrapper">
+        <div class="ts-copyright">
+          <p>&copy; 2026 TENNISSEL Inc. Todos los derechos reservados.</p>
+        </div>
+        <div class="ts-legal-nav">
+          <a href="{{ url_for('terminos_servicio') }}">Términos de Uso</a>
+          <span class="ts-sep">•</span>
+          <a href="{{ url_for('politica_privacidad') }}">Política de Privacidad</a>
+          <span class="ts-sep">•</span>
+          <a href="{{ url_for('politica_devoluciones') }}">Devoluciones</a>
+          <span class="ts-sep">•</span>
+          <a href="{{ url_for('politica_garantias') }}">Garantías</a>
+          <span class="ts-sep">•</span>
+          <a href="{{ url_for('tratamiento_datos') }}">Tratamiento de Datos</a>
+          <span class="ts-sep">•</span>
+          <a href="{{ url_for('politica_cookies') }}">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  /* ==========================================
+     ESTILOS PREMIUM TALLA MUNDIAL - TENNISSEL
+     ========================================== */
+  .ts-footer {
+    background-color: #080a0e;
+    color: #94a3b8;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-size: 0.938rem;
+    line-height: 1.6;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    margin-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ts-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* 1. HERO BANNER */
+  .ts-footer-hero {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(8, 10, 14, 0.95) 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 48px 0;
+    position: relative;
+  }
+
+  .ts-footer-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 15%;
+    width: 300px;
+    height: 100%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(0,0,0,0) 70%);
+    pointer-events: none;
+  }
+
+  .ts-hero-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .ts-tag {
+    display: inline-block;
+    color: #e2e8f0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .ts-hero-text h2 {
+    color: #ffffff;
+    font-size: 1.65rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .ts-hero-text p {
+    color: #94a3b8;
+    margin: 0;
+    max-width: 620px;
+    font-size: 0.95rem;
+  }
+
+  .ts-btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, #d4af37 0%, #b89028 100%);
+    color: #080a0e;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 14px 28px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+  }
+
+  .ts-btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -5px rgba(212, 175, 55, 0.45);
+    color: #000000;
+  }
+
+  /* 2. GRID PRINCIPAL */
+  .ts-footer-main {
+    padding: 72px 0 56px 0;
+  }
+
+  .ts-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 56px;
+  }
+
+  /* LOGO & MARCA */
+  .ts-logo {
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 1px;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .ts-dot {
+    color: #10b981;
+  }
+
+  .ts-brand-desc {
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    margin-bottom: 24px;
+  }
+
+  .ts-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 8px 16px;
+    border-radius: 30px;
+  }
+
+  .ts-status-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+  }
+
+  .ts-status-text {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #cbd5e1;
+  }
+
+  /* ENLACES Y COLUMNAS */
+  .ts-col-title {
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 24px 0;
+  }
+
+  .ts-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ts-links li {
+    margin-bottom: 12px;
+  }
+
+  .ts-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    display: inline-block;
+  }
+
+  .ts-links a:hover {
+    color: #ffffff;
+    transform: translateX(4px);
+  }
+
+  /* 3. FOOTER BOTTOM */
+  .ts-footer-bottom {
+    background-color: #040507;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 24px 0;
+  }
+
+  .ts-bottom-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .ts-copyright p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+
+  .ts-legal-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ts-legal-nav a {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.83rem;
+    transition: color 0.2s ease;
+  }
+
+  .ts-legal-nav a:hover {
+    color: #cbd5e1;
+  }
+
+  .ts-sep {
+    color: #334155;
+    font-size: 0.7rem;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .ts-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+    
+    .ts-hero-grid {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ts-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ts-bottom-wrapper {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .ts-sep {
+      display: none;
+    }
+
+    .ts-legal-nav {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+</style>

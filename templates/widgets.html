@@ -1,0 +1,64 @@
+<div id="tennissel-widgets" class="tennissel-widgets" data-user-id="{{ session.get('user_id', '') }}" data-role="{{ session.get('role', 'cliente') }}">
+    <button id="widget-dock-toggle" class="widget-dock-toggle" type="button" aria-label="Ocultar accesos flotantes" aria-expanded="true"><i class="fa-solid fa-chevron-down"></i></button>
+    <div class="widget-launchers">
+        <button id="chatbot-launcher" class="widget-launcher widget-launcher-chat" type="button">
+            <i class="fa-solid fa-robot"></i> TennisBot
+        </button>
+        <button id="widget-launcher" class="widget-launcher widget-launcher-radar" type="button">
+            <i class="fa-solid fa-users"></i> Radar
+        </button>
+        <button id="widget-teacher-launcher" class="widget-launcher widget-launcher-teacher" type="button">
+            <i class="fa-solid fa-graduation-cap"></i> <span id="teacher-launcher-label">Profesores</span>
+        </button>
+    </div>
+
+    <section id="chatbot-window" class="widget-panel widget-hidden" aria-label="TennisBot">
+        <header class="widget-header widget-chat-header">
+            <div><span><i class="fa-solid fa-robot"></i> TennisBot</span><small>Ayuda rápida de TENNISSEL</small></div>
+            <button class="btn-close-widget" data-close-widget="chatbot-window" type="button" aria-label="Cerrar">&times;</button>
+        </header>
+        <div class="chatbot-shortcuts"><button type="button" data-chatbot-prompt="¿Cómo hago una reserva?">Reservas</button><button type="button" data-chatbot-prompt="¿Dónde están los jugadores?">Jugadores</button><button type="button" data-chatbot-prompt="¿Qué incluye Premium?">Premium</button></div>
+        <div id="chatbot-messages-body" class="chat-messages-container"><div class="msg-bubble msg-other">Hola. Puedo ayudarte con reservas, jugadores, profesores, entrenamientos, productos, torneos y tu cuenta.</div></div>
+        <form id="chatbot-form" class="chat-input-area">
+            <input type="text" id="chatbot-input-text" placeholder="Escribe tu pregunta..." autocomplete="off">
+            <button type="submit" aria-label="Enviar"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </section>
+
+    <section id="widget-window" class="widget-panel widget-hidden" aria-label="Radar de jugadores">
+        <header class="widget-header widget-radar-header">
+            <span><i class="fa-solid fa-users"></i> Jugadores cercanos</span>
+            <button class="btn-close-widget" data-close-widget="widget-window" type="button" aria-label="Cerrar">&times;</button>
+        </header>
+        <div id="radar-list" class="widget-content"><p class="widget-empty">Cargando jugadores...</p></div>
+    </section>
+
+    <section id="widget-teacher-window" class="widget-panel widget-hidden" aria-label="Directorio de profesores">
+        <header class="widget-header widget-teacher-header">
+            <span><i class="fa-solid fa-graduation-cap"></i> Profesores</span>
+            <button class="btn-close-widget" data-close-widget="widget-teacher-window" type="button" aria-label="Cerrar">&times;</button>
+        </header>
+        <div id="teacher-list" class="widget-content"><p class="widget-empty">Cargando profesores...</p></div>
+    </section>
+
+    <section id="chat-universal-box" class="widget-panel widget-chat-user widget-hidden" aria-label="Conversacion">
+        <header class="widget-header">
+            <button id="chat-back-button" class="btn-close-widget" type="button" aria-label="Volver">&larr;</button>
+            <span id="chat-target-name">Conversacion</span>
+            <button class="btn-close-widget" data-close-widget="chat-universal-box" type="button" aria-label="Cerrar">&times;</button>
+        </header>
+        <div id="chat-messages-body" class="chat-messages-container"></div>
+        <form id="proposal-form" class="proposal-form" hidden>
+            <select id="proposal-location" required><option value="">Cancha</option></select>
+            <input id="proposal-date" type="date" required>
+            <input id="proposal-time" type="time" step="3600" required>
+            <select id="proposal-duration" required><option value="1">1 hora</option><option value="2">2 horas</option></select>
+            <button type="submit">Enviar propuesta</button>
+        </form>
+        <form id="chat-form" class="chat-input-area">
+            <button id="proposal-toggle" type="button" aria-label="Crear reserva"><i class="fa-solid fa-calendar-plus"></i></button>
+            <input type="text" id="chat-input-text" placeholder="Escribe un mensaje..." autocomplete="off">
+            <button type="submit" aria-label="Enviar"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+    </section>
+</div>

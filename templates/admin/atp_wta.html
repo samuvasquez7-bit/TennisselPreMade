@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar ATP/WTA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.2">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="container py-5" style="max-width: 1100px; margin-top: 40px;">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-4">
+        <div>
+            <h1 class="display-6 text-white">Administrar contenido ATP/WTA</h1>
+            <p class="text-secondary">Edita los bloques de texto que se muestran en la página de información ATP y WTA.</p>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <form action="{{ url_for('admin_torneos') }}" method="POST" class="d-flex gap-2 align-items-start">
+                <input type="hidden" name="accion" value="guardar_api">
+                <input type="password" name="api_key" class="form-control bg-black text-light border-secondary" placeholder="Sportradar API key" value="{{ api_key if api_key else '' }}">
+                <button type="submit" class="btn btn-outline-light">
+                    <i class="fa-solid fa-key"></i> Guardar API key
+                </button>
+            </form>
+            <a href="{{ url_for('admin_torneos') }}" class="btn btn-outline-light align-self-start">
+                <i class="fa-solid fa-sync"></i> Actualizar Sportradar
+            </a>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show bg-dark text-light border-secondary" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="card bg-dark border-secondary text-light shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="fs-5 text-white mb-3">Configurar tabla de jugadoras destacadas</h2>
+            <form action="{{ url_for('admin_torneos') }}" method="POST">
+                <input type="hidden" name="accion" value="guardar_tabla">
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label class="form-label text-secondary">Posición</label>
+                        <input type="number" name="posicion" min="1" class="form-control bg-black text-light border-secondary" placeholder="1" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-secondary">Jugadora</label>
+                        <input type="text" name="jugadora" class="form-control bg-black text-light border-secondary" placeholder="Serena Williams" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label text-secondary">País</label>
+                        <input type="text" name="pais" class="form-control bg-black text-light border-secondary" placeholder="Estados Unidos" required>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label text-secondary">Grand Slam</label>
+                        <input type="text" name="grand_slam" class="form-control bg-black text-light border-secondary" placeholder="23" required>
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label text-secondary">Destacado</label>
+                        <textarea name="destacado" rows="2" class="form-control bg-black text-light border-secondary" placeholder="Potencia física, 7 Wimbledon..." required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Añadir fila</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card bg-dark border-secondary text-light shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="fs-5 text-white mb-3">Agregar nuevo bloque ATP/WTA</h2>
+            <form action="{{ url_for('admin_torneos') }}" method="POST">
+                <input type="hidden" name="accion" value="nuevo">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label text-secondary">Clave del bloque</label>
+                        <input type="text" name="tipo" class="form-control bg-black text-light border-secondary" placeholder="introduccion, rankings, calendario" required>
+                        <div class="form-text text-light">Usa un identificador único para el bloque.</div>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label text-secondary">Título</label>
+                        <input type="text" name="titulo" class="form-control bg-black text-light border-secondary" placeholder="Título del bloque" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-secondary">Texto</label>
+                        <textarea name="texto" rows="4" class="form-control bg-black text-light border-secondary" placeholder="Contenido del bloque" required></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Crear nuevo bloque</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if tabla_config %}
+        <div class="card bg-dark border-secondary text-light shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="fs-5 text-white mb-3">Filas actuales de la tabla</h2>
+                {% for fila in tabla_config %}
+                    <form action="{{ url_for('admin_torneos') }}" method="POST" class="border border-secondary rounded p-3 mb-3">
+                        <input type="hidden" name="id" value="{{ fila.id }}">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-2">
+                                <label class="form-label text-secondary">Posición</label>
+                                <input type="number" name="posicion" min="1" value="{{ fila.posicion }}" class="form-control bg-black text-light border-secondary" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-secondary">Jugadora</label>
+                                <input type="text" name="jugadora" value="{{ fila.jugadora }}" class="form-control bg-black text-light border-secondary" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-secondary">País</label>
+                                <input type="text" name="pais" value="{{ fila.pais }}" class="form-control bg-black text-light border-secondary" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label text-secondary">Grand Slam</label>
+                                <input type="text" name="grand_slam" value="{{ fila.grand_slam }}" class="form-control bg-black text-light border-secondary" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label text-secondary">Destacado</label>
+                                <textarea name="destacado" rows="2" class="form-control bg-black text-light border-secondary" required>{{ fila.destacado }}</textarea>
+                            </div>
+                            <div class="col-12 d-flex gap-2">
+                                <button type="submit" name="accion" value="guardar_tabla" class="btn btn-success">Guardar fila</button>
+                                <button type="submit" name="accion" value="eliminar_tabla" class="btn btn-outline-danger" onclick="return confirm('¿Eliminar esta fila?');">Eliminar</button>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if contenidos %}
+        <div class="row g-4">
+            {% for contenido in contenidos %}
+                <div class="col-12">
+                    <div class="card bg-dark border-secondary text-light shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-3 mb-3">
+                                <div>
+                                    <h2 class="fs-4 text-white mb-1">{{ contenido.tipo | upper }}</h2>
+                                    <p class="text-secondary mb-0">Bloque editable para la sección {{ contenido.tipo | upper }}.</p>
+                                </div>
+                                <span class="badge bg-success rounded-pill py-2 px-3">Activo</span>
+                            </div>
+
+                            <form action="{{ url_for('admin_torneos') }}" method="POST">
+                                <input type="hidden" name="tipo" value="{{ contenido.tipo }}">
+
+                                <div class="mb-3">
+                                    <label class="form-label text-secondary">Título</label>
+                                    <input type="text" name="titulo" class="form-control bg-black text-light border-secondary" value="{{ contenido.titulo }}" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label text-secondary">Texto</label>
+                                    <textarea name="texto" rows="6" class="form-control bg-black text-light border-secondary" required>{{ contenido.texto }}</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">Guardar cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-secondary bg-dark border-secondary text-light" role="alert">
+            No hay contenido configurado para ATP/WTA. Por favor, crea entradas en la tabla <code>contenido_atp_wta</code> en la base de datos.
+        </div>
+    {% endif %}
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

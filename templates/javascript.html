@@ -1,0 +1,89 @@
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript del Carrito -->
+<script src="{{ url_for('static', filename='JS/carrito.js') }}"></script>
+<script src="{{ url_for('static', filename='JS/widgets.js') }}"></script>
+<script src="{{ url_for('static', filename='JS/chatbot.js') }}"></script>
+
+<!-- Lógica unificada para Navbar, Hamburguesa y Perfil -->
+<script>
+// Usamos una verificación global para evitar que todo el DOMContentLoaded se ejecute doble si se incrusta dos veces
+if (typeof window.navInitialized === 'undefined') {
+    window.navInitialized = true;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. SELECTORES DE LA HAMBURGUESA / MENÚ MÓVIL
+        const menuToggle = document.getElementById('menuToggle') || document.getElementById('hamburgerBtn');
+        const navbarMenu = document.getElementById('navbarMenu');
+
+        if (menuToggle && navbarMenu && !menuToggle.dataset.bound) {
+            menuToggle.dataset.bound = "true";
+            menuToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                navbarMenu.classList.toggle('active');
+                navbarMenu.classList.toggle('open');
+                menuToggle.classList.toggle('open');
+            });
+        }
+
+        // 2. SELECTORES DE PERFIL / DROPDOWN
+        const perfilBtn = document.getElementById('perfilBtn');
+        const menuPerfil = document.getElementById('menuPerfil');
+        const perfilContainer = document.getElementById('perfilContainer');
+
+        if (perfilBtn && menuPerfil && !perfilBtn.dataset.bound) {
+            perfilBtn.dataset.bound = "true";
+            perfilBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (menuPerfil.style.display === 'block') {
+                    menuPerfil.style.display = 'none';
+                    menuPerfil.classList.remove('show', 'active');
+                    if (perfilContainer) perfilContainer.classList.remove('active');
+                } else {
+                    menuPerfil.style.display = 'block';
+                    menuPerfil.classList.add('show', 'active');
+                    if (perfilContainer) perfilContainer.classList.add('active');
+                }
+            });
+        }
+
+        // 3. CIERRE AUTOMÁTICO (Clic fuera de los menús)
+        if (!document.body.dataset.clickOutsideBound) {
+            document.body.dataset.clickOutsideBound = "true";
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+
+                if (menuPerfil) {
+                    if (!perfilContainer || !perfilContainer.contains(target)) {
+                        menuPerfil.style.display = 'none';
+                        menuPerfil.classList.remove('show', 'active');
+                        if (perfilContainer) perfilContainer.classList.remove('active');
+                    }
+                }
+
+                if (navbarMenu && menuToggle) {
+                    if (!navbarMenu.contains(target) && !menuToggle.contains(target)) {
+                        navbarMenu.classList.remove('active');
+                        navbarMenu.classList.remove('open');
+                        menuToggle.classList.remove('open');
+                    }
+                }
+            });
+        }
+
+        // 4. ALERTA PREMIUM PARA INVITADOS (Evita múltiples confirmaciones)
+        const premiumAlertBtn = document.querySelector('.premium-login-alert');
+        if (premiumAlertBtn && !premiumAlertBtn.dataset.bound) {
+            premiumAlertBtn.dataset.bound = "true";
+            premiumAlertBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const confirmar = confirm("¡Para acceder a los beneficios Premium de TENNISSEL necesitas crear una cuenta primero! ¿Quieres registrarte ahora? 🎾");
+                if (confirmar) {
+                    window.location.href = "{{ url_for('registro') }}";
+                }
+            });
+        }
+    });
+}
+</script>

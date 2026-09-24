@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Alto Rendimiento | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        body {
+            background-color: #080a0f !important;
+            color: #ffffff !important;
+            font-family: 'Montserrat', sans-serif !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100vw !important;
+            overflow-x: hidden !important;
+        }
+
+        .tx-main-wrapper {
+            width: 100% !important;
+            max-width: 1100px !important;
+            margin: 0 auto !important;
+            padding: 2.5rem 1.25rem 5rem 1.25rem !important;
+        }
+
+        /* HERO HEADER */
+        .tx-hero-header {
+            width: 100% !important;
+            background-color: #080a0f;
+            border-bottom: 1px solid #1c2333;
+            padding: 4.5rem 1rem 3.5rem 1rem;
+            text-align: center;
+        }
+
+        /* SELECTOR DÍAS */
+        .tx-days-grid {
+            background: #0f141d;
+            border: 1px solid #1c2333;
+            border-radius: 14px;
+            padding: 8px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            width: 100%;
+        }
+
+        .tx-day-item {
+            background: #161c26;
+            border: 1px solid #252e3e;
+            color: #9eaabf;
+            padding: 12px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.25s ease;
+            display: block;
+        }
+
+        .tx-day-item:hover, .tx-day-item.active {
+            background: #00ff66 !important;
+            color: #000000 !important;
+            border-color: #00ff66 !important;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.35);
+        }
+
+        /* CONTENEDOR DE TARJETAS */
+        .tx-cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        /* TARJETA HORIZONTAL */
+        .tx-routine-card {
+            background: #0f141d;
+            border: 1px solid #1c2333;
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            min-height: 280px;
+            transition: border-color 0.25s ease, transform 0.25s ease;
+        }
+
+        @media (max-width: 768px) {
+            .tx-routine-card {
+                flex-direction: column;
+            }
+        }
+
+        .tx-routine-card:hover {
+            border-color: #00ff66;
+            transform: translateY(-4px);
+        }
+
+        .tx-routine-card-vip {
+            border: 1px solid #ffc107 !important;
+            box-shadow: 0 0 25px rgba(255, 193, 7, 0.12);
+        }
+
+        .tx-card-img-box {
+            position: relative;
+            flex: 0 0 40%;
+            min-height: 100%;
+            background: #161c26;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .tx-card-img-box {
+                flex: none;
+                height: 220px;
+                width: 100%;
+            }
+        }
+
+        .tx-card-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* BADGES SOBRE LA IMAGEN */
+        .tx-card-badge-container {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-start;
+        }
+
+        .tx-img-badge {
+            background: rgba(8, 10, 15, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .tx-vip-badge-tag {
+            background: linear-gradient(135deg, #ffc107 0%, #ff8800 100%);
+            color: #000000;
+            font-weight: 800;
+            font-size: 0.75rem;
+            padding: 5px 10px;
+            border-radius: 6px;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .tx-card-content {
+            flex: 1;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* PROTOCOLO GRID */
+        .tx-protocol-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            width: 100%;
+        }
+
+        @media (max-width: 992px) {
+            .tx-protocol-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* BANNER ÉLITE PRO */
+        .tx-vip-banner {
+            background: linear-gradient(135deg, #0d111a 0%, #06080d 100%);
+            border: 2px solid #ffc107;
+            border-radius: 22px;
+            padding: 32px;
+            margin-top: 40px;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .tx-vip-flex-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .tx-vip-main-col {
+            flex: 2 1 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .tx-vip-side-col {
+            flex: 1 1 280px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tx-vip-title {
+            color: #ffffff;
+            font-size: 1.8rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin: 0 0 14px 0;
+        }
+
+        .tx-vip-text {
+            color: #9eaabf;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 0 0 20px 0;
+        }
+
+        .tx-vip-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            width: 100%;
+        }
+
+        .tx-vip-feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #1c2536;
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tx-vip-feature-card i {
+            color: #ffc107;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .tx-vip-feature-card span {
+            color: #ffffff;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .tx-vip-cta-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #252e3e;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 100%;
+        }
+
+        .tx-vip-btn {
+            background: #ffc107;
+            color: #000000;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            text-transform: uppercase;
+            display: block;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.2s ease;
+        }
+
+        .tx-vip-btn:hover {
+            background: #ffcd39;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' ignore missing %}
+
+<!-- HERO HEADER -->
+<header class="tx-hero-header">
+    <div style="max-width: 850px; margin: 0 auto;">
+        <span class="badge rounded-pill px-3 py-2 mb-3" style="background: rgba(0, 255, 102, 0.1); color: #00ff66; border: 1px solid rgba(0, 255, 102, 0.3); font-weight: 700; letter-spacing: 0.5px;">
+            <i class="fa-solid fa-bolt me-1"></i> SISTEMA DE ENTRENAMIENTO BIOMECÁNICO PRO
+        </span>
+        <h1 class="h1 text-uppercase mb-3" style="font-weight: 900; letter-spacing: 1px; color: #ffffff; font-size: 2.5rem;">Centro de Rendimiento</h1>
+        <p class="mb-4" style="color: #9eaabf; font-size: 1.05rem; line-height: 1.6;">
+            Optimización atlética orientada al tenis competitivo. Monitorea tu desgaste metabólico, perfecciona tus patrones de movimiento lateral y maximiza el torque en cada impacto sobre pista dura, arcilla o césped.
+        </p>
+        <div class="d-inline-flex align-items-center gap-3 px-4 py-2 rounded-pill" style="background: #0f141d; border: 1px solid #1c2333;">
+            <span style="color: #9eaabf; font-size: 0.85rem;">Estatus de la Cuenta:</span>
+            {% if tipo_cuenta|default('free') in ['premium', 'admin'] %}
+                <span class="fw-bold text-warning small"><i class="fa-solid fa-crown me-1"></i> SOCIO ÉLITE ACTIVO</span>
+            {% else %}
+                <span class="fw-bold text-success small"><i class="fa-solid fa-user me-1"></i> PLAN ESTÁNDAR TENNISSEL</span>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main class="tx-main-wrapper">
+
+    <!-- SELECTOR DÍAS -->
+    <div class="mb-4">
+        <div class="tx-days-grid">
+            {% for d in ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'] %}
+                <a href="{{ url_for('entreno', dia=d) }}" 
+                   class="tx-day-item {% if dia|default('Lunes') == d %}active{% endif %}">
+                    <i class="fa-regular fa-calendar-check me-1 d-none d-md-inline"></i> {{ d }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- CARGA FÍSICA Y MÉTRICAS ACUMULADAS -->
+    <section class="p-4 mb-4 rounded-4 d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3" 
+             style="background: linear-gradient(90deg, #0f141d 0%, #161c26 100%); border-left: 5px solid #00ff66; border: 1px solid #1c2333;">
+        <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="badge bg-dark text-success border border-success px-2 py-1 small fw-bold">PROGRAMA DIARIO</span>
+                <h2 class="h4 fw-bold mb-0 text-white">Plan de Trabajo: <span style="color: #00ff66;">{{ dia|default('Lunes') }}</span></h2>
+            </div>
+            <p class="mb-0 small" style="color: #9eaabf;">Carga biomecánica y exigencia cardiovascular calculada para las rutinas programadas hoy.</p>
+        </div>
+        
+        <div class="d-flex gap-3 text-center w-100 w-lg-auto justify-content-center">
+            <div class="px-4 py-2 rounded-3" style="background: rgba(0,0,0,0.45); border: 1px solid #1c2333; min-width: 120px;">
+                <i class="fa-solid fa-stopwatch text-success small mb-1"></i>
+                <span class="d-block h5 fw-bold text-white mb-0" style="font-weight: 800;">{{ tiempo_total|default(0) }} min</span>
+                <small class="text-uppercase fw-bold" style="font-size: 0.6rem; color: #9eaabf;">Tiempo Pista</small>
+            </div>
+            <div class="px-4 py-2 rounded-3" style="background: rgba(0,0,0,0.45); border: 1px solid #1c2333; min-width: 120px;">
+                <i class="fa-solid fa-fire-flame-curved text-danger small mb-1"></i>
+                <span class="d-block h5 fw-bold text-white mb-0" style="font-weight: 800;">{{ calorias_totales|default(0) }} kcal</span>
+                <small class="text-uppercase fw-bold" style="font-size: 0.6rem; color: #9eaabf;">Gasto Calórico</small>
+            </div>
+            <div class="px-4 py-2 rounded-3 d-none d-sm-block" style="background: rgba(0,0,0,0.45); border: 1px solid #1c2333; min-width: 120px;">
+                <i class="fa-solid fa-heart-pulse text-warning small mb-1"></i>
+                <span class="d-block h5 fw-bold text-white mb-0" style="font-weight: 800;">ZONA 4</span>
+                <small class="text-uppercase fw-bold" style="font-size: 0.6rem; color: #9eaabf;">Rango Cardíaco</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- LISTADO DE RUTINAS -->
+    <div class="tx-cards-container mb-5">
+        {% for rutina in rutinas|default([]) %}
+            <article class="tx-routine-card {% if rutina.tipo_usuario == 'premium' %}tx-routine-card-vip{% endif %}">
+                
+                <!-- IMAGEN (Renderizada dinámicamente desde la ruta guardada en SQL) -->
+                <div class="tx-card-img-box">
+                    <img src="{{ url_for('static', filename=rutina.imagen_url) }}" 
+                         alt="{{ rutina.titulo_rutina|default('Rutina de entrenamiento') }}">
+                    
+                    <div class="tx-card-badge-container">
+                        <span class="tx-img-badge">
+                            Nivel: {{ rutina.dificultad|default('Intermedio') }}
+                        </span>
+                        {% if rutina.tipo_usuario == 'premium' %}
+                            <span class="tx-vip-badge-tag">
+                                <i class="fa-solid fa-crown me-1"></i> ÉLITE PRO
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- CONTENIDO -->
+                <div class="tx-card-content">
+                    <div>
+                        <h3 class="h4 fw-bold mb-1 text-white">{{ rutina.titulo_rutina|default('Rutina TENNISSEL') }}</h3>
+                        <p class="fw-semibold small mb-2" style="color: #00ff66;">
+                            <i class="fa-solid fa-crosshair me-1"></i> Enfoque Técnico: {{ rutina.nombre|default('General') }}
+                        </p>
+                        <p class="small mb-3" style="color: #a0aec0; line-height: 1.6; font-size: 0.9rem;">
+                            {{ rutina.descripcion|default('') }}
+                        </p>
+                    </div>
+
+                    <!-- CAJA DE ANÁLISIS TÁCTICO -->
+                    <div class="p-3 rounded-3 mb-3" style="background: #080a0f; border: 1px solid #1c2333;">
+                        <div class="mb-1">
+                            <span class="fw-bold text-white small" style="font-size: 0.82rem;"><i class="fa-solid fa-bullseye text-danger me-1"></i>Objetivo Táctico:</span>
+                            <span class="small" style="color: #9eaabf; font-size: 0.82rem;">{{ rutina.objetivo|default('N/A') }}</span>
+                        </div>
+                        {% if rutina.consejo_entrenador %}
+                            <div>
+                                <span class="fw-bold text-warning small" style="font-size: 0.82rem;"><i class="fa-solid fa-lightbulb me-1"></i>Indicación:</span>
+                                <span class="small fst-italic" style="color: #9eaabf; font-size: 0.82rem;">"{{ rutina.consejo_entrenador }}"</span>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- BARRA INFERIOR DE MÉTRICAS -->
+                    <div class="d-flex justify-content-between align-items-center text-center pt-2 mt-auto" style="border-top: 1px solid #1c2333; gap: 10px;">
+                        <div style="flex: 1; min-width: 0;">
+                            <small class="d-block" style="color: #9eaabf; font-size: 0.7rem;">Estructura</small>
+                            <span class="fw-bold text-white d-block" style="font-size: 0.82rem; white-space: nowrap;">
+                                <i class="fa-solid fa-rotate text-success me-1"></i>{{ rutina.series_repeticiones|default('3x10') }}
+                            </span>
+                        </div>
+                        <div style="flex: 1; min-width: 0; border-left: 1px solid rgba(28, 35, 51, 0.6); border-right: 1px solid rgba(28, 35, 51, 0.6);">
+                            <small class="d-block" style="color: #9eaabf; font-size: 0.7rem;">Tiempo</small>
+                            <span class="fw-bold text-white d-block" style="font-size: 0.82rem; white-space: nowrap;">
+                                <i class="fa-solid fa-clock text-success me-1"></i>{{ rutina.duracion_minutos|default(0) }} min
+                            </span>
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <small class="d-block" style="color: #9eaabf; font-size: 0.7rem;">Estimación</small>
+                            <span class="fw-bold text-white d-block" style="font-size: 0.82rem; white-space: nowrap;">
+                                <i class="fa-solid fa-bolt text-warning me-1"></i>{{ rutina.calorias_estimadas|default(0) }} kcal
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </article>
+        {% else %}
+            <div class="w-100 text-center py-5">
+                <p class="text-secondary h5">No hay rutinas asignadas para este día en la base de datos.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- GUÍA DE RENDIMIENTO -->
+    <section class="p-4 rounded-4 mb-4" style="background: #0f141d; border: 1px solid #1c2333;">
+        <h3 class="h5 fw-bold text-white mb-3"><i class="fa-solid fa-chart-line text-success me-2"></i>Protocolo de Preparación Física TENNISSEL</h3>
+        
+        <div class="tx-protocol-grid">
+            <div class="p-3 rounded-3" style="background: #080a0f; border: 1px solid #1c2333;">
+                <h4 class="h6 fw-bold text-success mb-2">1. Activación Dinámica</h4>
+                <p class="small text-secondary mb-0" style="line-height: 1.5;">10 minutos de movilidad articular, bandas elásticas y sombras de desplazamientos antes de ingresar a pista.</p>
+            </div>
+            
+            <div class="p-3 rounded-3" style="background: #080a0f; border: 1px solid #1c2333;">
+                <h4 class="h6 fw-bold text-warning mb-2">2. Hidratación e Isotónicos</h4>
+                <p class="small text-secondary mb-0" style="line-height: 1.5;">Consumo constante de electrolitos para mantener los niveles de sodio y prevenir calambres musculares.</p>
+            </div>
+            
+            <div class="p-3 rounded-3" style="background: #080a0f; border: 1px solid #1c2333;">
+                <h4 class="h6 fw-bold text-danger mb-2">3. Descanso Miofascial</h4>
+                <p class="small text-secondary mb-0" style="line-height: 1.5;">Uso de rodillo de espuma (foam roller) post-sesión en gemelos, cuádriceps e isquiotibiales.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- BANNER ÉLITE -->
+    {% if tipo_cuenta|default('free') == 'free' %}
+    <section class="tx-vip-banner">
+        <div class="tx-vip-flex-layout">
+            
+            <div class="tx-vip-main-col">
+                <div>
+                    <span class="tx-vip-badge-tag">★ MEMBRESÍA TENNISSEL ÉLITE PRO</span>
+                </div>
+                
+                <h2 class="tx-vip-title mt-2">¿Listo para dominar la tabla de posiciones?</h2>
+                
+                <p class="tx-vip-text">
+                    Lleva tu juego al siguiente nivel competitivo. Desbloquea los <strong>7 Bloques Semanales de Alto Rendimiento</strong>, análisis de video biomecánico, métricas de desgaste metabólico en tiempo real y rutinas exclusivas de saque y aceleración lineal.
+                </p>
+
+                <div class="tx-vip-features-grid">
+                    <div class="tx-vip-feature-card">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Acceso ilimitado a rutinas avanzadas</span>
+                    </div>
+                    <div class="tx-vip-feature-card">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Análisis biomecánico por golpe</span>
+                    </div>
+                    <div class="tx-vip-feature-card">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Planes nutricionales específicos</span>
+                    </div>
+                    <div class="tx-vip-feature-card">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Indicaciones de entrenadores PRO</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tx-vip-side-col">
+                <div class="tx-vip-cta-card">
+                    <i class="fa-solid fa-crown text-warning mb-2" style="font-size: 2.5rem;"></i>
+                    <h3 class="h5 fw-bold text-white mb-2">Pase de Temporada</h3>
+                    <p class="small text-secondary mb-3">Acceso total e ilimitado a todo el ecosistema de entrenamiento.</p>
+                    <a href="#" class="tx-vip-btn">SUSCRIBIRME AHORA</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    {% endif %}
+
+</main>
+
+{% include 'footer.html' ignore missing %}
+{% include 'javascript.html' ignore missing %}
+</body>
+</html>

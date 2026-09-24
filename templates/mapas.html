@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TENNISSEL - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+
+    <main class="container">
+        <h1 class="page-title">Encuentra tu Cancha Ideal</h1>
+        
+        <!-- Alertas de Sistema para las Reservas -->
+        {% if mensaje_error %}
+        <div style="background-color: #e74c3c; color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            {{ mensaje_error }}
+        </div>
+        {% endif %}
+        
+        {% if mensaje_exito %}
+        <div style="background-color: var(--court-green); color: white; padding: 15px; border-radius: 8px; margin-bottom: 25px; text-align: center; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            {{ mensaje_exito }}
+        </div>
+        {% endif %}
+
+        <!-- Barra de Búsqueda y Radar -->
+        <div class="search-section" style="margin-bottom: 25px; background: var(--white); padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 5px solid var(--court-green);">
+            <form action="/mapas" method="POST" id="search-form" style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                <input type="text" name="direccion" id="direccion" placeholder="Ingresa tu ubicación o calle cercana (ej. Suba)..." style="flex: 1; min-width: 250px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Montserrat', sans-serif;" value="{{ request.form.get('direccion', '') }}">
+                
+                <select name="categoria" style="padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Montserrat', sans-serif;">
+                    <option value="todos" {% if request.form.get('categoria') == 'todos' %}selected{% endif %}>Todas las categorías</option>
+                    <option value="cancha" {% if request.form.get('categoria') == 'cancha' %}selected{% endif %}>Canchas</option>
+                    <option value="tienda" {% if request.form.get('categoria') == 'tienda' %}selected{% endif %}>Tiendas</option>
+                    <option value="bar" {% if request.form.get('categoria') == 'bar' %}selected{% endif %}>Bares</option>
+                </select>
+
+                <button type="submit" class="btn-submit" style="padding: 12px 25px;">🔍 Buscar</button>
+                <button type="button" class="btn-submit" id="btn-radar" style="background-color: #e74c3c; padding: 12px 25px;">🎯 Radar</button>
+            </form>
+        </div>
+
+        <!-- EL MAPA -->
+        <div id="mapa" class="map-container" style="margin-bottom: 30px; border-radius: 15px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.1); border: 5px solid var(--primary-green); height: 500px;">
+            {{ mapa_widget | safe }}
+        </div>
+
+        <section class="map-filters" aria-label="Filtros de ubicaciones">
+            <div class="filter-heading">
+                <div>
+                    <span class="filter-kicker">Explora a tu medida</span>
+                    <h2>Ubicaciones y reseñas</h2>
+                </div>
+                <span id="results-count" class="results-count"></span>
+            </div>
+            <div class="filter-controls">
+                <label>Buscar <input type="search" id="location-search" placeholder="Nombre, dirección o tipo"></label>
+                <label>Categoría
+                    <select id="location-type">
+                        <option value="todos">Todas</option>
+                        <option value="cancha">Canchas</option>
+                        <option value="tienda">Tiendas</option>
+                        <option value="bar">Bares</option>
+                    </select>
+                </label>
+                <label>Calidad mínima
+                    <select id="location-rating">
+                        <option value="0">Cualquier valoración</option>
+                        <option value="4">4 estrellas o más</option>
+                        <option value="4.5">4.5 estrellas o más</option>
+                    </select>
+                </label>
+                <label>Ordenar por
+                    <select id="location-sort">
+                        <option value="relevance">Recomendados</option>
+                        <option value="distance">Más cercanos</option>
+                        <option value="rating">Mejor valorados</option>
+                        <option value="name">Nombre A-Z</option>
+                    </select>
+                </label>
+            </div>
+        </section>
+
+        <!-- Tarjetas dinámicas generadas desde la base de datos -->
+        <div id="ubicaciones" class="map-grid">
+            {% for loc in locaciones %}
+            <div class="location-card" data-name="{{ loc.nombre|lower }} {{ loc.direccion|lower }} {{ loc.tipo|lower }}" data-type="{{ loc.tipo }}" data-rating="{{ loc.calidad }}" data-distance="{{ loc.distancia_km if loc.distancia_km is not none else 999999 }}">
+                <img src="{{ url_for('proxy_imagen', url=loc.imagen_url) }}" alt="{{ loc.nombre }}" class="location-image" onerror="this.onerror=null; this.src='/static/IMG/tenis_lugar1.jpeg';">
+                
+                <div class="card-content">
+                    <h2>{{ loc.nombre }}</h2>
+                    <p class="address">📍 {{ loc.direccion }}</p>
+                    <p class="price" style="font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px;">💰 {{ loc.precio_aprox }}</p>
+                    <div class="location-meta"><span>★ {{ '%.1f'|format(loc.calidad) }}/5</span>{% if loc.distancia_km is not none %}<span>⌖ {{ '%.1f'|format(loc.distancia_km) }} km</span>{% endif %}</div>
+                    
+                    <hr>
+                    
+                    <div class="reviews-section">
+                        <h3>Comentarios y Reseñas</h3>
+                        
+                        <div id="reviews-{{ loc.id }}" class="comments-list">
+                            {% if loc.comentarios_lista %}
+                                {% for com in loc.comentarios_lista %}
+                                <div class="comment map-review-item" data-review-index="{{ loop.index0 }}" {% if loop.index > 5 %}style="display:none;"{% endif %}>
+                                    <strong>{{ com.nombre_usuario }}:</strong>
+                                    <span class="stars">
+                                        {% for _ in range(com.estrellas) %}⭐{% endfor %}
+                                    </span>
+                                    <small class="review-place-rating">Valoración del lugar: {{ com.estrellas }}/5</small>
+                                    <p>{{ com.comentario }}</p>
+                                    <small class="review-agreement">Acuerdo de la comunidad: {{ '%.1f'|format(com.acuerdo_promedio) }}/5 · {{ com.total_acuerdos }} valoración{% if com.total_acuerdos != 1 %}es{% endif %}</small>
+                                    {% if session.get('user_id') and not is_banned %}
+                                    <form action="{{ url_for('calificar_comentario_mapa', comentario_id=com.id) }}" method="POST" class="review-rating-form">
+                                        <select name="calificacion" required aria-label="Indicar acuerdo con la reseña"><option value="">Acuerdo</option><option value="5">Muy de acuerdo</option><option value="4">De acuerdo</option><option value="3">Neutral</option><option value="2">En desacuerdo</option><option value="1">Muy en desacuerdo</option></select>
+                                        <button type="submit">Guardar</button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <p style="font-size: 13px; color: #7f8c8d; font-style: italic;">Sé el primero en dejar una reseña.</p>
+                            {% endif %}
+                        </div>
+                        {% if loc.comentarios_lista|length > 5 %}
+                        <button type="button" class="btn-more-reviews" data-review-target="reviews-{{ loc.id }}">Ver 5 más</button>
+                        {% endif %}
+
+                        <!-- Formulario para publicar comentarios -->
+                        <form action="/mapas" method="POST" class="review-form">
+                            <input type="hidden" name="action" value="comentar">
+                            <input type="hidden" name="locacion_id" value="{{ loc.id }}">
+                            <input type="hidden" name="direccion" value="{{ request.form.get('direccion', '') }}">
+                            <input type="hidden" name="categoria" value="{{ request.form.get('categoria', 'todos') }}">
+                            
+                            <input type="text" name="usuario" placeholder="Tu nombre" required>
+                            <textarea name="comentario" placeholder="¿Qué tal te pareció?" rows="2" required></textarea>
+                            
+                            <div class="form-footer">
+                                <select name="estrellas" required>
+                                    <option value="" disabled selected>Calificación</option>
+                                    <option value="5">⭐⭐⭐⭐⭐ Excelente</option>
+                                    <option value="4">⭐⭐⭐⭐ Muy buena</option>
+                                    <option value="3">⭐⭐⭐ Aceptable</option>
+                                    <option value="2">⭐⭐ Regular</option>
+                                    <option value="1">⭐ Mala</option>
+                                </select>
+                                <button type="submit" class="btn-submit">Publicar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- BOTOÓN FLOTANTE INFERIOR IZQUIERDO -->
+    <button id="btn-toggle-reservas" class="btn-reservas-flotante" aria-controls="panel-reservas">
+        ☰ Reservas y Ocupación
+    </button>
+
+    <!-- PANEL DE RESERVAS (ESTILO DRAWER) -->
+    <div id="panel-reservas" class="panel-reservas oculto">
+        <div class="panel-header">
+            <h3>Estado de Canchas</h3>
+            <button id="btn-cerrar-reservas">✖</button>
+        </div>
+        <div class="panel-body">
+            {% if reservas %}
+                {% for res in reservas %}
+                <div class="reserva-item">
+                    <div class="reserva-titulo">
+                        <strong>🎾 {{ res.nombre_cancha }}</strong>
+                        <span class="badge-ocupada">🔴 Ocupada</span>
+                    </div>
+                    <div class="reserva-detalles">
+                        <span>📅 {{ res.fecha_reserva }} | ⏰ {{ res.hora_reserva }} - {{ res.hora_fin or 'Una hora' }}</span><br>
+                        <span>👤 Reserva ocupada</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="text-align: center; color: #7f8c8d; font-size: 14px; margin-top: 20px;">
+                    No hay canchas ocupadas en este momento. Todas están disponibles.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- SCRIPT PARA ABRIR Y CERRAR EL PANEL Y EL RADAR -->
+    <script>
+        // Lógica del Radar
+        document.getElementById('btn-radar').addEventListener('click', function() {
+            const btn = this;
+            if (navigator.geolocation) {
+                btn.innerHTML = "Ubicando... ⏳";
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('direccion').value = position.coords.latitude + ", " + position.coords.longitude;
+                    document.getElementById('search-form').submit();
+                }, function(error) {
+                    alert("No pudimos acceder a tu ubicación. Verifica los permisos de tu navegador para usar el Radar.");
+                    btn.innerHTML = "🎯 Radar";
+                });
+            } else {
+                alert("Tu navegador no soporta geolocalización.");
+            }
+        });
+
+        // Filtrado y ordenación local de las ubicaciones ya cargadas.
+        const cardsContainer = document.getElementById('ubicaciones');
+        const cards = Array.from(cardsContainer.querySelectorAll('.location-card'));
+        const searchInput = document.getElementById('location-search');
+        const typeSelect = document.getElementById('location-type');
+        const ratingSelect = document.getElementById('location-rating');
+        const sortSelect = document.getElementById('location-sort');
+        const resultsCount = document.getElementById('results-count');
+
+        function updateLocations() {
+            const search = searchInput.value.trim().toLowerCase();
+            const type = typeSelect.value;
+            const minimumRating = Number(ratingSelect.value);
+            const visibleCards = cards.filter(card => {
+                const matchesText = card.dataset.name.includes(search);
+                const matchesType = type === 'todos' || card.dataset.type === type;
+                const matchesRating = Number(card.dataset.rating) >= minimumRating;
+                return matchesText && matchesType && matchesRating;
+            });
+
+            visibleCards.sort((first, second) => {
+                if (sortSelect.value === 'distance') {
+                    return Number(first.dataset.distance) - Number(second.dataset.distance);
+                }
+                if (sortSelect.value === 'rating') {
+                    return Number(second.dataset.rating) - Number(first.dataset.rating);
+                }
+                if (sortSelect.value === 'name') {
+                    return first.dataset.name.localeCompare(second.dataset.name);
+                }
+                return 0;
+            });
+
+            cards.forEach(card => { card.hidden = true; });
+            visibleCards.forEach(card => {
+                card.hidden = false;
+                cardsContainer.appendChild(card);
+            });
+            resultsCount.textContent = `${visibleCards.length} resultado${visibleCards.length === 1 ? '' : 's'}`;
+        }
+
+        [searchInput, typeSelect, ratingSelect, sortSelect].forEach(control => {
+            control.addEventListener('input', updateLocations);
+            control.addEventListener('change', updateLocations);
+        });
+        updateLocations();
+
+        document.querySelectorAll('.btn-more-reviews').forEach(button => {
+            button.addEventListener('click', () => {
+                const list = document.getElementById(button.dataset.reviewTarget);
+                const hidden = Array.from(list.querySelectorAll('.map-review-item[style*="display:none"]')).slice(0, 5);
+                hidden.forEach(item => { item.style.display = ''; });
+                if (!list.querySelector('.map-review-item[style*="display:none"]')) button.remove();
+            });
+        });
+
+        // Lógica del Panel de Reservas
+        const btnToggle = document.getElementById('btn-toggle-reservas');
+        const btnCerrar = document.getElementById('btn-cerrar-reservas');
+        const panel = document.getElementById('panel-reservas');
+
+        btnToggle.addEventListener('click', () => {
+            panel.classList.toggle('oculto');
+        });
+
+        btnCerrar.addEventListener('click', () => {
+            panel.classList.add('oculto');
+        });
+    </script>
+    {% include 'footer.html' %}
+
+
+{% include 'javascript.html' %}
+</body>
+</html>

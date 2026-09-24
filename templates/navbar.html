@@ -1,0 +1,364 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
+
+<style>
+    /* Estilos del buscador y autocompletado */
+    .navbar-search {
+        position: relative;
+    }
+
+    .search-results-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        background-color: #161b22;
+        border: 1px solid #21262d;
+        border-radius: 8px;
+        margin: 0;
+        padding: 6px 0;
+        list-style: none;
+        max-height: 250px;
+        overflow-y: auto;
+        z-index: 9999;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        display: none;
+    }
+
+    .search-results-dropdown li a {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        color: #c9d1d9;
+        text-decoration: none;
+        font-size: 13px;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .search-results-dropdown li a:hover {
+        background-color: #21262d;
+        color: #00ff66;
+    }
+
+    .search-no-results {
+        padding: 10px 14px;
+        color: #8b949e;
+        font-size: 13px;
+        text-align: center;
+    }
+</style>
+
+<header class="navbar">
+    <div class="navbar-container">
+
+        <div class="brand-wrapper">
+            <img src="{{ url_for('static', filename='IMG/logo.png') }}" class="brand-logo" alt="Logo" onerror="this.style.display='none'">
+            <a href="{{ url_for('index') }}" class="navbar-brand">
+                TENNISSEL<span class="brand-dot">.</span>
+            </a>
+        </div>
+
+        {% if session.get('recovery_token') %}
+    <!-- Botón / Aviso destacado en el Navbar para regresar a la recuperación -->
+    <a href="{{ url_for('reset_password', token=session['recovery_token']) }}" class="btn btn-warning btn-sm fw-bold me-2 text-dark shadow-sm">
+        <i class="fa-solid fa-key me-1"></i> Volver a Recuperación
+    </a>
+{% endif %}
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <nav class="navbar-menu" id="navbarMenu">
+            <a href="{{ url_for('index') }}" class="nav-link">Inicio</a>
+            <a href="{{ url_for('productos') }}" class="nav-link">Productos</a>
+            {% if session.get('role') == 'tienda' and is_premium %}<a href="{{ url_for('tienda_productos') }}" class="nav-link">Mi tienda</a>{% endif %}
+            <a href="{{ url_for('juegos') }}" class="nav-link">Juegos</a>
+
+            <!-- Menú desplegable para Funciones / Actividades -->
+            <div class="admin-dropdown funciones-dropdown">
+                <span class="admin-trigger nav-link" style="cursor: pointer;">Servicios ▾</span>
+                <div class="admin-content">
+                    <a href="{{ url_for('entreno') }}">Entrenos</a>
+                    <a href="{{ url_for('index') }}#informacion">Información</a>
+                    <a href="{{ url_for('mapas') }}">Mapas</a>
+                    <a href="{{ url_for('matchmaking') }}">Matchmaking</a>
+                    <a href="{{ url_for('reservas') }}">Reservas</a>
+                </div>
+            </div>
+
+            <a href="{{ url_for('index') }}#quienes-somos" class="nav-link">Nosotros</a>
+            <a href="{{ url_for('contacto') }}" class="nav-link">Contacto</a>
+
+            {% if session.get('role') == 'admin' %}
+                <div class="admin-dropdown">
+                    <span class="admin-trigger">Admin ⚙️</span>
+                    <div class="admin-content">
+                        <div class="admin-menu-group"><span>Usuarios y soporte</span>
+                            <a href="{{ url_for('admin_perfiles') }}">Perfiles</a><a href="{{ url_for('admin_soporte') }}">Soporte</a><a href="{{ url_for('admin_contacto') }}">Contactos</a><a href="{{ url_for('admin_apelaciones') }}">Apelaciones</a><a href="{{ url_for('admin_denuncias') }}">Denuncias</a>
+                        </div>
+                        <div class="admin-menu-group"><span>Tienda y pedidos</span>
+                            <a href="{{ url_for('admin_productos') }}">Productos</a><a href="{{ url_for('admin_inventario') }}">Inventario</a><a href="{{ url_for('admin_pedidos_envios') }}">Pedidos y envíos</a><a href="{{ url_for('admin_facturas') }}">Facturas</a><a href="{{ url_for('admin_pagos') }}">Pagos</a>
+                        </div>
+                        <div class="admin-menu-group"><span>Contenido y comunidad</span>
+                            <a href="{{ url_for('admin_crud', resource='categorias') }}">Categorías</a><a href="{{ url_for('admin_crud', resource='resenas') }}">Reseñas</a><a href="{{ url_for('admin_crud', resource='comentarios') }}">Comentarios del mapa</a><a href="{{ url_for('admin_crud', resource='favoritos') }}">Favoritos</a>
+                        </div>
+                        <div class="admin-menu-group"><span>Entrenamiento y mapa</span>
+                            <a href="{{ url_for('admin_crud', resource='ejercicios') }}">Ejercicios</a><a href="{{ url_for('admin_crud', resource='rutinas') }}">Rutinas</a><a href="{{ url_for('admin_crud', resource='locaciones') }}">Ubicaciones</a><a href="{{ url_for('admin_crud', resource='reservas') }}">Reservas</a><a href="{{ url_for('admin_crud', resource='premium') }}">Suscripciones Premium</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </nav>
+
+        <div class="navbar-right">
+
+            <!-- BUSCADOR CON AUTOCOMPLETE -->
+            <div class="navbar-search">
+                <input type="text" id="searchInput" placeholder="Buscar sitio..." autocomplete="off">
+                <button id="searchBtn" class="search-btn">🔍</button>
+                <ul id="searchResults" class="search-results-dropdown"></ul>
+            </div>
+
+
+            {% if 'user_id' not in session %}
+                <a href="#" class="btn-premium-dorado premium-login-alert" data-register-url="{{ url_for('registro') }}" title="Regístrate para ser Premium">
+                    <span class="icon">👑</span>
+                    <span class="btn-text">Premium</span>
+                </a>
+            {% elif not is_premium %}
+                <a href="{{ url_for('premium') }}" class="btn-premium-dorado" title="Mi suscripción Premium">
+                    <span class="icon">👑</span>
+                    <span class="btn-text">Premium</span>
+                </a>
+            {% endif %}
+
+            {% if 'user_id' in session and session.get('role') != 'admin' %}
+                <a href="{{ url_for('notificaciones') }}" class="notificaciones-btn{% if notification_count > 0 %} tiene-notificaciones{% endif %}" title="{% if notification_count > 0 %}Tienes {{ notification_count }} notificaciones{% else %}No tienes notificaciones nuevas{% endif %}" aria-label="Notificaciones">
+                    <span class="icon">🔔</span>
+                    {% if notification_count > 0 %}
+                        <span id="contador-notificaciones" class="badge" aria-label="{{ notification_count }} notificaciones">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
+            {% endif %}
+
+            {% if session.get('role') != 'admin' %}
+                <a href="{{ url_for('ver_carrito') }}" class="carrito-btn">
+                    <span class="icon">🛒</span>
+                    <span id="contador-carrito" class="badge">0</span>
+                </a>
+            {% endif %}
+
+            <div class="perfil-container" id="perfilContainer">
+                <button class="perfil-btn" id="perfilBtn" title="Mi Cuenta">
+                    <span style="pointer-events: none;">👤</span>
+                </button>
+
+                <div class="menu-perfil" id="menuPerfil">
+                    <div class="perfil-header">
+                        <p class="perfil-name">{{ session.get('username', 'Invitado') }}</p>
+                        <span class="role-tag">
+                            {% if session.get('role') == 'admin' %}
+                                Administrador
+                            {% elif 'user_id' in session %}
+                                Cliente
+                            {% else %}
+                                Visita
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class="menu-divider"></div>
+
+                    {% if 'user_id' in session %}
+                        <a href="{{ url_for('editarperfil') }}" class="dropdown-item">Mi Perfil</a>
+                        <a href="{{ url_for('mis_compras') }}" class="dropdown-item">🧾 Mis Compras</a>
+                        {% if session.get('role') == 'admin' %}
+                            <!-- Opción de pagos para admin omitida temporalmente para evitar BuildError -->
+                        {% else %}
+                            <a href="{{ url_for('notificaciones') }}" class="dropdown-item">Notificaciones 🔔</a>
+                            {% if not is_premium %}
+                                <a href="{{ url_for('premium') }}" class="dropdown-item highlight-item">Ser Premium ⚡</a>
+                            {% endif %}
+                        {% endif %}
+                        <div class="menu-divider"></div>
+                        <a href="{{ url_for('logout') }}" class="dropdown-item logout-link">Cerrar Sesión</a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="dropdown-item">Iniciar Sesión</a>
+                        <a href="{{ url_for('registro') }}" class="dropdown-item highlight-item">Registrarme</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% if session.get('user_id') and session.get('role') != 'admin' and request.endpoint not in ('matchmaking', 'reservas') %}
+    {% if is_premium or session.get('role') == 'profesor' %}
+        {% include 'widgets.html' %}
+    {% else %}
+        {% include 'chatbot_only.html' %}
+    {% endif %}
+{% endif %}
+
+{% include 'javascript.html' %}
+
+<!-- SCRIPT DE AUTOCOMPLETADO Y CONTADOR DEL CARRITO -->
+<script>
+    window.actualizarContadorNavbar = function() {
+        const badgeCount = document.getElementById('contador-carrito');
+        if (!badgeCount) return;
+        let carrito = JSON.parse(localStorage.getItem('carritoTennissel')) || [];
+        let totalProductos = carrito.reduce((acc, item) => acc + (parseInt(item.cantidad) || 1), 0);
+        badgeCount.innerText = totalProductos;
+    };
+
+    // Si hay un proceso activo en sesión
+// Si hay un token activo en la sesión, agregamos la página a las opciones de búsqueda
+const recoveryToken = "{{ session.get('recovery_token', '') }}";
+
+if (recoveryToken) {
+    paginas.push({ 
+        nombre: "Regresar a Recuperación de Cuenta", 
+        url: "/reset_password/" + recoveryToken
+    });
+}
+
+    document.addEventListener("DOMContentLoaded", function() {
+        window.actualizarContadorNavbar();
+
+        // LISTA DE PÁGINAS DEL SITIO
+        // LISTA COMPLETA DE PÁGINAS DEL SITIO
+// LISTA COMPLETA DE PÁGINAS DEL SITIO
+const paginas = [
+    // Principales
+    { nombre: "Inicio", url: "{{ url_for('index') }}" },
+    { nombre: "Productos", url: "{{ url_for('productos') }}" },
+    { nombre: "Juegos", url: "{{ url_for('juegos') }}" },
+    { nombre: "Entrenos", url: "{{ url_for('entreno') }}" },
+    { nombre: "Contacto", url: "{{ url_for('contacto') }}" },
+    { nombre: "Mapas", url: "{{ url_for('mapas') }}" },
+    { nombre: "Matchmaking", url: "{{ url_for('matchmaking') }}" },
+    { nombre: "Reservas", url: "{{ url_for('reservas') }}" },
+    
+    // Informativos (Subcarpeta /informacion/)
+    { nombre: "ATP / WTA", url: "{{ url_for('informacion_atp_wta') }}" },
+    { nombre: "Datos y Tips", url: "{{ url_for('informacion_datos_y_tips') }}" },
+    { nombre: "Jugadores", url: "{{ url_for('informacion_jugadores') }}" },
+    { nombre: "Marcas y Útiles", url: "{{ url_for('informacion_marcas_y_utiles') }}" },
+    { nombre: "Noticias Nuevas", url: "{{ url_for('informacion_noticias_new') }}" },
+    { nombre: "Noticias Semanales", url: "{{ url_for('informacion_noticias_semanales') }}" },
+    { nombre: "Partidos Recientes", url: "{{ url_for('informacion_partidos_recientes') }}" },
+    { nombre: "Sitios Tennis", url: "{{ url_for('informacion_sitios_tennis') }}" },
+    { nombre: "Torneos", url: "{{ url_for('informacion_torneos') }}" },
+
+    // Usuario y Cuenta
+    { nombre: "Carrito de Compras", url: "{{ url_for('ver_carrito') }}" },
+    { nombre: "Notificaciones", url: "{{ url_for('notificaciones') }}" },
+    { nombre: "Iniciar Sesión", url: "{{ url_for('login') }}" },
+    { nombre: "Registrarse", url: "{{ url_for('registro') }}" },
+    { nombre: "Editar Perfil", url: "/editarperfil" },
+    { nombre: "Mis Compras", url: "{{ url_for('mis_compras') }}" },
+    { nombre: "Facturas", url: "/facturas" },
+    { nombre: "Premium", url: "{{ url_for('premium') }}" }
+];
+
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        if (searchInput && searchResults) {
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase().trim();
+                searchResults.innerHTML = '';
+
+                if (query.length === 0) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                // Filtra las opciones que coincidan con la búsqueda (p. ej: "ma")
+                const coincidencias = paginas.filter(p => p.nombre.toLowerCase().includes(query));
+
+                if (coincidencias.length > 0) {
+                    coincidencias.forEach(item => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<a href="${item.url}">📍 ${item.nombre}</a>`;
+                        searchResults.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement('li');
+                    li.className = 'search-no-results';
+                    li.textContent = 'No se encontraron páginas';
+                    searchResults.appendChild(li);
+                }
+
+                searchResults.style.display = 'block';
+            });
+
+            // Ocultar si se hace clic fuera del buscador
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.style.display = 'none';
+                }
+            });
+        }
+    });
+
+    
+</script>
+
+{% if 'user_id' in session and session.get('role') != 'admin' %}
+<script>
+    (() => {
+        let notificationCount = {{ notification_count|int }};
+
+        function showNotificationToast(count) {
+            const toast = document.createElement('a');
+            toast.href = "{{ url_for('notificaciones') }}";
+            toast.className = 'notification-toast';
+            toast.innerHTML = `<span class="notification-toast-icon">🔔</span><span><strong>Nueva notificación</strong><small>Tienes ${count} en tu bandeja</small></span>`;
+            document.body.appendChild(toast);
+            window.setTimeout(() => toast.classList.add('visible'), 20);
+            window.setTimeout(() => toast.classList.remove('visible'), 5500);
+            window.setTimeout(() => toast.remove(), 5900);
+        }
+
+        function updateNotificationBadge(count) {
+            const button = document.querySelector('.notificaciones-btn');
+            if (!button) return;
+            let badge = document.getElementById('contador-notificaciones');
+            button.classList.toggle('tiene-notificaciones', count > 0);
+            button.title = count > 0 ? `Tienes ${count} notificaciones` : 'No tienes notificaciones nuevas';
+            if (count > 0) {
+                if (!badge) {
+                    badge = document.createElement('span');
+                    badge.id = 'contador-notificaciones';
+                    badge.className = 'badge';
+                    button.appendChild(badge);
+                }
+                badge.textContent = count;
+            } else if (badge) {
+                badge.remove();
+            }
+        }
+
+        window.setInterval(async () => {
+            try {
+                const response = await fetch("{{ url_for('api_notificaciones_count') }}", { headers: { 'Accept': 'application/json' } });
+                if (!response.ok) return;
+                const data = await response.json();
+                const count = Number(data.count) || 0;
+                if (count > notificationCount) showNotificationToast(count);
+                notificationCount = count;
+                updateNotificationBadge(count);
+            } catch (error) {
+                // La navegación continúa aunque la consulta periódica no esté disponible.
+            }
+        }, 15000);
+    })();
+</script>
+{% endif %}

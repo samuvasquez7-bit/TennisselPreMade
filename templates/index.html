@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TENNISSEL | Comunidad, entrenamiento y productos de tenis</title>
+    <meta name="description" content="TENNISSEL reúne comunidad tenística, entrenamiento, reservas, torneos y productos para ayudarte a jugar mejor.">
+    <link rel="canonical" href="{{ request.url_root }}">
+    <meta property="og:title" content="TENNISSEL | Comunidad de tenis">
+    <meta property="og:description" content="Entrena, encuentra canchas, conecta con jugadores y descubre productos de tenis.">
+    <meta property="og:type" content="website">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+
+    <!-- =======================================================================
+       2. CONTENIDO PRINCIPAL
+       ======================================================================= -->
+    <main class="index-body">
+        
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!--                         SECCIÓN HERO                              -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <section class="index-hero">
+            <div class="index-hero-content">
+                <h1 class="index-hero-title">TENNISSEL</h1>
+                <p><strong>
+                    TENNISSEL es la plataforma web donde los apasionados del tenis pueden encontrar 
+                    en un solo lugar información actualizada sobre jugadores, rankings, torneos, 
+                    partidos, noticias, entrenamiento y las últimas novedades del mundo del tenis. 🎾🏆✨
+                </strong></p><br><br>
+                
+                <div class="index-hero-buttons">
+                    <a href="/productos" class="btn-tennissel">Ver Catálogo</a>
+                    {% if not usuario_autenticado %}
+                        <a href="/registro" class="btn-tennissel-outline">Crear Cuenta</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!--                      FIN SECCIÓN HERO                               -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+         <br><br><br><br>
+        
+
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<!--                  SECCIÓN DE EXPLORACIÓN (FEATURES)                   -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<section class="explore-section">
+
+    <h2 class="explore-title">
+        EXPLORA LA <span>PLATAFORMA</span>
+    </h2>
+
+    <div class="explore-grid">
+
+        {% if not is_premium %}
+        <div class="explore-card">
+            <span class="explore-icon">⚡</span>
+            <h3>Entrenamiento Élite</h3>
+            <p>
+                Accede a guías detalladas, análisis de golpes tácticos y rutinas
+                de agilidad preparadas para jugadores que buscan evolucionar
+                rápido.
+            </p>
+            <a href="/entreno" class="explore-link">
+                Ver entrenamientos →
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="explore-card">
+            <span class="explore-icon">💎</span>
+            <h3>Suscripción Premium</h3>
+            <p>
+                Desbloquea asesoramiento personalizado, contenido audiovisual
+                exclusivo de técnicas de tenis y ofertas especiales antes que
+                nadie.
+            </p>
+            <a href="/premium" class="explore-link">
+                Hacerse Premium →
+            </a>
+        </div>
+
+        <div class="explore-card">
+            <span class="explore-icon">🎾</span>
+            <h3>Raquetas y Más</h3>
+            <p>
+                Descubre nuestra línea complementaria de raquetas de alta gama,
+                encordados de precisión y maletines deportivos para proteger tu
+                equipo.
+            </p>
+            <a href="/productos" class="explore-link">
+                Ver equipo →
+            </a>
+        </div>
+
+        <div class="explore-card">
+            <span class="explore-icon">🤝</span>
+            <h3>Soporte Técnico</h3>
+            <p>
+                ¿Tienes dudas sobre tu calzado, compras o suscripción? Nuestro
+                equipo de expertos está disponible 24/7 para resolver tus
+                inquietudes.
+            </p>
+<a href="{{ url_for('soporte_tecnico') }}" class="explore-link">
+    Centro de ayuda →
+</a>
+        </div>
+
+    </div>
+
+</section>
+
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!--              FIN SECCIÓN DE EXPLORACIÓN                             -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <br><br>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+<!--                  SECCIÓN VIDEO Y BENEFICIOS                         -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+<section class="index-video-features">
+    
+    <h2 class="index-features-title">MÁS QUE UN DEPORTE, <span>UN ESTILO DE VIDA</span></h2>
+    
+    <div class="index-video-layout">
+        <!-- Columna Izquierdo: Video -->
+        <div class="index-video-box">
+            <div class="video-embed-wrapper">
+                <video autoplay loop muted playsinline>
+                    <source src="{{ url_for('static', filename='IMG/TENISSALUDABLE.mp4') }}" type="video/mp4">
+                    Tu navegador no soporta el elemento de video.
+                </video>
+            </div>
+        </div>
+        
+        <!-- Columna Derecho: Beneficios -->
+        <div class="index-info-box">
+            <h3>¿Por qué jugar Tenis?</h3>
+            <p class="info-intro">
+                El tenis es considerado uno de los deportes más completos del mundo, 
+                combinando exigencia física, agilidad mental y disciplina táctica.
+            </p>
+            
+            <ul class="beneficios-lista">
+                <li>
+                    <div class="beneficio-card">
+                        <span class="beneficio-icono">❤️</span>
+                        <div class="beneficio-text">
+                            <strong>Salud Cardiovascular:</strong> Mejora la resistencia, quema calorías y fortalece el corazón con entrenamientos de intervalos de alta intensidad (HIIT) naturales del juego.
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="beneficio-card">
+                        <span class="beneficio-icono">🧠</span>
+                        <div class="beneficio-text">
+                            <strong>Enfoque y Agilidad Mental:</strong> Obliga a tomar decisiones en fracciones de segundo, mejorando la concentración, la paciencia y la gestión del estrés bajo presión.
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="beneficio-card">
+                        <span class="beneficio-icono">💪</span>
+                        <div class="beneficio-text">
+                            <strong>Coordinación y Tonificación:</strong> Desarrolla la velocidad lateral, el equilibrio y fortalece tanto el tren superior como el inferior en cada golpe.
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+</section>
+
+            <!-- ═══════════════════════════════════════════════════════════════════ -->
+<!--                  SERVICIO PREMIUN                         -->
+<!-- ═══════════════════════════════════════════════════════════════════ -->
+
+<section class="premium-section">
+
+    <div class="premium-header">
+        <span class="premium-tag">EXPERIENCIA PREMIUM</span>
+        <h2>Servicios Premium</h2>
+        <p>
+            Lleva tu experiencia deportiva al siguiente nivel con herramientas
+            exclusivas diseñadas para jugadores de TENNISSEL.
+        </p>
+    </div>
+
+    <div class="premium-cards">
+
+        <!-- MAPAS -->
+        <div class="premium-card">
+            <img src="{{ url_for('static', filename='IMG/TENNISSEL_MAPAS.png') }}" alt="Mapas y reservas de canchas" width="640" height="360" loading="lazy" decoding="async">
+
+            <div class="card-content">
+                <h3>Mapas</h3>
+
+                <p>
+                    Encuentra canchas cercanas, conoce su ubicación y descubre
+                    nuevos lugares para jugar donde quieras.
+                </p>
+
+                <a href="{{ url_for('mapas') }}">Explorar</a>
+            </div>
+        </div>
+
+        <!-- MATCHMAKING -->
+        <div class="premium-card">
+            <img src="{{ url_for('static', filename='IMG/TENNISSEL_MATCHMAKING.png') }}" alt="Matchmaking para jugadores de tenis" width="640" height="360" loading="lazy" decoding="async">
+
+            <div class="card-content">
+                <h3>Matchmaking</h3>
+
+                <p>
+                    Encuentra rivales o compañeros con un nivel similar para
+                    disfrutar partidos competitivos y equilibrados.
+                </p>
+
+                <a href="{{ url_for('matchmaking') }}">Encontrar jugadores</a>
+            </div>
+        </div>
+
+        <!-- RESERVAS -->
+        <div class="premium-card">
+            <img src="{{ url_for('static', filename='IMG/TENNISSEL_RESERVAS.png') }}" alt="Reservas de canchas de tenis" width="640" height="360" loading="lazy" decoding="async">
+
+            <div class="card-content">
+                <h3>Reservas</h3>
+
+                <p>
+                    Reserva canchas en segundos, administra horarios y organiza
+                    tus encuentros desde un solo lugar.
+                </p>
+
+                <a href="{{ url_for('reservas') }}">Reservar ahora</a>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+        
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!--           SECCIÓN CENTRO DE INFORMACIÓN TENIS                     -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <section id="informacion" class="index-features">
+            <h2 class="index-features-title">🎾 CENTRO DE <span>INFORMACIÓN TENIS</span></h2>
+            
+            <div class="index-features-grid">
+                
+                <!-- Tarjeta 1: ATP y WTA -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">💥</span>
+                    <h3>ATP Y WTA</h3>
+                    <p>Conoce todo sobre la ATP y la WTA, las organizaciones que reúnen a los mejores tenistas del mundo. Explora rankings oficiales, calendarios de torneos, estadísticas, resultados y las últimas novedades del circuito profesional masculino y femenino.</p>
+                    <a href="/informacion/atp_wta" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 2: Torneos -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">🏆</span>
+                    <h3>Torneos</h3>
+                    <p>Descubre los próximos torneos y eventos amateur organizados por TENNISSEL. Participa en diferentes categorías, demuestra tu talento en la cancha, suma puntos para el ranking oficial y compite por premios exclusivos en cada partido.</p>
+                    <a href="/informacion/torneos" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 3: Jugadores -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">🥇</span>
+                    <h3>Jugadores</h3>
+                    <p>Accede a estadísticas actualizadas, posiciones en el ranking mundial, títulos obtenidos y datos relevantes de cada jugador del circuito profesional.</p>
+                    <a href="/informacion/jugadores" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 4: Partidos -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">🎾</span>
+                    <h3>Partidos Recientes</h3>
+                    <p>No te pierdas ningún detalle de los encuentros más recientes y conoce cómo evolucionan las principales competiciones del circuito internacional.</p>
+                    <a href="/informacion/partidos_recientes" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 5: Datos y Tips -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">😉</span>
+                    <h3>Datos y Tips</h3>
+                    <p>Explora estadísticas relevantes, hábitos de entrenamiento y recomendaciones utilizadas por jugadores y entrenadores para optimizar el rendimiento.</p>
+                    <a href="/informacion/datos_y_tips" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 6: Noticias Semanales -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">📰</span>
+                    <h3>Noticias Semanales</h3>
+                    <p>Accede a las últimas novedades, resultados destacados, cambios en los rankings y acontecimientos que están marcando el presente del tenis profesional a nivel mundial.</p>
+                    <a href="/informacion/noticias_semanales" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 7: Noticias Último Momento -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">📢</span>
+                    <h3>Noticias De Último Momento</h3>
+                    <p>Mantente informado con las novedades más recientes, resultados de última hora, cambios en los rankings, lesiones, fichajes de entrenadores y acontecimientos que impactan al circuito profesional.</p>
+                    <a href="/informacion/noticias_new" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 8: Marcas -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">🚀</span>
+                    <h3>Marca de Útiles y Lanzamiento</h3>
+                    <p>Mantente al día con las últimas innovaciones en raquetas, calzado, accesorios y tecnología deportiva desarrolladas por las marcas más reconocidas del mercado para maximizar el rendimiento en la cancha.</p>
+                    <a href="/informacion/marcas_y_utiles" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+                <!-- Tarjeta 9: Sitios para Ver Tenis -->
+                <div class="index-feature-card">
+                    <span class="index-card-icon">📺</span>
+                    <h3>Sitios para Ver Tenis</h3>
+                    <p>Descubre dónde seguir partidos en tiempo real, revivir encuentros históricos y acceder a contenido exclusivo de los principales circuitos y competiciones del tenis mundial.</p>
+                    <a href="/informacion/sitios_tennis" class="index-card-link">Centro de ayuda →</a>
+                </div>
+                
+            </div>
+            <br><br><br><br><br>
+
+</main>
+             <!-- ═══════════════════════════════════════════════════════════════════ -->
+             <!--                         SECCIÓN QUIÉNES SOMOS                     -->
+             <!-- ═══════════════════════════════════════════════════════════════════ -->
+<section id="¿quienes-somos?" class="quienes-wrapper">
+
+    <div class="quienes-somos-section" id="quienes-somos">
+
+        <!-- Encabezado -->
+        <div class="quienes-header">
+
+            <h2 class="quienes-title">QUIÉNES SOMOS</h2>
+
+            <p class="quienes-subtitle">
+                En <strong>TENNISSEL</strong> no somos una simple tienda ni
+                gestionamos infraestructura física de manera directa.
+
+                Somos la plataforma integral líder, el punto de encuentro
+                definitivo y el conector estratégico diseñado para centralizar
+                las soluciones de la comunidad tenista y los entusiastas del
+                deporte blanco.
+
+                <br><br>
+
+                Nacemos como respuesta a la excesiva dispersión de información
+                técnica, escenarios deportivos y recursos en el sector amateur.
+
+                Tradicionalmente, los jugadores, entrenadores independientes y
+                comercios locales han dependido de múltiples herramientas
+                ineficientes que limitan su autonomía y experiencia.
+
+                Nosotros rompemos esa barrera actuando como un HUB tecnológico
+                que unifica todo el ecosistema en un solo lugar.
+            </p>
+
+        </div>
+
+        <!-- Video -->
+        <div class="quienes-video-wrapper">
+
+            <video autoplay loop muted playsinline>
+                <source src="{{ url_for('static', filename='IMG/TENNISSELNOSOTROS.mp4') }}" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+
+        </div>
+
+        <!-- Tarjetas -->
+        <div class="quienes-grid">
+
+            <div class="quienes-card">
+                <div class="card-icon">📍</div>
+
+                <h3>Conectar la cancha</h3>
+
+                <p>
+                    Localiza en tiempo real escenarios, tiendas especializadas y
+                    los mejores sitios para disfrutar del circuito profesional
+                    mediante nuestro mapa interactivo.
+                </p>
+            </div>
+
+            <div class="quienes-card">
+                <div class="card-icon">🎾</div>
+
+                <h3>Potenciar el talento</h3>
+
+                <p>
+                    Servimos de puente para que entrenadores independientes
+                    adquieran visibilidad comercial y puedas reservar tus clases
+                    directamente con ellos.
+                </p>
+            </div>
+
+            <div class="quienes-card">
+                <div class="card-icon">⚡</div>
+
+                <h3>Vivir el tenis al minuto</h3>
+
+                <p>
+                    Centralizamos resultados, estadísticas, rankings ATP/WTA y
+                    guías tácticas en tiempo real para que nunca te quedes fuera
+                    del juego profesional.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Cierre -->
+        <div class="quienes-footer">
+
+            <p>
+                Democratizamos el acceso al deporte blanco.
+                Conectando cada rincón de la cancha con la tecnología que
+                necesitas.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+    
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+    <!--                    FIN CONTENIDO PRINCIPAL                              -->
+    <!-- ═══════════════════════════════════════════════════════════════════════ -->
+
+{% include 'footer.html' %}
+
+
+{% include 'javascript.html' %}
+</body>
+</html>

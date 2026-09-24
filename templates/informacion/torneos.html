@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torneos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.3">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<main class="informative-page informative-page--wide">
+    <header class="informative-hero informative-hero--centered">
+        <div class="informative-hero__copy">
+            <span class="informative-kicker">Calendario competitivo</span>
+            <h1>Torneos</h1>
+            <p>Consulta los eventos destacados, el calendario y la información clave para competir y seguir el circuito.</p>
+        </div>
+    </header>
+
+    {% if contenidos %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Guía del circuito</span>
+                <h2>Información sobre torneos</h2>
+            </div>
+            <div class="informative-grid informative-grid--content">
+            {% for contenido in contenidos %}
+                <article class="informative-card">
+                    <div class="informative-card__body">
+                        <span class="informative-label">{{ contenido.tipo|upper }}</span>
+                        <h2>{{ contenido.titulo }}</h2>
+                        <p>{{ contenido.texto }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
+    {% if torneos %}
+        <section class="informative-section">
+            <div class="informative-section__heading">
+                <span class="informative-kicker">Calendario</span>
+                <h2>Próximos torneos</h2>
+                <p>Revisa las próximas citas, sus categorías y los datos necesarios para organizar tu participación.</p>
+            </div>
+            <div class="informative-grid informative-grid--content">
+                {% for torneo in torneos %}
+                    <article class="informative-card">
+                        <div class="informative-card__body">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+                                <h3>{{ torneo.nombre }}</h3>
+                                <span class="informative-label text-warning">{{ torneo.nivel }}</span>
+                            </div>
+                            <p class="informative-card__subtitle">{{ torneo.categoria }}</p>
+                            <ul class="informative-list">
+                                <li><strong>Fecha:</strong> {{ torneo.fecha }}</li>
+                                <li><strong>Lugar:</strong> {{ torneo.lugar }}</li>
+                            </ul>
+                            <p>{{ torneo.descripcion }}</p>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% else %}
+        <div class="alert alert-secondary bg-dark border-secondary text-light" role="alert">
+            No hay torneos configurados en la base de datos. Puedes añadirlos desde el panel de administración.
+        </div>
+    {% endif %}
+</main>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

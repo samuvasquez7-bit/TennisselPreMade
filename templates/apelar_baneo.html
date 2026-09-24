@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apelar bloqueo | TENNISSEL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.2">
+    <style>
+        .appeal-page { max-width: 620px; margin: 120px auto 80px; padding: 0 22px; color: #fff; }
+        .appeal-card { padding: 34px; background: #151515; border: 1px solid #303030; border-radius: 14px; box-shadow: 0 18px 45px rgba(0,0,0,.35); }
+        .appeal-card h1 { margin-top: 0; color: #00ff66; }
+        .appeal-card p { color: #aaa; line-height: 1.6; }
+        .appeal-card label { display: block; margin: 18px 0 7px; color: #ddd; font-weight: 700; }
+        .appeal-card input, .appeal-card textarea { width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #444; border-radius: 6px; background: #0b0b0b; color: #fff; }
+        .appeal-card textarea { min-height: 140px; resize: vertical; }
+        .appeal-card button { margin-top: 20px; width: 100%; padding: 13px; border: 0; border-radius: 7px; background: #00ff66; color: #000; font-weight: 800; cursor: pointer; }
+    </style>
+</head>
+<body>
+{% include 'navbar.html' %}
+<main class="appeal-page">
+    <section class="appeal-card">
+        <h1>Revisión de bloqueo</h1>
+        <p>Si crees que la moderación fue incorrecta, explica tu caso. El equipo administrativo revisará la decisión manualmente.</p>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}<p>{{ message }}</p>{% endfor %}
+        {% endwith %}
+        <form method="post">
+            <label for="email">Correo de la cuenta</label>
+            <input id="email" name="email" type="email" required>
+            <label for="motivo">Motivo de la apelación</label>
+            <textarea id="motivo" name="motivo" required maxlength="2000" placeholder="Explica por qué consideras que el bloqueo fue incorrecto."></textarea>
+            <button type="submit">Enviar apelación</button>
+        </form>
+    </section>
+</main>
+</body>
+</html>

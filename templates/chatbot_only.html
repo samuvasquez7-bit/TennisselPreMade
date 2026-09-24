@@ -1,0 +1,12 @@
+<div id="tennissel-widgets" class="tennissel-widgets" data-user-id="{{ session.get('user_id', '') }}" data-role="{{ session.get('role', 'cliente') }}">
+    <button id="widget-dock-toggle" class="widget-dock-toggle" type="button" aria-label="Ocultar asistente" aria-expanded="true"><i class="fa-solid fa-chevron-down"></i></button>
+    <div class="widget-launchers">
+        <button id="chatbot-launcher" class="widget-launcher widget-launcher-chat" type="button"><i class="fa-solid fa-robot"></i> TennisBot</button>
+    </div>
+    <section id="chatbot-window" class="widget-panel widget-hidden" aria-label="TennisBot">
+        <header class="widget-header widget-chat-header"><div><span><i class="fa-solid fa-robot"></i> TennisBot</span><small>Ayuda rápida de TENNISSEL</small></div><button class="btn-close-widget" data-close-widget="chatbot-window" type="button" aria-label="Cerrar">&times;</button></header>
+        <div class="chatbot-shortcuts"><button type="button" data-chatbot-prompt="¿Cómo hago una reserva?">Reservas</button><button type="button" data-chatbot-prompt="¿Dónde están los jugadores?">Jugadores</button><button type="button" data-chatbot-prompt="¿Qué incluye Premium?">Premium</button></div>
+        <div id="chatbot-messages-body" class="chat-messages-container"><div class="msg-bubble msg-other">Hola. Puedo ayudarte con reservas, jugadores, profesores, entrenamientos, productos, torneos y tu cuenta.</div></div>
+        <form id="chatbot-form" class="chat-input-area"><input type="text" id="chatbot-input-text" placeholder="Escribe tu pregunta..." autocomplete="off"><button type="submit" aria-label="Enviar"><i class="fa-solid fa-paper-plane"></i></button></form>
+    </section>
+</div>

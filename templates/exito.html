@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exito</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+    <!-- =======================================================================
+       2. CONTENIDO PRINCIPAL
+       ======================================================================= -->
+<body>
+    <div class="tns-exito-contenedor">
+
+        <i class="fas fa-circle-check tns-exito-icono"></i>
+
+        <h1 class="tns-exito-titulo">
+            Tu formulario ha sido procesado correctamente
+        </h1>
+
+        <p class="tns-exito-texto">
+            ¡Gracias por registrarte en TENNISSEL!
+        </p>
+
+        <div class="tns-exito-botones">
+            <a href="/editarperfil" class="tns-exito-btn-principal">
+                Editar perfil
+            </a>
+
+            <a href="/login" class="tns-exito-btn-secundario">
+                Iniciar sesión
+            </a>
+        </div>
+
+    </div>
+
+{% include 'footer.html' %}
+
+{% include 'javascript.html' %}
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar información</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.2">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<div class="container py-5" style="max-width: 1200px; margin-top: 40px;">
+    <div class="mb-4">
+        <h1 class="display-6 text-white">Administrar contenido informativo</h1>
+        <p class="text-secondary">Edita el contenido de jugadores, noticias, tips, sitios, marcas y demás secciones informativas.</p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show bg-dark text-light border-secondary" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% for key, blocks in bloques_por_seccion.items() %}
+        <div class="card bg-dark border-secondary text-light shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="fs-5 text-white mb-0">{{ key.replace('_', ' ') | title }}</h2>
+                </div>
+
+                <form action="{{ url_for('admin_torneos') }}" method="POST" class="border border-secondary rounded p-3 mb-3">
+                    <input type="hidden" name="accion" value="guardar_bloque">
+                    <input type="hidden" name="tabla" value="{{ key }}">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-3">
+                            <label class="form-label text-secondary">Tipo</label>
+                            <input type="text" name="tipo" class="form-control bg-black text-light border-secondary" placeholder="intro" required>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label text-secondary">Título</label>
+                            <input type="text" name="titulo" class="form-control bg-black text-light border-secondary" placeholder="Título" required>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label text-secondary">Orden</label>
+                            <input type="number" name="orden" min="0" value="0" class="form-control bg-black text-light border-secondary">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-secondary">Texto</label>
+                            <textarea name="texto" rows="3" class="form-control bg-black text-light border-secondary" placeholder="Contenido" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Añadir bloque</button>
+                        </div>
+                    </div>
+                </form>
+
+                {% if blocks %}
+                    {% for bloque in blocks %}
+                        <form action="{{ url_for('admin_torneos') }}" method="POST" class="border border-secondary rounded p-3 mb-3">
+                            <input type="hidden" name="accion" value="guardar_bloque">
+                            <input type="hidden" name="tabla" value="{{ key }}">
+                            <input type="hidden" name="id" value="{{ bloque.id }}">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="form-label text-secondary">Tipo</label>
+                                    <input type="text" name="tipo" value="{{ bloque.tipo }}" class="form-control bg-black text-light border-secondary" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-secondary">Título</label>
+                                    <input type="text" name="titulo" value="{{ bloque.titulo }}" class="form-control bg-black text-light border-secondary" required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="form-label text-secondary">Orden</label>
+                                    <input type="number" name="orden" min="0" value="{{ bloque.orden if bloque.orden is not none else 0 }}" class="form-control bg-black text-light border-secondary">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label text-secondary">Texto</label>
+                                    <textarea name="texto" rows="3" class="form-control bg-black text-light border-secondary" required>{{ bloque.texto }}</textarea>
+                                </div>
+                                <div class="col-12 d-flex gap-2">
+                                    <button type="submit" class="btn btn-success">Guardar</button>
+                                    <button type="submit" name="accion" value="eliminar_bloque" class="btn btn-outline-danger" onclick="return confirm('¿Eliminar este bloque?');">Eliminar</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-secondary bg-dark border-secondary text-light mb-0">No hay bloques para esta sección.</div>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

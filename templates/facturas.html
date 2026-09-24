@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Compras | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+    <style>
+        body { background-color: #121212; color: #fff; font-family: 'Montserrat', sans-serif; }
+        .compras-page { padding: 40px 0; }
+        .compras-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .tabla-panel { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 12px; padding: 20px; }
+        .table-dark { --bs-table-bg: transparent; }
+        .badge-estado { background: rgba(0,255,102,0.15); color: #00ff66; border: 1px solid #00ff66; padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .badge-pendiente { background: rgba(255,193,7,0.15); color: #ffc107; border: 1px solid #ffc107; }
+        .modal-factura { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px); }
+        .modal-factura-content { background: #1a1a1a; padding: 30px; border-radius: 12px; max-width: 600px; width: 90%; border: 1px solid #00ff66; color: #fff; position: relative; box-shadow: 0 10px 30px rgba(0,255,102,0.15); }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; color: #aaa; cursor: pointer; }
+        .close-modal:hover { color: #00ff66; }
+        .btn-verde { background: #00ff66; color: #000; font-weight: bold; border: none; }
+        .btn-verde:hover { background: #00cc52; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #888; }
+        @media print { body * { visibility: hidden; } #modalFactura, #modalFactura * { visibility: visible; } #modalFactura { position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; } .modal-factura-content { border: none; box-shadow: none; color: #000; background: #fff; } .no-print { display: none !important; } }
+    </style>
+<base target="_self">
+</head>
+<body>
+
+{% include 'navbar.html' %}
+
+<main class="compras-page">
+    <div class="compras-container">
+
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold m-0"><i class="fas fa-receipt" style="color: #00ff66;"></i> MIS <span style="color: #00ff66;">COMPRAS</span></h1>
+                <p class="text-secondary m-0">Historial completo de tus pedidos y facturas.</p>
+            </div>
+            <a href="/catalogo" class="btn btn-verde"><i class="fas fa-shopping-bag"></i> Seguir Comprando</a>
+        </header>
+
+        <div class="tabla-panel">
+            <div class="table-responsive">
+                <table class="table table-dark text-white align-middle m-0">
+                    <thead>
+                        <tr style="border-color: #333; color: #888; font-size: 13px;">
+                            <th>ID FACTURA</th>
+                            <th>FECHA & HORA</th>
+                            <th>PRODUCTOS</th>
+                            <th>TOTAL</th>
+                            <th>ESTADO</th>
+                            <th>MÉTODO</th>
+                            <th class="text-end">ACCIÓN</th>
+                            <th>ENTREGA EST.</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaFacturasBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<div id="modalFactura" class="modal-factura">
+    <div class="modal-factura-content">
+        <span class="close-modal no-print" onclick="cerrarModal()">&times;</span>
+        <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-3 mb-3">
+            <div>
+                <h3 class="fw-bold m-0" style="color: #00ff66;">TENNISSEL<span style="color: #fff;">.</span></h3>
+                <small class="text-secondary">Factura Electrónica de Venta</small>
+            </div>
+            <div class="text-end">
+                <h5 class="m-0" id="modalFacturaId">#FAC-0000</h5>
+                <small class="text-secondary" id="modalFacturaFecha">00/00/0000 00:00</small>
+            </div>
+        </div>
+        <div class="mb-3"><strong>Cliente:</strong> <span id="modalFacturaCliente">---</span></div>
+        <div class="mb-3"><strong>Entrega estimada:</strong> <span id="modalFacturaEntrega">---</span></div>
+        <table class="table table-dark text-white table-sm mb-3">
+            <thead>
+                <tr class="text-secondary">
+                    <th>Producto</th>
+                    <th class="text-center">Cant.</th>
+                    <th class="text-end">Precio U.</th>
+                    <th class="text-end">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="modalFacturaProductos"></tbody>
+        </table>
+        <div class="d-flex justify-content-between border-top border-secondary pt-3">
+            <span class="fs-5 fw-bold">Total Pagado:</span>
+            <span class="fs-4 fw-bold" style="color: #00ff66;" id="modalFacturaTotal">$0</span>
+        </div>
+        <div class="mt-4 text-end no-print">
+            <button class="btn btn-outline-light me-2" onclick="cerrarModal()">Cerrar</button>
+            <button class="btn btn-verde" onclick="window.print()">
+                <i class="fas fa-print"></i> Imprimir
+            </button>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+
+<script>
+    const facturasData = {{ facturas_json | tojson }};
+
+    function escapeHTML(str) {
+        return String(str || '').replace(/[&<>"']/g, function(m) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+        });
+    }
+
+    function renderizarTabla(datos) {
+        const tbody = document.getElementById('tablaFacturasBody');
+        tbody.innerHTML = '';
+
+        if (datos.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8">
+                        <div class="empty-state">
+                            <i class="fas fa-receipt" style="font-size: 48px; color: #333; margin-bottom: 15px;"></i>
+                            <h3>Aún no tienes compras</h3>
+                            <p style="margin-bottom: 20px;">Tu historial de facturas aparecerá aquí.</p>
+                            <a href="/catalogo" class="btn btn-verde">Ir a la Tienda</a>
+                        </div>
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        datos.forEach(function(f) {
+            var fechaObj = new Date(f.fecha);
+            var fechaFormateada = isNaN(fechaObj) ? f.fecha : fechaObj.toLocaleDateString() + ' ' + fechaObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            var prodResumen = (f.productos || []).map(function(p) { 
+                return p.nombre + ' (x' + p.cantidad + ')'; 
+            }).join(', ');
+
+            var estado = (f.estado || '').toLowerCase();
+            var badgeClass = estado === 'pagado' ? 'badge-estado' : 'badge-estado badge-pendiente';
+
+            var fila = document.createElement('tr');
+            fila.style.borderColor = '#2a2a2a';
+            fila.innerHTML =
+                '<td class="fw-bold">' + escapeHTML(f.id_formateado) + '</td>' +
+                '<td class="text-secondary">' + escapeHTML(fechaFormateada) + '</td>' +
+                '<td style="max-width:250px;" class="text-truncate" title="' + escapeHTML(prodResumen) + '">' + escapeHTML(prodResumen) + '</td>' +
+                '<td style="color:#00ff66;" class="fw-bold">$' + (f.total || 0).toLocaleString() + '</td>' +
+                '<td><span class="' + badgeClass + '">' + escapeHTML(estado.toUpperCase()) + '</span></td>' +
+                '<td class="text-secondary">' + escapeHTML(f.metodo_pago || 'Tarjeta') + '</td>' +
+                '<td class="text-secondary">' + escapeHTML(f.fecha_entrega_estimada || 'Por confirmar') + '</td>' +
+                '<td class="text-end">' +
+                    '<button class="btn btn-sm btn-outline-light" title="Ver Detalle">' +
+                        '<i class="fas fa-eye"></i>' +
+                    '</button>' +
+                '</td>';
+
+            fila.querySelector('button').addEventListener('click', function() {
+                verDetalleFactura(f.id);
+            });
+
+            tbody.appendChild(fila);
+        });
+    }
+
+    function verDetalleFactura(id) {
+        var f = facturasData.find(function(item) { return item.id === id; });
+        if (!f) return;
+
+        document.getElementById('modalFacturaId').innerText = '#' + f.id_formateado;
+        document.getElementById('modalFacturaFecha').innerText = new Date(f.fecha).toLocaleString();
+        document.getElementById('modalFacturaCliente').innerText = f.cliente;
+        document.getElementById('modalFacturaEntrega').innerText = f.fecha_entrega_estimada || 'Por confirmar';
+        document.getElementById('modalFacturaTotal').innerText = '$' + (f.total || 0).toLocaleString();
+
+        var tbody = document.getElementById('modalFacturaProductos');
+        tbody.innerHTML = '';
+
+        (f.productos || []).forEach(function(p) {
+            var subtotal = (p.precio_unitario || 0) * (p.cantidad || 0);
+            var fila = document.createElement('tr');
+            fila.style.borderColor = '#333';
+            fila.innerHTML =
+                '<td>' + escapeHTML(p.producto_nombre || p.nombre) + '</td>' +
+                '<td class="text-center">' + p.cantidad + '</td>' +
+                '<td class="text-end">$' + (p.precio_unitario || 0).toLocaleString() + '</td>' +
+                '<td class="text-end">$' + subtotal.toLocaleString() + '</td>';
+            tbody.appendChild(fila);
+        });
+
+        document.getElementById('modalFactura').style.display = 'flex';
+    }
+
+    function cerrarModal() {
+        document.getElementById('modalFactura').style.display = 'none';
+    }
+
+    document.getElementById('modalFactura').addEventListener('click', function(e) {
+        if (e.target === this) cerrarModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderizarTabla(facturasData);
+    });
+</script>
+
+</body>
+</html>

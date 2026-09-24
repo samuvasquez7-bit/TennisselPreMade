@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas | TENNISSEL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="reservas-page">
+    {% include 'navbar.html' %}
+    <main class="reservas-shell">
+        <header class="reservas-heading">
+            <span>AGENDA DE CANCHAS</span>
+            <h1>Reserva tu próximo partido</h1>
+            <p>Elige un día para consultar horarios. Las reservas hechas aquí aparecen también en Mapas.</p>
+        </header>
+        <div id="reservas-feedback" class="reservas-feedback" hidden></div>
+        <section class="reservas-my-panel" aria-labelledby="mis-reservas-title">
+            <div class="reservas-panel-header">
+                <div><span class="reservas-eyebrow">TU AGENDA</span><h2 id="mis-reservas-title">Mis reservas</h2></div>
+                <button id="reservas-my-toggle" type="button" aria-expanded="true"><i class="fa-solid fa-chevron-up"></i></button>
+            </div>
+            <div id="reservas-my-list" class="reservas-my-list"><p class="reservas-empty">Cargando tus reservas...</p></div>
+        </section>
+        <div class="reservas-columns">
+            <section class="reservas-calendar-panel">
+                <div class="reservas-panel-header"><h2>Calendario</h2><button id="reservas-today" type="button">Hoy</button></div>
+                <input id="reservas-date" class="reservas-date-input" type="date">
+                <details class="reservas-filter-menu">
+                    <summary><i class="fa-solid fa-sliders"></i> Filtrar por cancha</summary>
+                    <select id="reservas-court-filter" class="reservas-court-filter"><option value="todas">Todas las canchas</option></select>
+                </details>
+                <div id="reservas-calendar" class="reservas-calendar"></div>
+            </section>
+            <section class="reservas-courts-panel">
+                <div class="reservas-panel-header"><div><span class="reservas-eyebrow">HORARIOS</span><h2 id="reservas-selected-label">Canchas disponibles</h2></div><span id="reservas-loading"></span></div>
+                <label class="reservas-duration">Duración de la reserva
+                    <select id="reservas-duration" aria-label="Duración de la reserva"><option value="1">1 hora</option><option value="2">2 horas</option></select>
+                </label>
+                <section id="reservas-confirmation" class="reservas-confirmation" tabindex="-1" hidden>
+                    <div><span class="reservas-eyebrow">CONFIRMAR RESERVA</span><strong id="reservas-confirmation-text"></strong></div>
+                    <div class="reservas-confirmation-actions"><button id="reservas-back" type="button">Volver</button><button id="reservas-confirm" type="button">Enviar reserva</button></div>
+                </section>
+                <div id="reservas-courts" class="reservas-courts"><p class="reservas-empty">Selecciona una fecha para ver horarios.</p></div>
+            </section>
+        </div>
+    </main>
+    {% include 'footer.html' %}
+    <script src="{{ url_for('static', filename='JS/reservas.js') }}"></script>
+</body>
+</html>

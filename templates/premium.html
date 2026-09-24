@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+    <style>
+        .premium-page { background: #080b0a; color: #f7fbf8; padding: 98px 0 72px; overflow: hidden; }
+        .premium-wrap { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+        .premium-hero { position: relative; isolation: isolate; text-align: center; padding: 66px 22px 56px; border: 1px solid rgba(0,255,102,.18); border-radius: 26px; background: radial-gradient(circle at 50% 0%, rgba(0,255,102,.16), transparent 46%), linear-gradient(135deg,#151d19,#0a0d0c 62%); overflow: hidden; }
+        .premium-hero::before, .premium-hero::after { content: ''; position: absolute; z-index: -1; border-radius: 50%; filter: blur(2px); }
+        .premium-hero::before { width: 280px; height: 280px; right: -105px; top: -145px; background: rgba(255,215,0,.14); }
+        .premium-hero::after { width: 230px; height: 230px; left: -120px; bottom: -150px; background: rgba(0,255,102,.13); }
+        .premium-eyebrow { display: inline-flex; gap: 8px; align-items: center; padding: 8px 13px; border: 1px solid rgba(0,255,102,.38); border-radius: 100px; color: #8effbc; background: rgba(0,255,102,.07); text-transform: uppercase; letter-spacing: .13em; font-size: .72rem; font-weight: 800; }
+        .premium-hero h1 { font-size: clamp(2.3rem,6vw,4.8rem); line-height: .98; letter-spacing: -.06em; max-width: 840px; margin: 21px auto 17px; font-weight: 900; }
+        .premium-hero h1 span { color: #00ff66; text-shadow: 0 0 26px rgba(0,255,102,.35); }
+        .premium-hero p { max-width: 650px; color: #afbab3; margin: 0 auto; font-size: 1.04rem; }
+        .premium-stats { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+        .premium-stat { min-width: 150px; padding: 12px 18px; border-left: 1px solid rgba(255,255,255,.12); text-align: left; }
+        .premium-stat strong { display: block; color: #fff; font-size: 1.1rem; }.premium-stat span { color:#8e9b93; font-size:.78rem; }
+        .premium-page .productos-header { display:none; }
+        .premium-page .cartas-grid { max-width: 900px; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; margin: 38px auto 0; }
+        .premium-page .plan-premium-card { position:relative; border-color: rgba(255,255,255,.12); background: linear-gradient(155deg,#1a211e,#0d1110); }
+        .premium-page .plan-premium-card:nth-child(2) { border-color: rgba(255,215,0,.52); box-shadow: 0 16px 42px rgba(255,215,0,.08); }
+        .premium-page .icono-premium { height: 130px; background: radial-gradient(circle,rgba(0,255,102,.17),transparent 68%); }.premium-page .plan-premium-card:nth-child(2) .icono-premium { background: radial-gradient(circle,rgba(255,215,0,.15),transparent 68%); }
+        .premium-page .carta-info { padding: 0 28px 28px; }.premium-page .carta-info p { color:#aab4ae; min-height:72px; }
+        .premium-page .carta-info h3 { font-size:1.55rem; }.premium-page .precio-contenedor .monto { color:#fff; }
+        .premium-includes { list-style:none; padding:0; margin: 19px 0 24px; text-align:left; }.premium-includes li { padding:7px 0; color:#d8e0db; font-size:.86rem; border-bottom:1px solid rgba(255,255,255,.06); }.premium-includes i { color:#00ff66; margin-right:8px; }
+        .premium-benefits { margin-top: 72px; }.premium-section-title { text-align:center; max-width:640px; margin:0 auto 28px; }.premium-section-title h2 { font-size:clamp(1.7rem,4vw,2.5rem); font-weight:800; }.premium-section-title p { color:#9ba69f; }
+        .premium-benefit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }.premium-benefit { padding:25px; border:1px solid rgba(255,255,255,.09); border-radius:16px; background:#111614; }.premium-benefit i { display:grid; place-items:center; width:43px; height:43px; border-radius:12px; color:#00ff66; background:rgba(0,255,102,.1); font-size:1.2rem; }.premium-benefit h3 { font-size:1.05rem; margin:17px 0 7px; }.premium-benefit p { margin:0; color:#93a097; font-size:.88rem; line-height:1.6; }
+        .premium-trust { margin-top: 40px; padding:22px 28px; display:flex; align-items:center; justify-content:space-between; gap:24px; border:1px solid rgba(0,255,102,.2); border-radius:16px; background:rgba(0,255,102,.05); }.premium-trust strong { font-size:1.08rem; }.premium-trust p { color:#99a79f; margin:3px 0 0; font-size:.87rem; }.premium-trust i { color:#00ff66; font-size:1.7rem; }
+        @media (max-width: 700px) { .premium-page { padding-top:80px; }.premium-page .cartas-grid,.premium-benefit-grid { grid-template-columns:1fr; }.premium-hero { padding:48px 16px; }.premium-trust { align-items:flex-start; }.premium-stat { min-width:120px; } }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' %}
+    <!-- =======================================================================
+       2. CONTENIDO PRINCIPAL
+       ======================================================================= -->
+    <main class="premium-page">
+        <div class="premium-wrap">
+            <section class="premium-hero">
+                <span class="premium-eyebrow"><i class="fas fa-bolt"></i> TENNISSEL PERFORMANCE</span>
+                <h1>Entrena con una <span>ventaja real</span> en cada punto.</h1>
+                <p>Desbloquea herramientas creadas para convertir tu constancia en progreso medible dentro y fuera de la cancha.</p>
+                <div class="premium-stats">
+                    <div class="premium-stat"><strong>+7</strong><span>nuevas rutinas y ejercicios</span></div>
+                    <div class="premium-stat"><strong>24/7</strong><span>acceso desde cualquier lugar</span></div>
+                    <div class="premium-stat"><strong>1:1</strong><span>seguimiento de progreso</span></div>
+                </div>
+            </section>
+        
+        <!-- ── 2.1 Encabezado de Sección ─────────────────────────────────── -->
+        <header class="productos-header">
+            <h2>PLANES <span>PREMIUM ✨</span></h2>
+            <p>Elige el nivel de entrenamiento que necesitas y perfecciona tu juego con herramientas avanzadas.</p>
+        </header>
+        
+        
+        <!-- ── 2.2 Mensajes Flash (Jinja2 - Flask) ───────────────────────── -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} text-center mx-auto alerta-flash">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
+        
+        <!-- ── 2.3 Grid de Planes Premium ────────────────────────────────── -->
+        <section class="cartas-grid">
+            
+            <!-- ── Carta 1: Plan Mensual PRO ───────────────────────────────── -->
+            <article class="carta-golpe plan-premium-card">
+                
+                <!-- Imagen / Icono -->
+                <div class="img-contenedor text-center">
+                    <div class="icono-premium">
+                        <i class="fas fa-star text-warning"></i>
+                    </div>
+                    <span class="badge-ayuda badge-recomendado">Recomendado</span>
+                </div>
+                
+                <!-- Información del Plan -->
+                <div class="carta-info text-center">
+                    <span class="carta-categoria">Plan Mensual</span>
+                    <h3>Pase Mensual PRO</h3>
+                    <p>Acceso ilimitado a guías avanzadas, videos interactivos y 1 análisis biomecánico de tu golpe al mes.</p>
+                    
+                    <!-- Precio -->
+                    <div class="precio-contenedor my-3">
+                        <span class="moneda">$</span>
+                        <span class="monto">39.900</span>
+                        <span class="periodo">/mes</span>
+                    </div>
+                    
+                    <!-- Botón -->
+                    <div class="carta-footer w-100 justify-content-center border-0 pt-0">
+                        <button class="btn-tennissel-sm w-100 btn-oro" data-bs-toggle="modal" data-bs-target="#modalPago" onclick="configurarPago('Pase Mensual PRO', '39.900')">
+                            Suscribirse Ahora
+                        </button>
+                    </div>
+                </div>
+            </article>
+            <!-- ── Fin Carta 1 ─────────────────────────────────────────────── -->
+            
+            
+            <!-- ── Carta 2: Plan Élite Anual ───────────────────────────────── -->
+            <article class="carta-golpe plan-premium-card">
+                
+                <!-- Imagen / Icono -->
+                <div class="img-contenedor text-center">
+                    <div class="icono-premium">
+                        <i class="fas fa-crown text-warning"></i>
+                    </div>
+                    <span class="badge-ayuda badge-mejor-valor">Mejor Valor</span>
+                </div>
+                
+                <!-- Información del Plan -->
+                <div class="carta-info text-center">
+                    <span class="carta-categoria">Plan Anual</span>
+                    <h3>Pase Élite Anual</h3>
+                    <p>Acceso total a todo el ecosistema, rutinas de preparación física y análisis ilimitados de tus videos.</p>
+                    
+                    <!-- Precio -->
+                    <div class="precio-contenedor my-3">
+                        <span class="moneda">$</span>
+                        <span class="monto">299.900</span>
+                        <span class="periodo">/año</span>
+                    </div>
+                    
+                    <!-- Botón -->
+                    <div class="carta-footer w-100 justify-content-center border-0 pt-0">
+                        <button class="btn-tennissel-sm w-100 btn-oro" data-bs-toggle="modal" data-bs-target="#modalPago" onclick="configurarPago('Pase Élite Anual', '299.900')">
+                            Obtener Pase Anual
+                        </button>
+                    </div>
+                </div>
+            </article>
+            <!-- ── Fin Carta 2 ─────────────────────────────────────────────── -->
+            
+        </section>
+        <!-- ── Fin Grid de Planes ────────────────────────────────────────── -->
+        
+            <section class="premium-benefits">
+                <div class="premium-section-title">
+                    <h2>Todo lo que necesitas para jugar mejor</h2>
+                    <p>Una experiencia Premium diseñada para que tu entrenamiento tenga dirección, ritmo y resultados.</p>
+                </div>
+                <div class="premium-benefit-grid">
+                    <article class="premium-benefit"><i class="fas fa-chart-line"></i><h3>Progreso visible</h3><p>Registra tu constancia y consulta métricas que te ayudan a mantener el foco.</p></article>
+                    <article class="premium-benefit"><i class="fas fa-play-circle"></i><h3>Biblioteca exclusiva</h3><p>Accede a rutinas, técnica por golpes y contenido para cada nivel de juego.</p></article>
+                    <article class="premium-benefit"><i class="fas fa-map-marked-alt"></i><h3>Más tenis cerca de ti</h3><p>Explora mapas, reservas y herramientas Premium para disfrutar más la cancha.</p></article>
+                </div>
+                <div class="premium-trust">
+                    <i class="fas fa-shield-alt"></i>
+                    <div><strong>Activa tu plan con tranquilidad</strong><p>Pago protegido, acceso inmediato y administración simple desde tu perfil.</p></div>
+                    <i class="fas fa-lock"></i>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- ======================================================================
+       FIN CONTENIDO PRINCIPAL
+       ====================================================================== -->
+
+
+    <!-- ======================================================================
+       3. MODAL DE PAGO
+       ====================================================================== -->
+    <div class="modal fade" id="modalPago" tabindex="-1" aria-labelledby="modalPagoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-tennissel modal-premium">
+                
+                <!-- Cabecera -->
+                <div class="modal-header modal-header-premium">
+                    <h5 class="modal-title fw-bold" id="modalPagoLabel">
+                        <i class="fas fa-shield-alt text-success me-2"></i> Pago Seguro TENNISSEL
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                
+                <!-- Cuerpo -->
+                <div class="modal-body">
+                    
+                    <!-- Resumen del Plan -->
+                    <div class="resumen-plan-box">
+                        <span class="text-muted small d-block">Plan seleccionado</span>
+                        <strong id="nombrePlanModal" class="text-warning text-uppercase fs-5">PLAN</strong>
+                        <div class="fw-bold mt-1 fs-4" id="precioPlanModal">$0</div>
+                    </div>
+                    
+                    <!-- Formulario de Pago -->
+                    <form action="/premium" method="POST">
+                        
+                        <!-- Input oculto: nombre del plan -->
+                        <input type="hidden" id="planInput" name="plan" value="">
+                        
+                        <!-- ID de Usuario -->
+                        <div class="mb-3">
+                            <label class="form-label small">ID de Usuario Asociado</label>
+                            <input type="number" class="form-control input-premium" name="user_id" placeholder="Ej. 1" required>
+                            <div class="form-text text-muted small">Ingresa el ID numérico del usuario de la tabla de phpMyAdmin.</div>
+                        </div>
+                        
+                        <!-- Nombre del Titular -->
+                        <div class="mb-3">
+                            <label class="form-label small">Nombre del Titular</label>
+                            <input type="text" class="form-control input-premium" placeholder="Juan Pérez" required>
+                        </div>
+                        
+                        <!-- Número de Tarjeta -->
+                        <div class="mb-3">
+                            <label class="form-label small">Número de Tarjeta</label>
+                            <div class="input-group">
+                                <span class="input-group-text input-icono"><i class="fas fa-credit-card"></i></span>
+                                <input type="text" class="form-control input-premium" placeholder="4557 •••• •••• ••••" required maxlength="16">
+                            </div>
+                        </div>
+                        
+                        <!-- Fila: Expiración + CVC -->
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label class="form-label small">Expiración</label>
+                                <input type="text" class="form-control input-premium" placeholder="MM/AA" required maxlength="5">
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label class="form-label small">CVC / CVV</label>
+                                <input type="password" class="form-control input-premium" placeholder="123" required maxlength="4">
+                            </div>
+                        </div>
+                        
+                        <!-- Botón Pagar -->
+                        <button type="submit" class="btn btn-pago-premium w-100 py-2.5 mt-3 fw-bold shadow-sm">
+                            <i class="fas fa-lock me-2"></i> Pagar y Activar Premium
+                        </button>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ======================================================================
+       FIN MODAL DE PAGO
+       ====================================================================== -->
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+<script>
+    function configurarPago(plan, precio) {
+        document.getElementById('nombrePlanModal').textContent = plan;
+        document.getElementById('precioPlanModal').textContent = '$' + precio;
+        document.getElementById('planInput').value = plan;
+    }
+</script>
+</body>
+</html>

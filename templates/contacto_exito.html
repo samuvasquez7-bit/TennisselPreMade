@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje Recibido | TENNISSEL</title>
+    <!-- Tus enlaces a estilos y fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='CSS/style.css') }}">
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Contenedor central con espacio superior para el navbar */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 120px; /* Ajusta este valor según la altura de tu navbar */
+            padding-bottom: 50px;
+        }
+
+        .exito-card {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #333;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            max-width: 450px;
+            width: 90%;
+        }
+
+        .icon-check {
+            font-size: 70px;
+            color: #00ff88;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        h1 { font-weight: 900; margin-bottom: 15px; letter-spacing: 1px; }
+        p { color: #b3b3b3; margin-bottom: 30px; line-height: 1.6; }
+
+        .btn-volver {
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-volver:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="main-content">
+        <div class="exito-card">
+            <span class="icon-check">✓</span>
+            <h1>¡Mensaje Recibido!</h1>
+            <p>Gracias por contactar con <b>TENNISSEL</b>. Nuestro equipo ha recibido tu solicitud y nos pondremos en contacto contigo a la brevedad posible.</p>
+            <a href="{{ url_for('index') }}" class="btn-volver">Volver al Inicio</a>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+    {% include 'javascript.html' %}
+
+</body>
+</html>

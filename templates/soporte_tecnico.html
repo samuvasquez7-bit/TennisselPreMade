@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soporte/tecnico - TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Cambia tu etiqueta link por esta: -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+</head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - TENNISSEL</title>
+    <!-- Cargamos FontAwesome para los iconos de los campos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+    <br><br>
+<div class="soporte-container">
+    <header class="soporte-hero">
+        <h1 class="titulo-soporte">Centro de Soporte TENNISSEL</h1>
+        <div class="divider"></div>
+        <p class="texto-soporte">Tu experiencia es nuestra prioridad. Nuestro equipo de expertos está disponible 24/7 para garantizar que cada herramienta de tu plataforma funcione con la máxima precisión y rendimiento.</p>
+    </header>
+
+    <div class="soporte-grid">
+        <section class="soporte-info">
+            <div class="info-card">
+                <h4>Respuesta Prioritaria</h4>
+                <p>Nuestro equipo técnico revisa cada caso con urgencia.</p>
+            </div>
+            <div class="info-card">
+                <h4>Seguridad Pro</h4>
+                <p>Tus consultas están protegidas y cifradas.</p>
+            </div>
+            <div class="info-card">
+                <h4>Soporte Técnico</h4>
+                <p>Expertos listos para resolver cualquier error en la plataforma.</p>
+            </div>
+        </section>
+
+        <section class="soporte-card">
+            <!-- Formulario igual al anterior -->
+            <form action="{{ url_for('soporte_tecnico') }}" method="POST">
+                <div class="input-group">
+                    <label>Usuario</label>
+                    <input type="text" value="{{ session.get('username') }}" disabled class="input-field">
+                </div>
+                <div class="input-group">
+                    <label>Categoría</label>
+                    <select name="motivo" class="input-field" required>
+                        <option value="" disabled selected>Elige una opción...</option>
+                        <option value="Tecnico">Incidencia Técnica</option>
+                        <option value="Suscripcion">Pagos / Suscripciones</option>
+                        <option value="Cuenta">Seguridad / Acceso</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Tu Mensaje</label>
+                    <textarea name="mensaje" rows="5" class="input-field" placeholder="Explica tu caso..." required></textarea>
+                </div>
+                <button type="submit" class="btn-verde">ENVIAR SOLICITUD</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+{% include 'javascript.html' %}
+</body>
+</html>

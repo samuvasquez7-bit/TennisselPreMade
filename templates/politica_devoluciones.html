@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Devoluciones y Reembolsos | TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        body {
+            background-color: #05070a !important;
+            color: #e2e8f0 !important;
+            font-family: 'Montserrat', sans-serif !important;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .tx-legal-wrapper {
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        .tx-legal-hero {
+            background: rgba(10, 12, 16, 0.88);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #1a1f2c;
+            padding: 2rem 1rem 1.75rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .tx-legal-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #f59e0b, transparent);
+        }
+
+        .tx-legal-layout {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 5rem 1.25rem;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .tx-legal-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tx-legal-sidebar {
+            position: sticky;
+            top: 130px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 16px;
+            padding: 1.25rem;
+        }
+
+        .tx-legal-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb {
+            background: #1a1f2c;
+            border-radius: 4px;
+        }
+        .tx-legal-sidebar::-webkit-scrollbar-thumb:hover {
+            background: #f59e0b;
+        }
+
+        .tx-sidebar-title {
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .tx-sidebar-link {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tx-sidebar-link:hover,
+        .tx-sidebar-link.active {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            transform: translateX(3px);
+        }
+
+        .tx-legal-content {
+            background: #0d1017;
+            border: 1px solid #1a1f2c;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        @media (max-width: 576px) {
+            .tx-legal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        .tx-section-block {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 130px;
+        }
+
+        .tx-section-block:last-child {
+            margin-bottom: 0;
+        }
+
+        .tx-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #1a1f2c;
+        }
+
+        .tx-section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            color: #fbbf24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .tx-section-title {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        p {
+            color: #cbd5e1;
+            font-size: 0.93rem;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+
+        ul, ol {
+            padding-left: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        li {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            line-height: 1.7;
+            margin-bottom: 0.5rem;
+        }
+
+        li strong, p strong {
+            color: #ffffff;
+        }
+
+        .tx-highlight-box {
+            background: rgba(251, 191, 36, 0.04);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-left: 4px solid #fbbf24;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        .tx-warning-box {
+            background: rgba(239, 68, 68, 0.04);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-left: 4px solid #ef4444;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+    </style>
+</head>
+<body>
+
+{% include 'navbar.html' ignore missing %}
+
+<div class="tx-legal-wrapper">
+
+    <header class="tx-legal-hero">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <span class="badge rounded-pill px-3 py-1 mb-2" style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); font-weight: 800; font-size: 0.7rem; letter-spacing: 1px;">
+                <i class="fa-solid fa-rotate-left me-1"></i> TÉRMINOS TRANSACCIONALES
+            </span>
+            <h1 class="h2 text-uppercase fw-black text-white mb-1" style="font-size: 2rem; letter-spacing: 1px;">Política de Devoluciones</h1>
+            <p class="small text-secondary mb-0">Lineamientos para reembolsos de clases, reservas de canchas y compras físicas en TENNISSEL.</p>
+        </div>
+    </header>
+
+    <main class="tx-legal-layout">
+
+        <aside class="tx-legal-sidebar d-none d-lg-block">
+            <div class="tx-sidebar-title"><i class="fa-solid fa-list-ul me-2"></i>Contenido</div>
+            <nav class="tx-sidebar-nav">
+                <a href="#d-sec-1" class="tx-sidebar-link active"><i class="fa-solid fa-chevron-right text-warning small"></i>1. Derecho de Retracto</a>
+                <a href="#d-sec-2" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>2. Cancelación de Clases</a>
+                <a href="#d-sec-3" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>3. Productos Físicos</a>
+                <a href="#d-sec-4" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>4. Proceso de Solicitud</a>
+                <a href="#d-sec-5" class="tx-sidebar-link"><i class="fa-solid fa-chevron-right text-warning small"></i>5. Tiempos de Reembolso</a>
+            </nav>
+        </aside>
+
+        <div class="tx-legal-content">
+
+            <section id="d-sec-1" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-scale-unbalanced-flip"></i></div>
+                    <h2 class="tx-section-title">1. Derecho de Retracto</h2>
+                </div>
+                <p>De acuerdo con la normativa de protección al consumidor, los usuarios de TENNISSEL tienen derecho a retractarse de las compras realizadas a través del portal en un plazo máximo de <strong>5 días hábiles</strong> posteriores a la transacción.</p>
+                <div class="tx-highlight-box">
+                    <p class="mb-0"><strong>Excepción Legal:</strong> El derecho de retracto no aplicará cuando el servicio de clase o uso de cancha ya se haya ejecutado dentro de dicho lapso de tiempo de manera satisfactoria.</p>
+                </div>
+            </section>
+
+            <section id="d-sec-2" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+                    <h2 class="tx-section-title">2. Devoluciones en Servicios (Clases y Canchas)</h2>
+                </div>
+                <p>Las cancelaciones y solicitudes de crédito respecto a servicios contratados dentro de la plataforma siguen la siguiente política:</p>
+                <ul>
+                    <li><strong>Cancelación con 24+ Horas de Anticipación:</strong> Reembolso del 100% abonado o crédito total directo en la billetera de la plataforma.</li>
+                    <li><strong>Cancelación Menor a 24 Horas:</strong> No aplicará devolución pecuniaria para resguardar la agenda reservada del profesor o club aliado.</li>
+                    <li><strong>Factores Climáticos:</strong> Si la sesión no puede efectuarse por lluvia u otra condición desfavorable, el saldo se acreditará automáticamente para agendar una nueva fecha.</li>
+                </ul>
+            </section>
+
+            <section id="d-sec-3" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-box-open"></i></div>
+                    <h2 class="tx-section-title">3. Devoluciones de Productos Físicos e Insumos</h2>
+                </div>
+                <p>Para indumentaria, raquetas o accesorios comprados a través de aliados comerciales dentro del portal:</p>
+                <div class="tx-warning-box">
+                    <p class="mb-0">El producto debe encontrarse intacto, sin marcas de uso en grip o cordaje, con etiquetas originales y dentro de su empaque original.</p>
+                </div>
+                <p>Los gastos de envío originados por cambios de talla o gusto personal correrán por cuenta del comprador, salvo que se trate de un despacho erróneo por parte de la tienda.</p>
+            </section>
+
+            <section id="d-sec-4" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-file-signature"></i></div>
+                    <h2 class="tx-section-title">4. Proceso para Solicitar una Devolución</h2>
+                </div>
+                <ol>
+                    <li>Ingresa a tu panel de usuario y ubica la sección <strong>Historial de Transacciones</strong>.</li>
+                    <li>Selecciona la orden correspondiente y presiona el botón <strong>Solicitar Reembolso / Soporte</strong>.</li>
+                    <li>Adjunta comprobantes o fotografías que respalden la solicitud (en caso de bienes físicos o fallos en el servicio).</li>
+                </ol>
+            </section>
+
+            <section id="d-sec-5" class="tx-section-block">
+                <div class="tx-section-header">
+                    <div class="tx-section-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <h2 class="tx-section-title">5. Tiempos y Medios de Reembolso</h2>
+                </div>
+                <p>Una vez aprobada la solicitud por nuestro equipo de auditoría:</p>
+                <ul>
+                    <li><strong>Saldo TENNISSEL:</strong> Disponibilidad inmediata en la cuenta del usuario para contrataciones futuras.</li>
+                    <li><strong>Tarjetas de Crédito / Débito:</strong> El reenvío del importe se ejecutará en un plazo de <strong>5 a 15 días hábiles</strong>, según los tiempos de procesamiento de la entidad bancaria emisora.</li>
+                </ul>
+                <p class="small text-secondary mt-4">Consultas directas sobre el estado de un reembolso pueden dirigirse a <strong>tennisselnuestrosaber@gmail.com</strong>.</p>
+            </section>
+
+        </div>
+    </main>
+
+</div>
+
+{% include 'footer.html' ignore missing %}
+{% include 'javascript.html' ignore missing %}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const sections = document.querySelectorAll(".tx-section-block");
+    const navLinks = document.querySelectorAll(".tx-sidebar-link");
+
+    function changeActiveLink() {
+        let index = sections.length;
+
+        while(--index && window.scrollY + 160 < sections[index].offsetTop) {}
+
+        navLinks.forEach((link) => link.classList.remove("active"));
+        if(navLinks[index]) {
+            navLinks[index].classList.add("active");
+        }
+    }
+
+    changeActiveLink();
+    window.addEventListener("scroll", changeActiveLink);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - TENNISSEL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.1">
+    <style>
+        :root {
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --border: #21262d;
+            --text-main: #ffffff;
+            --text-muted: #8b949e;
+            --accent: #00ff66;
+            --accent-hover: #00cc52;
+            --error: #ff6b6b;
+            --error-bg: #3c1618;
+            --success-bg: #0d2d1e;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .registro-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+        }
+
+        .registro-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+            text-align: left;
+        }
+
+        .registro-title {
+            font-weight: 900;
+            font-size: 28px;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .registro-title span {
+            color: var(--accent);
+        }
+
+        .subtitulo {
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .campo-registro {
+            margin-bottom: 20px;
+        }
+
+        .campo-registro label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            color: #c9d1d9;
+            margin-bottom: 8px;
+        }
+
+        .campo-registro input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            background: var(--bg-dark);
+            transition: all 0.25s ease;
+        }
+
+        .campo-registro input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 255, 102, 0.15);
+        }
+
+        .campo-registro input::placeholder {
+            color: #484f58;
+        }
+
+        .campo-registro select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-main);
+            background: var(--bg-dark);
+        }
+
+        .registro-ayuda {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .grupo-password {
+            position: relative;
+        }
+
+        .grupo-password input {
+            padding-right: 45px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+
+        .toggle-password:hover {
+            color: var(--accent);
+        }
+
+        .btn-registrar {
+            width: 100%;
+            padding: 16px;
+            background: var(--accent);
+            color: #000000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 10px;
+        }
+
+        .btn-registrar:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 6px 20px rgba(0, 255, 102, 0.3);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .login-link a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alerta {
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .alerta-success { background: var(--success-bg); color: var(--accent); border: 1px solid var(--accent); }
+        .alerta-error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error); }
+        .alerta-warning { background: #3d2a0a; color: #f0a500; border: 1px solid #f0a500; }
+
+        @media (max-width: 576px) {
+            .registro-box {
+                padding: 32px 20px;
+            }
+            .registro-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+<base target="_self">
+</head>
+<body>
+
+    {% include 'navbar.html' %}
+
+    <div class="registro-container">
+        <div class="registro-box">
+
+            <h1 class="registro-title">CREAR <span>CUENTA</span></h1>
+            <div class="subtitulo">Unete a la comunidad TENNISSEL</div>
+
+            <!-- Alertas Flask -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alerta alerta-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('registro') }}" method="POST">
+
+                <!-- Username -->
+                <div class="campo-registro">
+                    <label for="username">
+                        <i class="fa-solid fa-at" style="color:var(--accent); margin-right: 6px;"></i>Nombre de Usuario
+                    </label>
+                    <input type="text" id="username" name="username" 
+                           placeholder="Tu usuario" required>
+                </div>
+
+                <!-- Email -->
+                <div class="campo-registro">
+                    <label for="email">
+                        <i class="fa-solid fa-envelope" style="color:var(--accent); margin-right: 6px;"></i>Correo Electrónico
+                    </label>
+                    <input type="email" id="email" name="email" 
+                           placeholder="correo@ejemplo.com" required>
+                </div>
+
+                <!-- Telefono -->
+                <div class="campo-registro">
+                    <label for="telefono">
+                        <i class="fa-solid fa-phone" style="color:var(--accent); margin-right: 6px;"></i>Teléfono
+                    </label>
+                    <input type="tel" id="telefono" name="telefono" 
+                           placeholder="Ej. 3001234567">
+                </div>
+
+                <div class="campo-registro">
+                    <label for="ciudad"><i class="fa-solid fa-location-dot" style="color:var(--accent); margin-right: 6px;"></i>Barrio o zona</label>
+                    <input type="text" id="ciudad" name="ciudad" placeholder="Opcional, por ejemplo: Suba">
+                    <div class="registro-ayuda">Si no lo pones, no podremos darte una personalización tan precisa.</div>
+                </div>
+
+                <div class="campo-registro">
+                    <label for="nivel"><i class="fa-solid fa-chart-line" style="color:var(--accent); margin-right: 6px;"></i>Nivel de juego</label>
+                    <select id="nivel" name="nivel" required>
+                        <option value="principiante">Principiante</option>
+                        <option value="intermedio">Intermedio</option>
+                        <option value="avanzado">Avanzado</option>
+                    </select>
+                </div>
+
+                <div class="campo-registro">
+                    <label for="rol"><i class="fa-solid fa-user-tag" style="color:var(--accent); margin-right: 6px;"></i>Tipo de cuenta</label>
+                    <select id="rol" name="rol" required>
+                        <option value="cliente">Usuario</option>
+                        <option value="profesor">Profesor</option>
+                        <option value="tienda">Tienda</option>
+                    </select>
+                    <div class="registro-ayuda">Los profesores podrán recibir solicitudes y enviar propuestas de clase.</div>
+                </div>
+
+                <!-- Password -->
+                <div class="campo-registro">
+                    <label for="password">
+                        <i class="fa-solid fa-lock" style="color:var(--accent); margin-right: 6px;"></i>Contraseña
+                    </label>
+                    <div class="grupo-password">
+                        <input type="password" id="password" name="password" 
+                               placeholder="Minimo 6 caracteres" required minlength="6">
+                        <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <!-- Confirmar Password -->
+                <div class="campo-registro">
+                    <label for="confirm_password">
+                        <i class="fa-solid fa-lock" style="color:var(--accent); margin-right: 6px;"></i>Confirmar Contraseña
+                    </label>
+                    <div class="grupo-password">
+                        <input type="password" id="confirm_password" name="confirm_password" 
+                               placeholder="Repite tu contraseña" required minlength="6">
+                        <i class="fa-solid fa-eye toggle-password" id="toggleConfirmPassword"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-registrar">Registrarme</button>
+
+                <div class="login-link">
+                    ¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesion aqui</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+
+<script>
+    function setupToggle(toggleId, inputId) {
+        const toggle = document.querySelector(toggleId);
+        const input = document.querySelector(inputId);
+        if (toggle && input) {
+            toggle.addEventListener('click', function () {
+                const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                input.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+    }
+
+    setupToggle('#togglePassword', '#password');
+    setupToggle('#toggleConfirmPassword', '#confirm_password');
+
+    // Validacion de contraseñas coinciden
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const pass = document.getElementById('password').value;
+        const confirm = document.getElementById('confirm_password').value;
+        if (pass !== confirm) {
+            e.preventDefault();
+            alert('Las contraseñas no coinciden.');
+        }
+    });
+</script>
+{% include 'javascript.html' %}
+</body>
+</html>
